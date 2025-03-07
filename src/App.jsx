@@ -9,21 +9,22 @@ const App = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // Ha van token, ellenőrizzük annak érvényességét
       try {
-        const decodedToken = JSON.parse(atob(token.split('.')[1])); // JWT token dekódolása
-        const expirationTime = decodedToken.exp * 1000; // A token lejárati ideje (milliszekundumban)
+        const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decode JWT token
+        const expirationTime = decodedToken.exp * 1000; // Token expiration time in milliseconds
         if (Date.now() < expirationTime) {
-          setIsAuthenticated(true); // Ha a token érvényes, bejelentkezett
+          setIsAuthenticated(true); // Token is valid
         } else {
-          localStorage.removeItem('token'); // Ha lejárt, töröljük a tokent
+          localStorage.removeItem('token'); // Remove expired token
         }
       } catch (error) {
-        console.log("Token dekódolási hiba:", error);
+        console.log("Token decoding error:", error);
         localStorage.removeItem('token');
       }
     }
   }, []);
+
+  console.log("IsAuthenticated: ", isAuthenticated);  // For debugging
 
   return (
     <Router>
