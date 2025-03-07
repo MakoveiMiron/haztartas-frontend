@@ -14,13 +14,13 @@ const AdminPanel = () => {
   }, []);
 
   const fetchTasks = () => {
-    axios.get('https://haztartas-backend-production.up.railway.app/tasks')
+    axios.get('https://haztartas-backend-production.up.railway.app/api/tasks')
       .then(response => setTasks(response.data))
       .catch(error => console.error('Error fetching tasks:', error));
   };
 
   const fetchUsers = () => {
-    axios.get('https://haztartas-backend-production.up.railway.app/users')
+    axios.get('https://haztartas-backend-production.up.railway.app/api/users')
       .then(response => setUsers(response.data))
       .catch(error => console.error('Error fetching users:', error));
   };
@@ -28,7 +28,7 @@ const AdminPanel = () => {
   const handleCreateTask = () => {
     if (!newTask || !selectedUser) return alert("Adj meg egy feladatnevet és válassz felhasználót!");
 
-    axios.post('https://haztartas-backend-production.up.railway.app/tasks', {
+    axios.post('https://haztartas-backend-production.up.railway.app/api/tasks', {
       name: newTask,
       assignedUsers: [selectedUser],
       frequency: "daily", 
@@ -43,7 +43,7 @@ const AdminPanel = () => {
   };
 
   const handleDeleteTask = (taskId) => {
-    axios.delete(`https://haztartas-backend-production.up.railway.app/tasks/${taskId}`)
+    axios.delete(`https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`)
       .then(() => fetchTasks())
       .catch(error => console.error('Error deleting task:', error));
   };
@@ -55,7 +55,7 @@ const AdminPanel = () => {
   const handleUpdateTask = () => {
     if (!editingTask) return;
 
-    axios.put(`https://haztartas-backend-production.up.railway.app/tasks/${editingTask.id}`, {
+    axios.put(`https://haztartas-backend-production.up.railway.app/api/tasks/${editingTask.id}`, {
       name: editingTask.name,
       assignedUsers: [editingTask.assignedTo],
       frequency: editingTask.frequency,
