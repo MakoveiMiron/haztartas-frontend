@@ -27,7 +27,7 @@ const App = () => {
   console.log("IsAuthenticated: ", isAuthenticated);  // For debugging
 
   return (
-    <Router>
+    <Router basename="/haztartas-frontend">
       <Routes>
         <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} />
         <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
