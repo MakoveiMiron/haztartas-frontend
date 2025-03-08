@@ -12,6 +12,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post('https://haztartas-backend-production.up.railway.app/api/auth/login', { username, password });
+      console.log("resp", response)
       localStorage.setItem('token', response.data.token); // Elmentjük a JWT tokent
       localStorage.setItem('user', response.data.user);
       navigate('/dashboard',{ replace: true }); // Átirányítás a Dashboard oldalra
