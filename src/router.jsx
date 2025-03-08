@@ -7,26 +7,26 @@ import AdminPanel from "./pages/AdminPanel";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,  // Main App component to handle authentication and layout
+    element: <App />,
     children: [
       {
         path: "/login",
-        element: <Login />,  // Login page
+        element: <Login />,
       },
       {
         path: "/dashboard",
-        element: <Dashboard />,  // User dashboard page
+        element: <Dashboard />,
       },
       {
         path: "/admin",
-        element: <AdminPanel />,  // Admin panel page
+        element: <AdminPanel />,
       },
       {
         path: "/",
-        element: <Navigate to="/dashboard" />,  // Default redirect to dashboard if authenticated
+        element: <Navigate to="/dashboard" />,
       },
     ],
   },
-]);
+], { basename: '/haztartas-frontend' }); // Base path a React Router-nek
 
 export default router;
