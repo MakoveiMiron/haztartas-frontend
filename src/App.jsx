@@ -32,14 +32,10 @@ const App = () => {
   }, []);
 
   return (
-    <>
-      {/* Conditional rendering based on authentication */}
-      {isAuthenticated ? (
-        <Dashboard user={user} /> // Pass user data to Dashboard component
-      ) : (
+    
         <Login /> // Show Login component if not authenticated
-      )}
-    </>
+      
+    
   );
 };
 
