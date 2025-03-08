@@ -14,20 +14,20 @@ const Dashboard = () => {
 
   const user = JSON.parse(localStorage.getItem("user")); // Get the logged-in user
 
-  useEffect(() => {
-    if (user) {
-      axios
-        .get(
-          `https://haztartas-backend-production.up.railway.app/api/tasks?userId=${user.id}`
-        )
-        .then((response) => {
-          setTasks(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching tasks:", error);
-        });
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     axios
+  //       .get(
+  //         `https://haztartas-backend-production.up.railway.app/api/tasks?userId=${user.id}`
+  //       )
+  //       .then((response) => {
+  //         setTasks(response.data);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error fetching tasks:", error);
+  //       });
+  //   }
+  // }, [user]);
 
   return (
     <div className="p-4">
