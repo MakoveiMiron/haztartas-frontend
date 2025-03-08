@@ -8,6 +8,8 @@ const AdminPanel = () => {
   const [newTask, setNewTask] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
   const [editingTask, setEditingTask] = useState(null);
+  const [taskFrequency, setTaskFrequency] = useState("daily");
+  const [taskDays, setTaskDays] = useState(["Monday", "Wednesday"]);
   const navigate = useNavigate();
   const token = localStorage.getItem("token"); // Check for token
 
@@ -24,14 +26,22 @@ const AdminPanel = () => {
 
   const fetchTasks = () => {
     axios
-      .get("https://haztartas-backend-production.up.railway.app/api/tasks")
+      .get("https://haztartas-backend-production.up.railway.app/api/tasks", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => setTasks(response.data))
       .catch((error) => console.error("Error fetching tasks:", error));
   };
 
   const fetchUsers = () => {
     axios
-      .get("https://haztartas-backend-production.up.railway.app/api/users")
+      .get("https://haztartas-backend-production.up.railway.app/api/users", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => setUsers(response.data))
       .catch((error) => console.error("Error fetching users:", error));
   };
@@ -46,8 +56,13 @@ const AdminPanel = () => {
         {
           name: newTask,
           assignedUsers: [selectedUser],
-          frequency: "daily",
-          days: ["Monday", "Wednesday"], // fix értékek, de UI-n módosítható
+          frequency: taskFrequency,
+          days: taskDays,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       )
       .then(() => {
@@ -61,7 +76,12 @@ const AdminPanel = () => {
   const handleDeleteTask = (taskId) => {
     axios
       .delete(
-        `https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`
+        `https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then(() => fetchTasks())
       .catch((error) => console.error("Error deleting task:", error));
@@ -80,8 +100,13 @@ const AdminPanel = () => {
         {
           name: editingTask.name,
           assignedUsers: [editingTask.assignedTo],
-          frequency: editingTask.frequency,
-          days: editingTask.days,
+          frequency: taskFrequency,
+          days: taskDays,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       )
       .then(() => {

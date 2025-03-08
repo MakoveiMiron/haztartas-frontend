@@ -1,28 +1,19 @@
-import { createBrowserRouter } from "react-router-dom";
-import App from "./App";
-import Dashboard from "./pages/Dashboard";
-import Login from "./Login";
-import AdminPanel from "./pages/AdminPanel";
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+import App from './App';
+import Dashboard from './pages/Dashboard';
+import Login from './Login';
+import AdminPanel from './pages/AdminPanel';
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      {
-        path: "/user/login",
-        element: <Login />,
-      },
-      {
-        path: "/user/dashboard",
-        element: <Dashboard />,
-      },
-      {
-        path: "/user/admin",
-        element: <AdminPanel />,
-      }
-    ],
-  },
-], { basename: '/haztartas-frontend' });  // No trailing slash here
+const router = (
+  <Router basename="/haztartas-frontend">
+    <Routes>
+      <Route path="/" element={<App />}>
+        <Route path="user/login" element={<Login />} />
+        <Route path="user/dashboard" element={<Dashboard />} />
+        <Route path="user/admin" element={<AdminPanel />} />
+      </Route>
+    </Routes>
+  </Router>
+);
 
 export default router;

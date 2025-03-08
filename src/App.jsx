@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
-import Login from "./Login"; // Import the Login page
+import axios from 'axios';
+
+// Set Authorization header for all requests
+axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -32,10 +35,11 @@ const App = () => {
   }, []);
 
   return (
-    
-        <Login /> // Show Login component if not authenticated
-      
-    
+    <>
+      {/* Include the routes for the authenticated user here */}
+      {isAuthenticated ? navigate("/user/dashboard") : navigate("/user/login")}
+      {/* You can place shared components or layouts for authenticated users here */}
+    </>
   );
 };
 
