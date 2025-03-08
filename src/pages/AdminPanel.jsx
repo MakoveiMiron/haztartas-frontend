@@ -13,7 +13,7 @@ const AdminPanel = () => {
 
   // If there's no token, redirect to login page
   if (!token) {
-    return <Navigate to="/login" />;
+    navigate("/login");
   }
 
   // Fetch tasks and users

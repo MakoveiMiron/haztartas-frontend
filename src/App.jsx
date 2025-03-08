@@ -30,7 +30,7 @@ const App = () => {
   }, []);
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+    navigate("/login");
   }
 
   return (
