@@ -15,7 +15,7 @@ const AdminPanel = () => {
 
   // If there's no token, redirect to login page
   if (!token) {
-    navigate("/user/login");
+    navigate("/");
   }
 
   // Fetch tasks and users
@@ -117,7 +117,7 @@ const AdminPanel = () => {
   };
 
   const handleBackToDashboard = () => {
-    navigate("/user/dashboard"); // Direct navigation to dashboard page
+    navigate("/#user/dashboard"); // Direct navigation to dashboard page
   };
 
   return (

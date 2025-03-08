@@ -9,7 +9,7 @@ const Dashboard = () => {
 
   // If no token exists, redirect to login with hash-based URL
   if (!token) {
-    navigate("/#/user/login");  // Hash-based redirection to login
+    navigate("/");  // Hash-based redirection to login
   }
 
   const user = JSON.parse(localStorage.getItem("user")); // Get the logged-in user
