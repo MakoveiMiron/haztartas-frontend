@@ -11,7 +11,7 @@ const Dashboard = () => {
     if (user) {
       axios
         .get(
-          `https://haztartas-backend-production.up.railway.app/tasks?userId=${user.id}`
+          `https://haztartas-backend-production.up.railway.app/api/tasks?userId=${user.id}`
         )
         .then((response) => {
           setTasks(response.data);
