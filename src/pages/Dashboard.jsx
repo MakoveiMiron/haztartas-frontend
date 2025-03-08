@@ -11,7 +11,8 @@ const Dashboard = () => {
     navigate("#/login");
   }
 
-  const user = JSON.parse(localStorage.getItem("user")); // Bejelentkezett felhasználó
+  const user = localStorage.getItem("user"); // Bejelentkezett felhasználó
+  console.log(user)
 
   useEffect(() => {
     if (user) {
