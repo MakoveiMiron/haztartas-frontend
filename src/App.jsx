@@ -29,7 +29,7 @@ const App = () => {
         localStorage.removeItem("user");
       }
     }
-  }, []);
+  }, [user]);
 
   return (
     <Router>
