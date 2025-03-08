@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -13,7 +13,7 @@ const Login = () => {
     try {
       const response = await axios.post('https://haztartas-backend-production.up.railway.app/api/auth/login', { username, password });
       localStorage.setItem('token', response.data.token); // Elmentjük a JWT tokent
-      navigate('/dashboard'); // Átirányítás a Dashboard oldalra
+      <Navigate to="/dashboard" />; // Átirányítás a Dashboard oldalra
     } catch (error) {
       setError('Hibás felhasználónév vagy jelszó!');
     }

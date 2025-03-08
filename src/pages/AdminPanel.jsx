@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Navigate } from 'react-router-dom'; // Importáljuk a Navigate-et
 
 const AdminPanel = () => {
   const [tasks, setTasks] = useState([]);
@@ -7,6 +8,7 @@ const AdminPanel = () => {
   const [newTask, setNewTask] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
   const [editingTask, setEditingTask] = useState(null);
+  const [redirectToDashboard, setRedirectToDashboard] = useState(false); // Állapot, ami vezérli a navigálást
 
   useEffect(() => {
     fetchTasks();
@@ -68,9 +70,26 @@ const AdminPanel = () => {
     .catch(error => console.error('Error updating task:', error));
   };
 
+  // Navigálás a Dashboardra
+  const handleBackToDashboard = () => {
+    setRedirectToDashboard(true); // Állapotot változtatunk, hogy navigáljunk
+  };
+
+  if (redirectToDashboard) {
+    return <Navigate to="/dashboard" />; // Ha az állapot true, akkor átirányítunk a dashboard-ra
+  }
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold">Admin Panel</h1>
+
+      {/* Vissza gomb */}
+      <button 
+        onClick={handleBackToDashboard} 
+        className="mt-4 bg-gray-500 text-white px-4 py-2 rounded"
+      >
+        Vissza a Dashboardra
+      </button>
 
       {/* Új feladat hozzáadása */}
       <div className="mt-4 p-4 border">
