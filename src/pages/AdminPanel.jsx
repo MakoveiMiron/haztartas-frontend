@@ -22,6 +22,7 @@ const AdminPanel = () => {
     fetchUsers();
   }, []);
 
+  
   const fetchTasks = () => {
     axios
       .get('https://haztartas-backend-production.up.railway.app/api/tasks')
