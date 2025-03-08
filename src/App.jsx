@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Dashboard from "./pages/Dashboard"
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -29,14 +30,10 @@ const App = () => {
     }
   }, []);
 
-  if (!isAuthenticated) {
-    navigate("/login");
-  }
-
   return (
     <>
       {/* Include the routes for the authenticated user here */}
-      {user?.isAdmin && <AdminPanel />}
+      {user ? <Dashboard /> : navigate("/login")}
       {/* You can place shared components or layouts for authenticated users here */}
     </>
   );
