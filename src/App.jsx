@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './Login';
 import Dashboard from './pages/Dashboard';
 
@@ -24,10 +24,8 @@ const App = () => {
     }
   }, []);
 
-  console.log("IsAuthenticated: ", isAuthenticated);  // For debugging
-
   return (
-    <Router basename="/haztartas-frontend/">
+    <Router>
       <Routes>
         <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} />
         <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
