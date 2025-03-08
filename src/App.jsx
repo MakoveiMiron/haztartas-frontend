@@ -33,7 +33,7 @@ const App = () => {
   return (
     <>
       {/* Include the routes for the authenticated user here */}
-      {user ? <Dashboard /> : navigate("/login")}
+      {user ? <Dashboard /> : navigate("/user/login")}
       {/* You can place shared components or layouts for authenticated users here */}
     </>
   );

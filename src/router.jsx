@@ -10,21 +10,17 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "/login",
+        path: "/user/login",
         element: <Login />,
       },
       {
-        path: "/dashboard",
+        path: "/user/dashboard",
         element: <Dashboard />,
       },
       {
-        path: "/admin",
+        path: "/user/admin",
         element: <AdminPanel />,
-      },
-      {
-        path: "/",
-        element: <Navigate to="/dashboard" />,
-      },
+      }
     ],
   },
 ], { basename: '/haztartas-frontend' }); // Base path a React Router-nek

@@ -9,7 +9,7 @@ const Dashboard = () => {
 
   // If no token exists, redirect to login
   if (!token) {
-    navigate("/login");
+    navigate("/user/login");
   }
 
   const user = JSON.parse(localStorage.getItem("user")); // Get the logged-in user
@@ -36,7 +36,7 @@ const Dashboard = () => {
       {/* Admin button */}
       {user?.isAdmin && (
         <button
-          onClick={() => navigate("/admin")} // Use "/admin" for a relative path
+          onClick={() => navigate("/user/admin")} // Use "/admin" for a relative path
           className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
         >
           Admin Panel

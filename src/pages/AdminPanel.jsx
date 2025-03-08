@@ -13,7 +13,7 @@ const AdminPanel = () => {
 
   // If there's no token, redirect to login page
   if (!token) {
-    navigate("/login");
+    navigate("/user/login");
   }
 
   // Fetch tasks and users
@@ -22,7 +22,7 @@ const AdminPanel = () => {
     fetchUsers();
   }, []);
 
-  
+
   const fetchTasks = () => {
     axios
       .get('https://haztartas-backend-production.up.railway.app/api/tasks')
@@ -84,7 +84,7 @@ const AdminPanel = () => {
   };
 
   const handleBackToDashboard = () => {
-    navigate('/dashboard'); // Direct navigation to dashboard page
+    navigate('/user/dashboard'); // Direct navigation to dashboard page
   };
 
   return (

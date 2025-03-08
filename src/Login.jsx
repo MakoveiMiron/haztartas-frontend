@@ -20,7 +20,7 @@ const Login = () => {
       localStorage.setItem('token', response.data.token);  // Save JWT token
       localStorage.setItem('user', JSON.stringify(response.data.user)); // Save user data
   
-      navigate("/dashboard");  // Redirect to Dashboard page
+      navigate("/user/dashboard");  // Redirect to Dashboard page
     } catch (error) {
       setError('Invalid username or password!');
     }
