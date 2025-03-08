@@ -12,7 +12,7 @@ const Dashboard = () => {
   }
 
   const user = JSON.parse(localStorage.getItem("user")); // Bejelentkezett felhasználó
-  console.log(user)
+  console.log(user.id)
 
   useEffect(() => {
     if (user) {
