@@ -11,14 +11,21 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://haztartas-backend-production.up.railway.app/api/auth/login', { username, password });
-      localStorage.setItem('token', response.data.token); // Save JWT token
+      const response = await axios.post(
+        'https://haztartas-backend-production.up.railway.app/api/auth/login', 
+        { username, password }
+      );
+      console.log(response.data); // Log to inspect the response
+  
+      localStorage.setItem('token', response.data.token);  // Save JWT token
       localStorage.setItem('user', JSON.stringify(response.data.user)); // Save user data
-      navigate("/dashboard"); // Redirect to Dashboard page
+  
+      navigate("/dashboard");  // Redirect to Dashboard page
     } catch (error) {
       setError('Invalid username or password!');
     }
   };
+  
 
   return (
     <div className="p-4">
