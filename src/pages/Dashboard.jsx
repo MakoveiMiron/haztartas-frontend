@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom"; // Use Navigate for redirects
 import axios from "axios";
 
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const navigate = useNavigate();
-  const token = localStorage.getItem("token"); // Ellenőrizzük a token-t
+  const token = localStorage.getItem("token"); // Check for token
 
+  // If no token exists, redirect to login
   if (!token) {
-    navigate("#/login");
+    return <Navigate to="/login" />;
   }
 
-  const user = JSON.parse(localStorage.getItem("user")); // Bejelentkezett felhasználó
+  const user = JSON.parse(localStorage.getItem("user")); // Get the logged-in user
 
   useEffect(() => {
     if (user) {
@@ -32,10 +33,10 @@ const Dashboard = () => {
     <div className="p-4">
       <h1 className="text-2xl font-bold">Mai feladataid</h1>
 
-      {/* Admin gomb */}
+      {/* Admin button */}
       {user?.isAdmin && (
         <button
-          onClick={() => navigate("#/admin")}
+          onClick={() => navigate("/admin")} // Use "/admin" for a relative path
           className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
         >
           Admin Panel

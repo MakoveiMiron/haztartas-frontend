@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from "./Login";
-import Dashboard from "./pages/Dashboard";
-import AdminPanel from "./pages/AdminPanel"; // Admin panel importálása
+import { useNavigate } from "react-router-dom";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -18,7 +16,7 @@ const App = () => {
         const expirationTime = decodedToken.exp * 1000;
         if (Date.now() < expirationTime) {
           setIsAuthenticated(true);
-          setUser(JSON.parse(storedUser)); // Felhasználó adatok beállítása
+          setUser(JSON.parse(storedUser)); // User data set
         } else {
           localStorage.removeItem("token");
           localStorage.removeItem("user");
@@ -29,20 +27,18 @@ const App = () => {
         localStorage.removeItem("user");
       }
     }
-  }, [user]);
+  }, []);
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} />
-        <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
-        
-        {/* Admin panel útvonal */}
-        <Route path="/admin" element={isAuthenticated && user?.isAdmin ? <AdminPanel /> : <Navigate to="/dashboard" />} />
-        
-        <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
-      </Routes>
-    </Router>
+    <>
+      {/* Include the routes for the authenticated user here */}
+      {user?.isAdmin && <AdminPanel />}
+      {/* You can place shared components or layouts for authenticated users here */}
+    </>
   );
 };
 
