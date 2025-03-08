@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Dashboard from "./pages/Dashboard"
+import Dashboard from "./pages/Dashboard";
+import Login from "./Login"; // Import the Login page
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -32,9 +33,12 @@ const App = () => {
 
   return (
     <>
-      {/* Include the routes for the authenticated user here */}
-      {isAuthenticated ? navigate("/user/dashboard") : navigate("/user/login")}
-      {/* You can place shared components or layouts for authenticated users here */}
+      {/* Conditional rendering based on authentication */}
+      {isAuthenticated ? (
+        <Dashboard user={user} /> // Pass user data to Dashboard component
+      ) : (
+        <Login /> // Show Login component if not authenticated
+      )}
     </>
   );
 };

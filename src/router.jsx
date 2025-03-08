@@ -23,6 +23,6 @@ const router = createBrowserRouter([
       }
     ],
   },
-], { basename: '/haztartas-frontend' }); // Base path a React Router-nek
+], { basename: '/haztartas-frontend' });  // No trailing slash here
 
 export default router;

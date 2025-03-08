@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate, Navigate } from 'react-router-dom'; // Import Navigate
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AdminPanel = () => {
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
-  const [newTask, setNewTask] = useState('');
-  const [selectedUser, setSelectedUser] = useState('');
+  const [newTask, setNewTask] = useState("");
+  const [selectedUser, setSelectedUser] = useState("");
   const [editingTask, setEditingTask] = useState(null);
   const navigate = useNavigate();
-  const token = localStorage.getItem('token'); // Check for token
+  const token = localStorage.getItem("token"); // Check for token
 
   // If there's no token, redirect to login page
   if (!token) {
@@ -22,44 +22,49 @@ const AdminPanel = () => {
     fetchUsers();
   }, []);
 
-
   const fetchTasks = () => {
     axios
-      .get('https://haztartas-backend-production.up.railway.app/api/tasks')
-      .then(response => setTasks(response.data))
-      .catch(error => console.error('Error fetching tasks:', error));
+      .get("https://haztartas-backend-production.up.railway.app/api/tasks")
+      .then((response) => setTasks(response.data))
+      .catch((error) => console.error("Error fetching tasks:", error));
   };
 
   const fetchUsers = () => {
     axios
-      .get('https://haztartas-backend-production.up.railway.app/api/users')
-      .then(response => setUsers(response.data))
-      .catch(error => console.error('Error fetching users:', error));
+      .get("https://haztartas-backend-production.up.railway.app/api/users")
+      .then((response) => setUsers(response.data))
+      .catch((error) => console.error("Error fetching users:", error));
   };
 
   const handleCreateTask = () => {
-    if (!newTask || !selectedUser) return alert("Adj meg egy feladatnevet és válassz felhasználót!");
+    if (!newTask || !selectedUser)
+      return alert("Adj meg egy feladatnevet és válassz felhasználót!");
 
     axios
-      .post('https://haztartas-backend-production.up.railway.app/api/tasks', {
-        name: newTask,
-        assignedUsers: [selectedUser],
-        frequency: "daily", 
-        days: ["Monday", "Wednesday"] // fix értékek, de UI-n módosítható
-      })
+      .post(
+        "https://haztartas-backend-production.up.railway.app/api/tasks",
+        {
+          name: newTask,
+          assignedUsers: [selectedUser],
+          frequency: "daily",
+          days: ["Monday", "Wednesday"], // fix értékek, de UI-n módosítható
+        }
+      )
       .then(() => {
-        setNewTask('');
-        setSelectedUser('');
+        setNewTask("");
+        setSelectedUser("");
         fetchTasks();
       })
-      .catch(error => console.error('Error creating task:', error));
+      .catch((error) => console.error("Error creating task:", error));
   };
 
   const handleDeleteTask = (taskId) => {
     axios
-      .delete(`https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`)
+      .delete(
+        `https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`
+      )
       .then(() => fetchTasks())
-      .catch(error => console.error('Error deleting task:', error));
+      .catch((error) => console.error("Error deleting task:", error));
   };
 
   const handleEditTask = (task) => {
@@ -70,21 +75,24 @@ const AdminPanel = () => {
     if (!editingTask) return;
 
     axios
-      .put(`https://haztartas-backend-production.up.railway.app/api/tasks/${editingTask.id}`, {
-        name: editingTask.name,
-        assignedUsers: [editingTask.assignedTo],
-        frequency: editingTask.frequency,
-        days: editingTask.days,
-      })
+      .put(
+        `https://haztartas-backend-production.up.railway.app/api/tasks/${editingTask.id}`,
+        {
+          name: editingTask.name,
+          assignedUsers: [editingTask.assignedTo],
+          frequency: editingTask.frequency,
+          days: editingTask.days,
+        }
+      )
       .then(() => {
         setEditingTask(null);
         fetchTasks();
       })
-      .catch(error => console.error('Error updating task:', error));
+      .catch((error) => console.error("Error updating task:", error));
   };
 
   const handleBackToDashboard = () => {
-    navigate('/user/dashboard'); // Direct navigation to dashboard page
+    navigate("/user/dashboard"); // Direct navigation to dashboard page
   };
 
   return (
@@ -92,8 +100,8 @@ const AdminPanel = () => {
       <h1 className="text-2xl font-bold">Admin Panel</h1>
 
       {/* Back button */}
-      <button 
-        onClick={handleBackToDashboard} 
+      <button
+        onClick={handleBackToDashboard}
         className="mt-4 bg-gray-500 text-white px-4 py-2 rounded"
       >
         Vissza a Dashboardra
@@ -102,25 +110,27 @@ const AdminPanel = () => {
       {/* Add new task */}
       <div className="mt-4 p-4 border">
         <h2 className="text-lg font-bold">Új feladat hozzáadása</h2>
-        <input 
+        <input
           type="text"
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
           placeholder="Feladat neve"
           className="border p-2 w-full mt-2"
         />
-        <select 
+        <select
           value={selectedUser}
           onChange={(e) => setSelectedUser(e.target.value)}
           className="border p-2 w-full mt-2"
         >
           <option value="">Válassz felhasználót</option>
-          {users.map(user => (
-            <option key={user.id} value={user.id}>{user.name}</option>
+          {users.map((user) => (
+            <option key={user.id} value={user.id}>
+              {user.name}
+            </option>
           ))}
         </select>
-        <button 
-          onClick={handleCreateTask} 
+        <button
+          onClick={handleCreateTask}
           className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
         >
           Feladat létrehozása
@@ -130,18 +140,18 @@ const AdminPanel = () => {
       {/* Task List */}
       <h2 className="text-xl mt-4">Feladatok</h2>
       <ul>
-        {tasks.map(task => (
+        {tasks.map((task) => (
           <li key={task.id} className="p-2 border-b flex justify-between">
             {task.name} - {task.assignedTo}
             <div>
-              <button 
-                onClick={() => handleEditTask(task)} 
+              <button
+                onClick={() => handleEditTask(task)}
                 className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
               >
                 Szerkesztés
               </button>
-              <button 
-                onClick={() => handleDeleteTask(task.id)} 
+              <button
+                onClick={() => handleDeleteTask(task.id)}
                 className="bg-red-500 text-white px-2 py-1 rounded"
               >
                 Törlés
@@ -156,13 +166,18 @@ const AdminPanel = () => {
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-4">
             <h2 className="text-lg font-bold">Feladat szerkesztése</h2>
-            <input 
+            <input
               type="text"
               value={editingTask.name}
-              onChange={(e) => setEditingTask({...editingTask, name: e.target.value})}
+              onChange={(e) =>
+                setEditingTask({ ...editingTask, name: e.target.value })
+              }
               className="border p-2 w-full mt-2"
             />
-            <button onClick={handleUpdateTask} className="mt-2 bg-green-500 text-white px-4 py-2 rounded">
+            <button
+              onClick={handleUpdateTask}
+              className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
+            >
               Mentés
             </button>
           </div>
