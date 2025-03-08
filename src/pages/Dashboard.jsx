@@ -8,7 +8,7 @@ const Dashboard = () => {
   const token = localStorage.getItem("token"); // Ellenőrizzük a token-t
 
   if (!token) {
-    return <Navigate to="/login" />;
+    navigate("#/login");
   }
 
   const user = JSON.parse(localStorage.getItem("user")); // Bejelentkezett felhasználó
@@ -35,7 +35,7 @@ const Dashboard = () => {
       {/* Admin gomb */}
       {user?.isAdmin && (
         <button
-          onClick={() => navigate("/admin")}
+          onClick={() => navigate("#/admin")}
           className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
         >
           Admin Panel

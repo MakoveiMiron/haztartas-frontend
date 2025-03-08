@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Navigate } from 'react-router-dom'; // Importáljuk a Navigate-et
+import { useNavigate } from 'react-router-dom'; // Importáljuk a Navigate-et
 
 const AdminPanel = () => {
   const [tasks, setTasks] = useState([]);
@@ -9,12 +9,12 @@ const AdminPanel = () => {
   const [selectedUser, setSelectedUser] = useState('');
   const [editingTask, setEditingTask] = useState(null);
   const [redirectToDashboard, setRedirectToDashboard] = useState(false); // Állapot, ami vezérli a navigálást
-
+  const navigate = useNavigate()
   const token = localStorage.getItem('token'); // Ellenőrizzük, hogy van-e token
 
   // Ha nincs token, irányítsuk át a Login oldalra
   if (!token) {
-    return <Navigate to="/login" />;
+    navigate("#/login");
   }
 
   useEffect(() => {
@@ -83,7 +83,7 @@ const AdminPanel = () => {
   };
 
   if (redirectToDashboard) {
-    return <Navigate to="/dashboard" />; // Ha az állapot true, akkor átirányítunk a dashboard-ra
+    navigate("#/dahboard"); // Ha az állapot true, akkor átirányítunk a dashboard-ra
   }
 
   return (
