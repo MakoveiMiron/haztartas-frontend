@@ -5,6 +5,12 @@ import axios from "axios";
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token"); // Ellenőrizzük a token-t
+
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
+
   const user = JSON.parse(localStorage.getItem("user")); // Bejelentkezett felhasználó
 
   useEffect(() => {

@@ -10,6 +10,13 @@ const AdminPanel = () => {
   const [editingTask, setEditingTask] = useState(null);
   const [redirectToDashboard, setRedirectToDashboard] = useState(false); // Állapot, ami vezérli a navigálást
 
+  const token = localStorage.getItem('token'); // Ellenőrizzük, hogy van-e token
+
+  // Ha nincs token, irányítsuk át a Login oldalra
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
+
   useEffect(() => {
     fetchTasks();
     fetchUsers();
