@@ -79,12 +79,8 @@ const AdminPanel = () => {
 
   // Navigálás a Dashboardra
   const handleBackToDashboard = () => {
-    setRedirectToDashboard(true); // Állapotot változtatunk, hogy navigáljunk
+    navigate("/dashboard", { replace: true });
   };
-
-  if (redirectToDashboard) {
-    navigate("/dashboard", { replace: true }); // Ha az állapot true, akkor átirányítunk a dashboard-ra
-  }
 
   return (
     <div className="p-4">
