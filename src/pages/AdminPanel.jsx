@@ -14,7 +14,7 @@ const AdminPanel = () => {
 
   // Ha nincs token, irányítsuk át a Login oldalra
   if (!token) {
-    navigate("https://makoveimiron.github.io/haztartas-frontend/#/login");
+    navigate("/login", { replace: true });
   }
 
   useEffect(() => {
@@ -83,7 +83,7 @@ const AdminPanel = () => {
   };
 
   if (redirectToDashboard) {
-    navigate("https://makoveimiron.github.io/haztartas-frontend/#/dahboard"); // Ha az állapot true, akkor átirányítunk a dashboard-ra
+    navigate("/dahboard", { replace: true }); // Ha az állapot true, akkor átirányítunk a dashboard-ra
   }
 
   return (

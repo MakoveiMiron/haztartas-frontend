@@ -8,7 +8,7 @@ const Dashboard = () => {
   const token = localStorage.getItem("token"); // Ellenőrizzük a token-t
 
   if (!token) {
-    navigate("https://makoveimiron.github.io/haztartas-frontend/#/login");
+    navigate("/login", { replace: true });
   }
 
   const user = JSON.parse(localStorage.getItem("user")); // Bejelentkezett felhasználó
@@ -36,7 +36,7 @@ const Dashboard = () => {
       {/* Admin gomb */}
       {user?.isAdmin && (
         <button
-          onClick={() => navigate("https://makoveimiron.github.io/haztartas-frontend/#/admin")}
+          onClick={() => navigate("/admin", { replace: true })}
           className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
         >
           Admin Panel
