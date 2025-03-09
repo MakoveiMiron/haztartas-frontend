@@ -77,9 +77,9 @@ const AdminPanel = () => {
     .catch(error => console.error('Error updating task:', error));
   };
 
-  // Navigálás a Dashboardra
+  // Navigálás a Dashboardra 
   const handleBackToDashboard = () => {
-    navigate("/dashboard", { replace: true });
+    navigate("/dashboard",  { replace: true });
   };
 
   return (
