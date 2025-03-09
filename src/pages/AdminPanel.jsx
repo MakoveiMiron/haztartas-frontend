@@ -83,7 +83,7 @@ const AdminPanel = () => {
   };
 
   if (redirectToDashboard) {
-    navigate("/dahboard", { replace: true }); // Ha az állapot true, akkor átirányítunk a dashboard-ra
+    navigate("/dashboard", { replace: true }); // Ha az állapot true, akkor átirányítunk a dashboard-ra
   }
 
   return (
