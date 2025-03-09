@@ -20,7 +20,7 @@ const Login = () => {
       console.log("resp", response)
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-      navigate("/dashboard", { replace:true })
+      navigate('/dashboard', { replace:true })
     } catch (error) {
       setError('Hibás felhasználónév vagy jelszó!');
     }
