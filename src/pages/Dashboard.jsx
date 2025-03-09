@@ -17,15 +17,18 @@ const Dashboard = () => {
   useEffect(() => {
     if (user) {
       axios
-        .get(
-          `https://haztartas-backend-production.up.railway.app/api/tasks/${user.id}`
-        )
+        .get(`https://haztartas-backend-production.up.railway.app/api/tasks/${user.id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`, // Itt küldöd a tokent
+          },
+        })
         .then((response) => {
-          setTasks(response.data);
+            setTasks(response.data);
         })
         .catch((error) => {
-          console.error("Error fetching tasks:", error);
+            console.error("Error fetching tasks:", error);
         });
+
     }
   }, [user]);
 
