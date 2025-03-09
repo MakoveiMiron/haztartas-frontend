@@ -49,7 +49,6 @@ const AdminPanel = () => {
       {
         name: newTask,
         assignedUsers: [selectedUser],
-        frequency: "daily", 
         days: selectedDays // Send the selected days
       },
       {
@@ -139,7 +138,7 @@ const AdminPanel = () => {
         {/* Checkboxes for days */}
         <div className="mt-2">
           <label className="font-bold">Napok</label>
-          {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(day => (
+          {['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'].map(day => (
             <div key={day} className="flex items-center">
               <input 
                 type="checkbox" 
