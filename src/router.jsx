@@ -6,7 +6,7 @@ import AdminPanel from './pages/AdminPanel';
 const router = (
   <Router basename="/haztartas-frontend">
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<App />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/admin" element={<AdminPanel />} />
     </Routes>
