@@ -15,7 +15,7 @@ const Login = () => {
       console.log("resp", response)
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-      navigate('#/dashboard',{ replace: true });  // Átirányítás a Dashboard oldalra
+      navigate('#/dashboard',{ replace: true });   // Átirányítás a Dashboard oldalra
     } catch (error) {
       setError('Hibás felhasználónév vagy jelszó!');
     }
