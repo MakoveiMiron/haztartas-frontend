@@ -7,14 +7,19 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const token = localStorage.getItem("token")
+
+  if(token){
+    navigate('/dashboard')
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('https://haztartas-backend-production.up.railway.app/api/auth/login', { username, password });
       console.log("resp", response)
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      await localStorage.setItem('token', response.data.token);
+      await localStorage.setItem('user', JSON.stringify(response.data.user));
       navigate("/dashboard", { replace: true }); // Átirányítás a Dashboard oldalra
     } catch (error) {
       setError('Hibás felhasználónév vagy jelszó!');
