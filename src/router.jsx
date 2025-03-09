@@ -1,14 +1,16 @@
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './Login';
+import App from './App';
 import Dashboard from './pages/Dashboard';
+import Login from './Login';
 import AdminPanel from './pages/AdminPanel';
 
 const router = (
   <Router basename="/haztartas-frontend">
     <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/admin" element={<AdminPanel />} />
+      <Route path="/" element={<Login />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin" element={<AdminPanel />} />
+      </Route>
     </Routes>
   </Router>
 );
