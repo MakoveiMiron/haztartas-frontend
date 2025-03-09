@@ -8,8 +8,8 @@ const router = (
   <Router basename="/haztartas-frontend">
     <Routes>
       <Route path="/" element={<Login />}>
-        <Route path="user/dashboard" element={<Dashboard />} />
-        <Route path="user/admin" element={<AdminPanel />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin" element={<AdminPanel />} />
       </Route>
     </Routes>
   </Router>
