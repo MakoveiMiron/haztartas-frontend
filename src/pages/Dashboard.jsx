@@ -6,7 +6,7 @@ const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const navigate = useNavigate();
   const token = localStorage.getItem("token"); // Ellenőrizzük a token-t
-  console.log(token)
+
   if (!token) {
     navigate("/login", { replace: true });
   }
@@ -30,7 +30,7 @@ const Dashboard = () => {
         });
 
     }
-  }, [user]);
+  }, []);
 
   return (
     <div className="p-4">
