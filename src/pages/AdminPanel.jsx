@@ -99,6 +99,9 @@ const AdminPanel = () => {
   };
 
   const handleSaveEdit = async () => {
+    console.log("editTaskData", editTaskData)
+    console.log("newTask",newTask)
+    console.log("selectedDays", selectedDays)
     if (editTaskData && newTask && selectedDays.length > 0) {
       try {
         await axios.put(
@@ -275,9 +278,9 @@ const AdminPanel = () => {
                     checked={selectedUsers.includes(user.username)}
                     onChange={() =>
                       setSelectedUsers((prev) =>
-                        prev.includes(user.id)
-                          ? prev.filter((id) => id !== user.id)
-                          : [...prev, user.id]
+                        prev.includes(user.username)
+                          ? prev.filter((name) => name !== user.username)
+                          : [...prev, user.username]
                       )
                     }
                   />
