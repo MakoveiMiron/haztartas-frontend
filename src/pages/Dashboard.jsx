@@ -25,7 +25,6 @@ const Dashboard = () => {
         .then((response) => {
           setTasks(response.data);
 
-          // Kezdetben minden napra `false` értéket állítunk be
           const initialCompletedDays = {};
           response.data.forEach((task) => {
             initialCompletedDays[task.id] = task.days.reduce((acc, day) => {
@@ -52,7 +51,6 @@ const Dashboard = () => {
   };
 
   const handleCompleteTask = (taskId) => {
-    // Ellenőrizzük, hogy az összes nap kész-e
     const allDaysCompleted = Object.values(completedDays[taskId]).every(Boolean);
 
     if (allDaysCompleted) {
@@ -76,9 +74,8 @@ const Dashboard = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Mai feladataid</h1>
+      <h1 className="text-3xl font-bold mb-4">Mai feladataid</h1>
 
-      {/* Admin gomb */}
       {user?.isAdmin && (
         <button
           onClick={() => navigate("/admin", { replace: true })}
@@ -89,28 +86,29 @@ const Dashboard = () => {
       )}
 
       <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-300">
+        <table className="w-full border border-gray-300 text-lg">
           <thead>
-            <tr className="bg-gray-200">
-              <th className="border px-4 py-2">Feladat</th>
+            <tr className="bg-gray-200 text-center">
+              <th className="border px-6 py-3 w-1/4 text-left">Feladat</th>
               {DAYS_OF_WEEK.map((day) => (
-                <th key={day} className="border px-4 py-2">{day}</th>
+                <th key={day} className="border px-6 py-3 min-w-[120px]">{day}</th>
               ))}
-              <th className="border px-4 py-2">Kész</th>
+              <th className="border px-6 py-3 min-w-[150px]">Kész</th>
             </tr>
           </thead>
           <tbody>
             {tasks.map((task) => (
-              <tr key={task.id} className="border">
-                <td className="border px-4 py-2 font-bold">{task.name}</td>
+              <tr key={task.id} className="border text-center">
+                <td className="border px-6 py-3 text-left font-semibold">{task.name}</td>
 
                 {DAYS_OF_WEEK.map((day) => (
-                  <td key={day} className="border px-4 py-2 text-center">
+                  <td key={day} className="border px-6 py-3">
                     {task.days.includes(day) ? (
                       <input
                         type="checkbox"
                         checked={completedDays[task.id]?.[day] || false}
                         onChange={() => handleDayCompletion(task.id, day)}
+                        className="w-6 h-6"
                       />
                     ) : (
                       "-"
@@ -118,11 +116,11 @@ const Dashboard = () => {
                   </td>
                 ))}
 
-                <td className="border px-4 py-2 text-center">
+                <td className="border px-6 py-3">
                   <button
                     onClick={() => handleCompleteTask(task.id)}
                     disabled={!Object.values(completedDays[task.id]).every(Boolean)}
-                    className={`px-4 py-2 rounded ${
+                    className={`px-6 py-3 text-lg rounded ${
                       Object.values(completedDays[task.id]).every(Boolean)
                         ? "bg-green-500 text-white"
                         : "bg-gray-300 text-gray-600 cursor-not-allowed"
