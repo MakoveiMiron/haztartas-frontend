@@ -292,7 +292,7 @@ const AdminPanel = () => {
                     type="checkbox"
                     value={user.id}
                     checked={selectedUsers.includes(user.username)}
-                    onChange={() =>{
+                    onChange={(prev) =>{
 
                       setSelectedUsers((prev) =>
                         prev.includes(user.username)
