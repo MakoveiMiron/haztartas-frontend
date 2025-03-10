@@ -257,20 +257,25 @@ const AdminPanel = () => {
                       </thead>
                       <tbody>
                         {user.tasks.map((task) => (
-                          <tr key={task.id}>
-                            <td>{task.name}</td>
-                            {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
-                              <td key={day}>
-                                <input
-                                  type="checkbox"
-                                  checked={task.progress[day] || false}
-                                  disabled
-                                />
-                              </td>
-                            ))}
-                          </tr>
-                        ))}
+                            <tr key={task.id}>
+                              <td>{task.name}</td>
+                              {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                                <td key={day}>
+                                  {task.days.includes(day) ? (
+                                    <input
+                                      type="checkbox"
+                                      checked={task.progress[day] || false}
+                                      disabled
+                                    />
+                                  ) : (
+                                    <span>-</span> // If the task isn't assigned to this day, display a dash
+                                  )}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
                       </tbody>
+
                     </table>
                   </div>
                 ) : (
