@@ -31,7 +31,7 @@ const AdminPanel = () => {
   };
 
   const fetchUsers = () => {
-    axios.get('https://haztartas-backend-production.up.railway.app/api/tasks/users',  {
+    axios.get('https://haztartas-backend-production.up.railway.app/api/tasks/get/users',  {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(response => setUsers(response.data))
