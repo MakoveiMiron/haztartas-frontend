@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "./Dashboard.css"; // 📌 Importáljuk az új CSS fájlt
 
 const DAYS_OF_WEEK = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"];
 
@@ -86,29 +87,29 @@ const Dashboard = () => {
       )}
 
       <div className="overflow-x-auto">
-        <table className="w-full border border-gray-300 text-lg">
+        <table className="task-table">
           <thead>
-            <tr className="bg-gray-200 text-center">
-              <th className="border px-6 py-3 w-1/4 text-left">Feladat</th>
+            <tr>
+              <th>Feladat</th>
               {DAYS_OF_WEEK.map((day) => (
-                <th key={day} className="border px-6 py-3 min-w-[120px]">{day}</th>
+                <th key={day}>{day}</th>
               ))}
-              <th className="border px-6 py-3 min-w-[150px]">Kész</th>
+              <th>Kész</th>
             </tr>
           </thead>
           <tbody>
             {tasks.map((task) => (
-              <tr key={task.id} className="border text-center">
-                <td className="border px-6 py-3 text-left font-semibold">{task.name}</td>
+              <tr key={task.id}>
+                <td>{task.name}</td>
 
                 {DAYS_OF_WEEK.map((day) => (
-                  <td key={day} className="border px-6 py-3">
+                  <td key={day}>
                     {task.days.includes(day) ? (
                       <input
                         type="checkbox"
                         checked={completedDays[task.id]?.[day] || false}
                         onChange={() => handleDayCompletion(task.id, day)}
-                        className="w-6 h-6"
+                        className="task-checkbox"
                       />
                     ) : (
                       "-"
@@ -116,14 +117,12 @@ const Dashboard = () => {
                   </td>
                 ))}
 
-                <td className="border px-6 py-3">
+                <td>
                   <button
                     onClick={() => handleCompleteTask(task.id)}
                     disabled={!Object.values(completedDays[task.id]).every(Boolean)}
-                    className={`px-6 py-3 text-lg rounded ${
-                      Object.values(completedDays[task.id]).every(Boolean)
-                        ? "bg-green-500 text-white"
-                        : "bg-gray-300 text-gray-600 cursor-not-allowed"
+                    className={`complete-btn ${
+                      Object.values(completedDays[task.id]).every(Boolean) ? "enabled" : "disabled"
                     }`}
                   >
                     Kész
