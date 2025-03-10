@@ -206,65 +206,72 @@ const AdminPanel = () => {
       </div>
 
       {/* Edit Task Modal */}
-      {showEditModal && (
-        <div className="edit-modal">
-          <div className="modal-content">
-            <h2>Feladat szerkesztése</h2>
-            <input
-              type="text"
-              value={newTask}
-              onChange={(e) => setNewTask(e.target.value)}
-              placeholder="Feladat neve"
-            />
-            <div className="user-selection">
-              <label className="label">Felhasználók</label>
-              {users.map((user) => (
-                <div key={user.id} className="checkbox">
-                  <input
-                    type="checkbox"
-                    value={user.id}
-                    checked={selectedUsers.includes(user.id)}
-                    onChange={() =>
-                      setSelectedUsers((prev) =>
-                        prev.includes(user.id)
-                          ? prev.filter((id) => id !== user.id)
-                          : [...prev, user.id]
-                      )
-                    }
-                  />
-                  <label>{user.username}</label>
-                </div>
-              ))}
+{showEditModal && (
+  <div className="edit-modal">
+    <div className="modal-content">
+      <h2>Feladat szerkesztése</h2>
+      <input
+        type="text"
+        value={newTask}
+        onChange={(e) => setNewTask(e.target.value)}
+        placeholder="Feladat neve"
+      />
+      
+      {/* Ensure users are loaded before displaying */}
+      {users && users.length > 0 ? (
+        <div className="user-selection">
+          <label className="label">Felhasználók</label>
+          {users.map((user) => (
+            <div key={user.id} className="checkbox">
+              <input
+                type="checkbox"
+                value={user.id}
+                checked={selectedUsers.includes(user.id)}
+                onChange={() =>
+                  setSelectedUsers((prev) =>
+                    prev.includes(user.id)
+                      ? prev.filter((id) => id !== user.id)
+                      : [...prev, user.id]
+                  )
+                }
+              />
+              <label>{user.username}</label>
             </div>
-
-            <div className="days-selection">
-              <label className="label">Napok</label>
-              {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
-                <div key={day} className="checkbox">
-                  <input
-                    type="checkbox"
-                    value={day}
-                    checked={selectedDays.includes(day)}
-                    onChange={() =>
-                      setSelectedDays((prev) =>
-                        prev.includes(day) ? prev.filter((item) => item !== day) : [...prev, day]
-                      )
-                    }
-                  />
-                  <label>{day}</label>
-                </div>
-              ))}
-            </div>
-
-            <button className="create-btn" onClick={handleSaveEdit}>
-              Mentés
-            </button>
-            <button onClick={() => setShowEditModal(false)} className="cancel-btn">
-              Mégse
-            </button>
-          </div>
+          ))}
         </div>
+      ) : (
+        <p>Felhasználók betöltése...</p>
       )}
+
+      <div className="days-selection">
+        <label className="label">Napok</label>
+        {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+          <div key={day} className="checkbox">
+            <input
+              type="checkbox"
+              value={day}
+              checked={selectedDays.includes(day)}
+              onChange={() =>
+                setSelectedDays((prev) =>
+                  prev.includes(day) ? prev.filter((item) => item !== day) : [...prev, day]
+                )
+              }
+            />
+            <label>{day}</label>
+          </div>
+        ))}
+      </div>
+
+      <button className="create-btn" onClick={handleSaveEdit}>
+        Mentés
+      </button>
+      <button onClick={() => setShowEditModal(false)} className="cancel-btn">
+        Mégse
+      </button>
+    </div>
+  </div>
+)}
+
 
       {/* Right Panel - User Tasks */}
       <div className="right-panel">
