@@ -1,16 +1,17 @@
+/* Admin Panel Container */
 .admin-panel-container {
     display: flex;
     height: 100vh;
     width: 100%;
     gap: 20px;
     background-color: #222222;
-    padding: 0; /* Removed padding here to make sure panels take full width */
+    padding: 0; /* Ensure panels take full width */
     box-sizing: border-box;
 }
 
-/* Bal panel - Task management */
+/* Left Panel - Task Management */
 .left-panel {
-    flex: 1; /* Allow the left panel to take equal space */
+    flex: 1; /* Ensure equal space for the left panel */
     padding: 20px;
     background-color: #222222;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
@@ -20,9 +21,9 @@
     gap: 15px;
 }
 
-/* Jobb panel - User task tables */
+/* Right Panel - User Task Tables */
 .right-panel {
-    flex: 1; /* Allow the right panel to take equal space */
+    flex: 1; /* Equal space for the right panel */
     padding: 20px;
     overflow-y: auto;
     background-color: #222222;
@@ -30,7 +31,7 @@
     border-radius: 10px;
 }
 
-/* Feladatok táblázat */
+/* User Task Tables */
 .user-task-table {
     margin-bottom: 30px;
 }
@@ -47,8 +48,9 @@ td {
     padding: 12px;
     text-align: center;
     border: 1px solid #ddd;
-    background-color: #222;
+    background-color: #333;
     color: white;
+    font-size: 16px;
 }
 
 /* Checkbox */
@@ -62,7 +64,7 @@ td {
     margin-right: 10px;
 }
 
-/* Gombok */
+/* Buttons */
 .create-btn,
 .back-button {
     background-color: #1d1d1d;
@@ -72,7 +74,8 @@ td {
     cursor: pointer;
     border: none;
     transition: background-color 0.3s ease;
-    width: 300px
+    width: 300px;
+    margin-top: 10px;
 }
 
 .create-btn:hover,
@@ -80,13 +83,13 @@ td {
     background-color: #111;
 }
 
-/* Címkék */
+/* Labels */
 .label {
     font-weight: bold;
     margin-bottom: 5px;
 }
 
-/* Reszponzív dizájn */
+/* Responsive Design */
 @media (max-width: 768px) {
     .admin-panel-container {
         flex-direction: column;
@@ -110,5 +113,6 @@ td {
     .back-button {
         padding: 10px;
         font-size: 14px;
+        width: 100%;
     }
 }
