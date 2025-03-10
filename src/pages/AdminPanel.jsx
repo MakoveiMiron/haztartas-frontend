@@ -101,11 +101,11 @@ const AdminPanel = () => {
   const handleSaveEdit = async () => {
     console.log("editTaskData", editTaskData)
     console.log("newTask",newTask)
-    console.log("selectedDays", selectedDays)
+    console.log("selectedDays", selectedUsers)
     if (editTaskData && newTask && selectedDays.length > 0) {
       try {
         await axios.put(
-          `https://haztartas-backend-production.up.railway.app/api/tasks/${editTaskData.id}`,
+          `https://haztartas-backend-production.up.railway.app/api/tasks/update/${editTaskData.id}`,
           {
             name: newTask,
             assignedUsers: selectedUsers,
