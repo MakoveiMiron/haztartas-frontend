@@ -92,126 +92,127 @@ const AdminPanel = () => {
 
   return (
     <div className="admin-panel-container">
-      {/* Left Panel - Task Management */}
-      <div className="left-panel">
-        <button onClick={handleBackToDashboard} className="back-button">
-          Vissza a Dashboardra
-        </button>
+  {/* Left Panel - Task Management */}
+  <div className="left-panel">
+    <button onClick={handleBackToDashboard} className="back-button">
+      Vissza a Dashboardra
+    </button>
 
-        <div className="task-management">
-          <h2>Feladat létrehozása</h2>
-          <input
-            type="text"
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            placeholder="Feladat neve"
-            className="input-field"
-          />
+    <div className="task-management">
+      <h2>Feladat létrehozása</h2>
+      <input
+        type="text"
+        value={newTask}
+        onChange={(e) => setNewTask(e.target.value)}
+        placeholder="Feladat neve"
+        className="input-field"
+      />
 
-          {/* User Selection */}
-          <div className="user-selection">
-            <label className="label">Felhasználók</label>
-            {users.map((user) => (
-              <div key={user.id} className="checkbox">
-                <input
-                  type="checkbox"
-                  value={user.id}
-                  checked={selectedUsers.includes(user.id)}
-                  onChange={() =>
-                    setSelectedUsers((prev) =>
-                      prev.includes(user.id) ? prev.filter((id) => id !== user.id) : [...prev, user.id]
-                    )
-                  }
-                />
-                <label>{user.username}</label>
-              </div>
-            ))}
+      {/* User Selection */}
+      <div className="user-selection">
+        <label className="label">Felhasználók</label>
+        {users.map((user) => (
+          <div key={user.id} className="checkbox">
+            <input
+              type="checkbox"
+              value={user.id}
+              checked={selectedUsers.includes(user.id)}
+              onChange={() =>
+                setSelectedUsers((prev) =>
+                  prev.includes(user.id)
+                    ? prev.filter((id) => id !== user.id)
+                    : [...prev, user.id]
+                )
+              }
+            />
+            <label>{user.username}</label>
           </div>
-
-          {/* Day Selection */}
-          <div className="days-selection">
-            <label className="label">Napok</label>
-            {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
-              <div key={day} className="checkbox">
-                <input
-                  type="checkbox"
-                  value={day}
-                  checked={selectedDays.includes(day)}
-                  onChange={() =>
-                    setSelectedDays((prev) =>
-                      prev.includes(day) ? prev.filter((item) => item !== day) : [...prev, day]
-                    )
-                  }
-                />
-                <label>{day}</label>
-              </div>
-            ))}
-          </div>
-
-          <button className="create-btn" onClick={handleCreateTask}>Feladat létrehozása</button>
-        </div>
-
-        {/* Show uncompleted tasks only after 8 PM */}
-        {currentHour >= 20 && (
-          <div className="task-list">
-            <h2>El nem készült feladatok</h2>
-            {tasks
-              .filter((task) => task.days.includes(today))
-              .map((task) => (
-                <div key={task.id} className="task-item">
-                  <span>{task.name}</span>
-                </div>
-              ))}
-          </div>
-        )}
+        ))}
       </div>
 
-      {/* Right Panel - User Tasks */}
-      <div className="right-panel">
-        <h2 className="header">Felhasználói feladatok</h2>
-        {loading ? (
-          <p>Adatok betöltése...</p>
-        ) : (
-          usersProgress?.map((user) => (
-            <div key={user.userId} className="user-task-table">
-              <h3>{user.username} - Feladatok</h3>
-              {user.tasks.length > 0 ? (
-                <div className="task-table-container">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th>Feladat</th>
-                        {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
-                          <th key={day}>{day}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {user.tasks.map((task) => (
-                        <tr key={task.id}>
-                          <td>{task.name}</td>
-                          {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
-                            <td key={day}>
-                              <input
-                                type="checkbox"
-                                checked={task.progress[day] || false}
-                                disabled
-                              />
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <p>Ez a felhasználó nincs hozzárendelve feladatokhoz.</p>
-              )}
-            </div>
-          ))
-        )}
+      {/* Day Selection */}
+      <div className="days-selection">
+        <label className="label">Napok</label>
+        {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+          <div key={day} className="checkbox">
+            <input
+              type="checkbox"
+              value={day}
+              checked={selectedDays.includes(day)}
+              onChange={() =>
+                setSelectedDays((prev) =>
+                  prev.includes(day) ? prev.filter((item) => item !== day) : [...prev, day]
+                )
+              }
+            />
+            <label>{day}</label>
+          </div>
+        ))}
       </div>
+
+      <button className="create-btn" onClick={handleCreateTask}>
+        Feladat létrehozása
+      </button>
     </div>
+
+    {/* Show uncompleted tasks only after 8 PM */}
+    {currentHour >= 20 && (
+      <div className="task-list">
+        <h2>El nem készült feladatok</h2>
+        {tasks
+          .filter((task) => task.days.includes(today))
+          .map((task) => (
+            <div key={task.id} className="task-item">
+              <span>{task.name}</span>
+            </div>
+          ))}
+      </div>
+    )}
+  </div>
+
+  {/* Right Panel - User Tasks */}
+  <div className="right-panel">
+    <h2 className="header">Felhasználói feladatok</h2>
+    {loading ? (
+      <p>Adatok betöltése...</p>
+    ) : (
+      usersProgress?.map((user) => (
+        <div key={user.userId} className="user-task-table">
+          <h3>{user.username} - Feladatok</h3>
+          {user.tasks.length > 0 ? (
+            <div className="task-table-container">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Feladat</th>
+                    {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                      <th key={day}>{day}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {user.tasks.map((task) => (
+                    <tr key={task.id}>
+                      <td>{task.name}</td>
+                      {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                        <td key={day}>
+                          <input type="checkbox" checked={task.progress[day] || false} disabled />
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p>Ez a felhasználó nincs hozzárendelve feladatokhoz.</p>
+          )}
+        </div>
+      ))
+    )}
+  </div>
+</div>
+
   );
 };
 
