@@ -106,7 +106,6 @@ const AdminPanel = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      await fetchData()
       location.reload()
     }
     catch(err){
@@ -134,7 +133,6 @@ const AdminPanel = () => {
         alert("Feladat sikeresen frissítve");
         setShowEditModal(false);
         setSelectedDays([])
-        fetchData();
       } catch (error) {
         alert("Hiba történt a feladat frissítésekor");
         console.error(error);
