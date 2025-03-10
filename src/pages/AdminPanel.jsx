@@ -88,6 +88,7 @@ const AdminPanel = () => {
         setNewTask('');
         setSelectedUsers([]);
         setSelectedDays([]);
+        setEditedUsers([])
         location.reload();
       } catch (error) {
         alert("Hiba történt a feladat létrehozásakor");
@@ -115,6 +116,7 @@ const AdminPanel = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      setEditedUsers([])
       location.reload();
     } catch (err) {
       console.log(err);
