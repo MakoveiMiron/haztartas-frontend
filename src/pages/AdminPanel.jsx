@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import './AdminPanel.css';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "./AdminPanel.css";
 
 const AdminPanel = () => {
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
-  const [newTask, setNewTask] = useState('');
+  const [newTask, setNewTask] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selectedDays, setSelectedDays] = useState([]);
   const [editingTask, setEditingTask] = useState(null);
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const currentHour = new Date().getHours();
-  const currentDay = new Date().toLocaleString('hu-HU', { weekday: 'long' });
+  const today = new Date().toLocaleString("hu-HU", { weekday: "long" }); // Aktuális nap magyarul
 
   if (!token) {
     navigate("/login", { replace: true });
@@ -25,135 +25,111 @@ const AdminPanel = () => {
   }, []);
 
   const fetchTasks = () => {
-    axios.get('https://haztartas-backend-production.up.railway.app/api/tasks', {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(response => setTasks(response.data))
-      .catch(error => console.error('Error fetching tasks:', error));
+    axios
+      .get("https://haztartas-backend-production.up.railway.app/api/tasks", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => setTasks(response.data))
+      .catch((error) => console.error("Error fetching tasks:", error));
   };
 
   const fetchUsers = () => {
-    axios.get('https://haztartas-backend-production.up.railway.app/api/tasks/fetch/users', {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(response => setUsers(response.data))
-      .catch(error => console.error('Error fetching users:', error));
-  };
-
-  const handleCreateTask = () => {
-    if (!newTask || selectedUsers.length === 0 || selectedDays.length === 0) {
-      return alert("Adj meg egy feladatnevet, válassz legalább egy felhasználót és egy napot!");
-    }
-
-    axios.post('https://haztartas-backend-production.up.railway.app/api/tasks', 
-      {
-        name: newTask,
-        assignedUsers: selectedUsers, 
-        days: selectedDays 
-      },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    )
-    .then(() => {
-      setNewTask('');
-      setSelectedUsers([]);
-      setSelectedDays([]);
-      fetchTasks();
-    })
-    .catch(error => console.error('Error creating task:', error));
-  };
-
-  const handleDeleteTask = (taskId) => {
-    axios.delete(`https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(() => fetchTasks())
-      .catch(error => console.error('Error deleting task:', error));
+    axios
+      .get(
+        "https://haztartas-backend-production.up.railway.app/api/tasks/fetch/users",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => setUsers(response.data))
+      .catch((error) => console.error("Error fetching users:", error));
   };
 
   const handleBackToDashboard = () => {
     navigate("/dashboard", { replace: true });
   };
 
-  const handleDayChange = (day) => {
-    setSelectedDays(prevState => 
-      prevState.includes(day) 
-        ? prevState.filter(item => item !== day) 
-        : [...prevState, day]
-    );
-  };
-
-  const handleUserChange = (userId) => {
-    setSelectedUsers(prevState => 
-      prevState.includes(userId)
-        ? prevState.filter(id => id !== userId)
-        : [...prevState, userId]
-    );
-  };
-
-  // Aznapi, be nem fejezett feladatok kiszűrése
-  const uncompletedTasksToday = tasks.filter(task => 
-    task.days.includes(currentDay) && !task.completed
-  );
-
   return (
     <div className="admin-panel-container">
+      {/* Bal panel - Feladatok kezelése */}
       <div className="left-panel">
-        <button 
-          onClick={handleBackToDashboard} 
-          className="back-button"
-        >
+        <button onClick={handleBackToDashboard} className="back-button">
           Vissza a Dashboardra
         </button>
 
-        {/* Csak este 8 után jelenjen meg a feladatkezelő */}
+        <div className="task-management">
+          <h2>Feladat létrehozása</h2>
+          <input
+            type="text"
+            value={newTask}
+            onChange={(e) => setNewTask(e.target.value)}
+            placeholder="Feladat neve"
+            className="input-field"
+          />
+
+          {/* Felhasználók kiválasztása */}
+          <div className="user-selection">
+            <label className="label">Felhasználók</label>
+            {users.map((user) => (
+              <div key={user.id} className="checkbox">
+                <input
+                  type="checkbox"
+                  value={user.id}
+                  checked={selectedUsers.includes(user.id)}
+                  onChange={() =>
+                    setSelectedUsers((prev) =>
+                      prev.includes(user.id)
+                        ? prev.filter((id) => id !== user.id)
+                        : [...prev, user.id]
+                    )
+                  }
+                />
+                <label>{user.username}</label>
+              </div>
+            ))}
+          </div>
+
+          {/* Napok kiválasztása */}
+          <div className="days-selection">
+            <label className="label">Napok</label>
+            {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+              <div key={day} className="checkbox">
+                <input
+                  type="checkbox"
+                  value={day}
+                  checked={selectedDays.includes(day)}
+                  onChange={() =>
+                    setSelectedDays((prev) =>
+                      prev.includes(day)
+                        ? prev.filter((item) => item !== day)
+                        : [...prev, day]
+                    )
+                  }
+                />
+                <label>{day}</label>
+              </div>
+            ))}
+          </div>
+
+          <button className="btn create-btn">Feladat létrehozása</button>
+        </div>
+
+        {/* Csak 20 óra után jelenítse meg az el nem készült feladatokat */}
         {currentHour >= 20 && (
-          <div className="task-management">
-            <h2>Feladat létrehozása</h2>
-            <input 
-              type="text"
-              value={newTask}
-              onChange={(e) => setNewTask(e.target.value)}
-              placeholder="Feladat neve"
-              className="input-field"
-            />
-
-            <div className="user-selection">
-              <label className="label">Felhasználók</label>
-              {users.map(user => (
-                <div key={user.id} className="checkbox">
-                  <input 
-                    type="checkbox" 
-                    value={user.id}
-                    checked={selectedUsers.includes(user.id)}
-                    onChange={() => handleUserChange(user.id)}
-                  />
-                  <label>{user.username}</label>
+          <div className="task-list">
+            <h2>El nem készült feladatok</h2>
+            {tasks
+              .filter((task) => task.days.includes(today)) // Csak a mai napra szólókat szűrjük
+              .map((task) => (
+                <div key={task.id} className="task-item">
+                  <span>{task.name}</span>
                 </div>
               ))}
-            </div>
-
-            <div className="days-selection">
-              <label className="label">Napok</label>
-              {['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'].map(day => (
-                <div key={day} className="checkbox">
-                  <input 
-                    type="checkbox" 
-                    value={day}
-                    checked={selectedDays.includes(day)}
-                    onChange={() => handleDayChange(day)}
-                  />
-                  <label>{day}</label>
-                </div>
-              ))}
-            </div>
-
-            <button onClick={handleCreateTask} className="btn create-btn">Feladat létrehozása</button>
           </div>
         )}
       </div>
 
+      {/* Jobb panel - Felhasználók feladatai */}
       <div className="right-panel">
         <h2 className="header">Felhasználói feladatok</h2>
         {users.map((user) => (
@@ -174,18 +150,22 @@ const AdminPanel = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {uncompletedTasksToday.filter(task => task.assignedUsers.includes(user.id)).map(task => (
-                    <tr key={task.id}>
-                      <td>{task.name}</td>
-                      {['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'].map((day) => (
-                        <td key={day}>
-                          {task.days.includes(day) && (
-                            <input type="checkbox" disabled />
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
+                  {tasks
+                    .filter(
+                      (task) =>
+                        task.assignedUsers.includes(user.id) &&
+                        task.days.includes(today) // Csak az adott user mai napi feladatai
+                    )
+                    .map((task) => (
+                      <tr key={task.id}>
+                        <td>{task.name}</td>
+                        {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                          <td key={day}>
+                            {task.days.includes(day) && <input type="checkbox" disabled />}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
