@@ -75,6 +75,8 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+      <h1 className="text-3xl font-bold mb-4">Mai feladataid</h1>
+
       {user?.isAdmin && (
         <button
           onClick={() => navigate("/admin", { replace: true })}
@@ -84,9 +86,7 @@ const Dashboard = () => {
         </button>
       )}
 
-      <h1 className="header">Heti feladataid</h1>
-
-      <div className="table-container">
+      <div className="overflow-x-auto">
         <table className="task-table">
           <thead>
             <tr>
