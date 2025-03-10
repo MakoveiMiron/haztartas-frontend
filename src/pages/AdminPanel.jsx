@@ -299,7 +299,7 @@ const AdminPanel = () => {
                           ? prev.filter((name) => name !== user.username)
                           : [...prev, user.username]
                       );
-                      setEditedUsers([...prev, user.id])
+                      setEditedUsers((prev) => [...prev, user.id])
                     }
                     }
                   />
