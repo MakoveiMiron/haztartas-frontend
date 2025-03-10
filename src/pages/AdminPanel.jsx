@@ -136,7 +136,7 @@ const AdminPanel = () => {
         >
           <option value="">Válassz felhasználót</option>
           {users.map(user => (
-            <option className='text-white' key={user.id} value={user.id}>{user.name}</option>
+            <option key={user.id} value={user.id}>{user.username}</option>
           ))}
         </select>
         
