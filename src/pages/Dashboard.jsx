@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const DAYS_OF_WEEK = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"];
+
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [completedDays, setCompletedDays] = useState({});
@@ -27,7 +29,7 @@ const Dashboard = () => {
           const initialCompletedDays = {};
           response.data.forEach((task) => {
             initialCompletedDays[task.id] = task.days.reduce((acc, day) => {
-              acc[day] = false; // Kezdetben minden nap nincs kész
+              acc[day] = false;
               return acc;
             }, {});
           });
@@ -43,61 +45,97 @@ const Dashboard = () => {
   const handleDayCompletion = (taskId, day) => {
     setCompletedDays((prevState) => {
       const updatedDays = { ...prevState };
-
-      // Flip the checkbox state
       updatedDays[taskId][day] = !updatedDays[taskId][day];
-
-      // Ellenőrizzük, hogy minden nap kész-e
-      const allDaysCompleted = Object.values(updatedDays[taskId]).every(Boolean);
-
-      // Frissítjük az adatbázist, ha minden nap kész van
-      if (allDaysCompleted) {
-        axios
-          .put(`https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`, 
-          { is_completed: true }, 
-          { headers: { Authorization: `Bearer ${token}` } })
-          .then(() => console.log(`Task ${taskId} completed!`))
-          .catch((error) => console.error("Error updating task:", error));
-      }
 
       return updatedDays;
     });
   };
 
+  const handleCompleteTask = (taskId) => {
+    // Ellenőrizzük, hogy az összes nap kész-e
+    const allDaysCompleted = Object.values(completedDays[taskId]).every(Boolean);
+
+    if (allDaysCompleted) {
+      axios
+        .put(
+          `https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`,
+          { is_completed: true },
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then(() => {
+          console.log(`Task ${taskId} completed!`);
+          setTasks((prevTasks) =>
+            prevTasks.map((task) =>
+              task.id === taskId ? { ...task, is_completed: true } : task
+            )
+          );
+        })
+        .catch((error) => console.error("Error updating task:", error));
+    }
+  };
+
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold">Mai feladataid</h1>
+      <h1 className="text-2xl font-bold mb-4">Mai feladataid</h1>
 
       {/* Admin gomb */}
       {user?.isAdmin && (
         <button
           onClick={() => navigate("/admin", { replace: true })}
-          className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+          className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
         >
           Admin Panel
         </button>
       )}
 
-      <ul className="mt-4">
-        {tasks.map((task) => (
-          <li key={task.id} className="p-2 border-b">
-            <span className="font-bold">{task.name}</span>
-            <div className="mt-2">
-              {task.days.map((day) => (
-                <label key={day} className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={completedDays[task.id]?.[day] || false}
-                    onChange={() => handleDayCompletion(task.id, day)}
-                    className="mr-2"
-                  />
-                  {day}
-                </label>
+      <div className="overflow-x-auto">
+        <table className="min-w-full border border-gray-300">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border px-4 py-2">Feladat</th>
+              {DAYS_OF_WEEK.map((day) => (
+                <th key={day} className="border px-4 py-2">{day}</th>
               ))}
-            </div>
-          </li>
-        ))}
-      </ul>
+              <th className="border px-4 py-2">Kész</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tasks.map((task) => (
+              <tr key={task.id} className="border">
+                <td className="border px-4 py-2 font-bold">{task.name}</td>
+
+                {DAYS_OF_WEEK.map((day) => (
+                  <td key={day} className="border px-4 py-2 text-center">
+                    {task.days.includes(day) ? (
+                      <input
+                        type="checkbox"
+                        checked={completedDays[task.id]?.[day] || false}
+                        onChange={() => handleDayCompletion(task.id, day)}
+                      />
+                    ) : (
+                      "-"
+                    )}
+                  </td>
+                ))}
+
+                <td className="border px-4 py-2 text-center">
+                  <button
+                    onClick={() => handleCompleteTask(task.id)}
+                    disabled={!Object.values(completedDays[task.id]).every(Boolean)}
+                    className={`px-4 py-2 rounded ${
+                      Object.values(completedDays[task.id]).every(Boolean)
+                        ? "bg-green-500 text-white"
+                        : "bg-gray-300 text-gray-600 cursor-not-allowed"
+                    }`}
+                  >
+                    Kész
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
