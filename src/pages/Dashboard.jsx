@@ -107,7 +107,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <h1 className="text-3xl font-bold mb-4">Mai feladataid</h1>
+      <h1 className="text-3xl font-bold mb-4">Heti feladataid</h1>
 
       {user?.isAdmin && (
         <button
