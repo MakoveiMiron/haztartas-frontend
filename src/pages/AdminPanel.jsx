@@ -13,7 +13,7 @@ const AdminPanel = () => {
   const [usersProgress, setUsersProgress] = useState([]);
   const [editTaskData, setEditTaskData] = useState(null); // for edit modal
   const [showEditModal, setShowEditModal] = useState(false); // to toggle the modal
-  
+
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const today = new Date().toLocaleString("hu-HU", { weekday: "long" });
@@ -265,7 +265,7 @@ const AdminPanel = () => {
           </div>
         </div>
       )}
-      
+
       {/* Right Panel - User Tasks */}
       <div className="right-panel">
         <h2 className="header">Felhasználói feladatok</h2>
