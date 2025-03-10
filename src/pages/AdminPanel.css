@@ -8,7 +8,7 @@
 
 /* Bal panel */
 .left-panel {
-    width: 320px;
+    width: 20%;
     padding: 20px;
     background-color: #222222;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
@@ -20,6 +20,7 @@
 
 /* Jobb panel */
 .right-panel {
+    width: 80%;
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;

@@ -10,6 +10,7 @@ const AdminPanel = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selectedDays, setSelectedDays] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [usersProgress, setUsersProgress] = useState([])
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -21,7 +22,17 @@ const AdminPanel = () => {
       navigate("/login", { replace: true });
       return;
     }
+    const fetchUserProgress = async () => {
+      try{
+        const result = await axios.get("https://haztartas-backend-production.up.railway.app/api/tasks/progress/all-users", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        setUsersProgress(result)
+      }
+      catch(err){
 
+      }
+    }
     const fetchData = async () => {
       try {
         const [taskRes, userRes] = await Promise.all([
@@ -43,6 +54,7 @@ const AdminPanel = () => {
     };
 
     fetchData();
+    fetchUserProgress();
   }, [navigate, token]);
 
   const handleBackToDashboard = () => navigate("/dashboard", { replace: true });
@@ -129,7 +141,7 @@ const AdminPanel = () => {
         {loading ? (
           <p>Adatok betöltése...</p>
         ) : (
-          users.map((user) => (
+          usersProgress.map((user) => (
             <div key={user.id} className="user-task-table">
               <h3>{user.username} - Feladatok</h3>
               <div className="task-table-container">
@@ -143,8 +155,8 @@ const AdminPanel = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {tasks
-                      .filter((task) => task.assignedUsers.includes(user.id) && task.days.includes(today))
+                    {(usersProgress.tasks)
+                      .filter((task) => task.days.includes(today))
                       .map((task) => (
                         <tr key={task.id}>
                           <td>{task.name}</td>
