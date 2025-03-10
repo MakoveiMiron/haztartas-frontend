@@ -84,7 +84,7 @@ const Dashboard = () => {
     if (allDaysCompleted) {
       axios
         .put(
-          `https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`,
+          `https://haztartas-backend-production.up.railway.app/api/tasks/complete/${taskId}`,
           { is_completed: true },
           { headers: { Authorization: `Bearer ${token}` } }
         )
