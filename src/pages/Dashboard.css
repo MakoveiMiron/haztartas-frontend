@@ -8,7 +8,6 @@
   width: 100%;
   position: relative;
   text-align: center;
-  padding-top: 20px;
   background-color: #222222; /* Háttér szín */
 }
 
@@ -16,7 +15,7 @@
 h1 {
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-top: 20px;
   text-align: center;
   width: 100%;
   color: white;
