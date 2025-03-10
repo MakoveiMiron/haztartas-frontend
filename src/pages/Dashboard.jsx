@@ -50,7 +50,7 @@ const Dashboard = () => {
       // Send the updated progress to the backend
       axios
         .put(
-          `https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`,
+          `https://haztartas-backend-production.up.railway.app/api/tasks/progress/${taskId}`,
           { days: updatedDays[taskId], is_completed: Object.values(updatedDays[taskId]).every(Boolean) },
           { headers: { Authorization: `Bearer ${token}` } }
         )
