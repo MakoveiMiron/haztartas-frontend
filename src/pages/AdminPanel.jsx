@@ -114,6 +114,7 @@ const AdminPanel = () => {
         );
         alert("Feladat sikeresen frissítve");
         setShowEditModal(false);
+        setSelectedDays([])
         fetchData();
       } catch (error) {
         alert("Hiba történt a feladat frissítésekor");
@@ -307,7 +308,7 @@ const AdminPanel = () => {
             <button className="create-btn" onClick={handleSaveEdit}>
               Mentés
             </button>
-            <button onClick={() => setShowEditModal(false)} className="cancel-btn">
+            <button onClick={() => {setShowEditModal(false); setSelectedDays([])}} className="cancel-btn">
               Mégse
             </button>
           </div>
