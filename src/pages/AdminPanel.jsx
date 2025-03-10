@@ -27,7 +27,7 @@ const AdminPanel = () => {
         const result = await axios.get("https://haztartas-backend-production.up.railway.app/api/tasks/progress/all-users", {
           headers: { Authorization: `Bearer ${token}` },
         })
-        setUsersProgress(result)
+        setUsersProgress(result.data)
       }
       catch(err){
 
