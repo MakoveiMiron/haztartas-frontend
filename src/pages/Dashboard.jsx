@@ -37,6 +37,7 @@ const Dashboard = () => {
           });
 
           setCompletedDays(initialCompletedDays);
+          console.log("Initial completedDays state:", initialCompletedDays); // Log initial state for debugging
         })
         .catch((error) => {
           console.error("Error fetching tasks:", error);
@@ -128,7 +129,7 @@ const Dashboard = () => {
                     {task.days?.includes(day) ? (
                       <input
                         type="checkbox"
-                        checked={completedDays[task.id]?.[day] || false}  // If task.id or completedDays is undefined, default to false
+                        checked={completedDays[task.id]?.[day] || false}  // Ensure the checkbox is checked when appropriate
                         onChange={() => handleDayCompletion(task.id, day)}  // Handle the checkbox toggle
                         className="task-checkbox"
                       />
