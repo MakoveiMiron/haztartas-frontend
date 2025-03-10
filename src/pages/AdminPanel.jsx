@@ -81,6 +81,7 @@ const AdminPanel = () => {
         setNewTask('');
         setSelectedUsers([]);
         setSelectedDays([]);
+        location.reload()
       } catch (error) {
         alert("Hiba történt a feladat létrehozásakor");
         console.error(error);
@@ -101,7 +102,7 @@ const AdminPanel = () => {
   const handleDelete = async (taskId) => {
     try{
       await axios.delete(
-        `https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`,
+        `https://haztartas-backend-production.up.railway.app/api/tasks/delete/${taskId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
