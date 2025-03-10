@@ -12,21 +12,16 @@ const AdminPanel = () => {
   const [editingTask, setEditingTask] = useState(null);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
+  const currentHour = new Date().getHours();
+  const currentDay = new Date().toLocaleString('hu-HU', { weekday: 'long' });
 
   if (!token) {
     navigate("/login", { replace: true });
   }
 
   useEffect(() => {
-    const fetchTasksAndUsers = () => {
-      const currentHour = new Date().getHours();
-      if (currentHour >= 20) {
-        fetchTasks();
-        fetchUsers();
-      }
-    };
-
-    fetchTasksAndUsers();
+    fetchTasks();
+    fetchUsers();
   }, []);
 
   const fetchTasks = () => {
@@ -77,27 +72,6 @@ const AdminPanel = () => {
       .catch(error => console.error('Error deleting task:', error));
   };
 
-  const handleEditTask = (task) => {
-    setEditingTask(task);
-  };
-
-  const handleUpdateTask = () => {
-    if (!editingTask) return;
-
-    axios.put(`https://haztartas-backend-production.up.railway.app/api/tasks/${editingTask.id}`, {
-      name: editingTask.name,
-      assignedUsers: editingTask.assignedUsers,
-      days: editingTask.days,
-    }, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    .then(() => {
-      setEditingTask(null);
-      fetchTasks();
-    })
-    .catch(error => console.error('Error updating task:', error));
-  };
-
   const handleBackToDashboard = () => {
     navigate("/dashboard", { replace: true });
   };
@@ -118,6 +92,11 @@ const AdminPanel = () => {
     );
   };
 
+  // Aznapi, be nem fejezett feladatok kiszűrése
+  const uncompletedTasksToday = tasks.filter(task => 
+    task.days.includes(currentDay) && !task.completed
+  );
+
   return (
     <div className="admin-panel-container">
       <div className="left-panel">
@@ -128,77 +107,49 @@ const AdminPanel = () => {
           Vissza a Dashboardra
         </button>
 
-        <div className="task-management">
-          <h2>Feladat létrehozása</h2>
-          <input 
-            type="text"
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            placeholder="Feladat neve"
-            className="input-field"
-          />
-
-          <div className="user-selection">
-            <label className="label">Felhasználók</label>
-            {users.map(user => (
-              <div key={user.id} className="checkbox">
-                <input 
-                  type="checkbox" 
-                  value={user.id}
-                  checked={selectedUsers.includes(user.id)}
-                  onChange={() => handleUserChange(user.id)}
-                />
-                <label>{user.username}</label>
-              </div>
-            ))}
-          </div>
-
-          <div className="days-selection">
-            <label className="label">Napok</label>
-            {['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'].map(day => (
-              <div key={day} className="checkbox">
-                <input 
-                  type="checkbox" 
-                  value={day}
-                  checked={selectedDays.includes(day)}
-                  onChange={() => handleDayChange(day)}
-                />
-                <label>{day}</label>
-              </div>
-            ))}
-          </div>
-
-          <button onClick={handleCreateTask} className="btn create-btn">Feladat létrehozása</button>
-        </div>
-
-        {editingTask && (
-          <div className="task-editing">
-            <h2>Szerkesztés: {editingTask.name}</h2>
-            <input
+        {/* Csak este 8 után jelenjen meg a feladatkezelő */}
+        {currentHour >= 20 && (
+          <div className="task-management">
+            <h2>Feladat létrehozása</h2>
+            <input 
               type="text"
-              value={editingTask.name}
-              onChange={(e) => setEditingTask({ ...editingTask, name: e.target.value })}
+              value={newTask}
+              onChange={(e) => setNewTask(e.target.value)}
+              placeholder="Feladat neve"
+              className="input-field"
             />
-            {/* Allow user editing for days */}
+
+            <div className="user-selection">
+              <label className="label">Felhasználók</label>
+              {users.map(user => (
+                <div key={user.id} className="checkbox">
+                  <input 
+                    type="checkbox" 
+                    value={user.id}
+                    checked={selectedUsers.includes(user.id)}
+                    onChange={() => handleUserChange(user.id)}
+                  />
+                  <label>{user.username}</label>
+                </div>
+              ))}
+            </div>
+
             <div className="days-selection">
+              <label className="label">Napok</label>
               {['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'].map(day => (
                 <div key={day} className="checkbox">
                   <input 
                     type="checkbox" 
-                    checked={editingTask.days.includes(day)}
-                    onChange={() => {
-                      const updatedDays = editingTask.days.includes(day)
-                        ? editingTask.days.filter(d => d !== day)
-                        : [...editingTask.days, day];
-                      setEditingTask({ ...editingTask, days: updatedDays });
-                    }}
+                    value={day}
+                    checked={selectedDays.includes(day)}
+                    onChange={() => handleDayChange(day)}
                   />
                   <label>{day}</label>
                 </div>
               ))}
             </div>
 
-            <button onClick={handleUpdateTask} className="btn update-btn">Frissítés</button>
+            <button onClick={handleCreateTask} className="btn create-btn">Feladat létrehozása</button>
           </div>
         )}
       </div>
@@ -223,16 +174,13 @@ const AdminPanel = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {tasks.filter(task => task.assignedUsers.includes(user.id) && task.days.includes(new Date().toLocaleString('en-us', { weekday: 'long' }))).map(task => (
+                  {uncompletedTasksToday.filter(task => task.assignedUsers.includes(user.id)).map(task => (
                     <tr key={task.id}>
                       <td>{task.name}</td>
                       {['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'].map((day) => (
                         <td key={day}>
                           {task.days.includes(day) && (
-                            <input
-                              type="checkbox"
-                              disabled
-                            />
+                            <input type="checkbox" disabled />
                           )}
                         </td>
                       ))}
