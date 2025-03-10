@@ -11,10 +11,8 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
-  // If token is not available, redirect to login
   if (!token) {
     navigate("/login", { replace: true });
-    return null; // Return early to prevent rendering
   }
 
   const user = JSON.parse(localStorage.getItem("user"));
@@ -38,7 +36,8 @@ const Dashboard = () => {
         const initialCompletedDays = {};
         fetchedTasks.forEach((task) => {
           initialCompletedDays[task.id] = task.days.reduce((acc, day) => {
-            acc[day] = task.progress && task.progress[day] ? true : false; // Set based on the fetched progress
+            // Set the initial completion status based on the `progress` field
+            acc[day] = task.progress && task.progress[day] ? task.progress[day] : false;
             return acc;
           }, {});
         });
@@ -134,7 +133,7 @@ const Dashboard = () => {
                     {task.days?.includes(day) ? (
                       <input
                         type="checkbox"
-                        checked={completedDays[task.id]?.[day] || false} // Reflect task completion status
+                        checked={completedDays[task.id]?.[day] || false} // Ensure checkbox reflects task completion
                         onChange={() => handleDayCompletion(task.id, day)} // Toggle completion on checkbox change
                         className="task-checkbox"
                       />
