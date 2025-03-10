@@ -145,13 +145,10 @@ const AdminPanel = () => {
         {loading ? (
           <p>Adatok betöltése...</p>
         ) : (
-          usersProgress?.tasks &&
-          Array.isArray(usersProgress.tasks) &&
-          usersProgress.tasks
-            .filter((task) => task.days.includes(today))
-            .map((task) => (
-              <div key={task.id} className="user-task-table">
-                <h3>{task.username} - Feladatok</h3>
+          usersProgress?.map((user) => (
+            <div key={user.userId} className="user-task-table">
+              <h3>{user.username} - Feladatok</h3>
+              {user.tasks.length > 0 ? (
                 <div className="task-table-container">
                   <table className="table">
                     <thead>
@@ -163,23 +160,28 @@ const AdminPanel = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {task?.days?.includes(today) && (
+                      {user.tasks.map((task) => (
                         <tr key={task.id}>
                           <td>{task.name}</td>
-                          {Array(7)
-                            .fill(null)
-                            .map((_, idx) => (
-                              <td key={idx}>
-                                <input type="checkbox" disabled />
-                              </td>
-                            ))}
+                          {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                            <td key={day}>
+                              <input
+                                type="checkbox"
+                                checked={task.progress[day] || false}
+                                disabled
+                              />
+                            </td>
+                          ))}
                         </tr>
-                      )}
+                      ))}
                     </tbody>
                   </table>
                 </div>
-              </div>
-            ))
+              ) : (
+                <p>Ez a felhasználó nincs hozzárendelve feladatokhoz.</p>
+              )}
+            </div>
+          ))
         )}
       </div>
     </div>
