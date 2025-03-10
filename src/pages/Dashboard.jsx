@@ -11,40 +11,45 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
+  // If token is not available, redirect to login
   if (!token) {
     navigate("/login", { replace: true });
-    return null;  // Stop rendering if the user isn't authenticated
+    return null; // Return early to prevent rendering
   }
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // Fetch tasks when `user` and `token` change
+  // This effect runs only when `user` or `token` changes, and will prevent infinite re-fetches
   useEffect(() => {
-    if (user) {
-      axios
-        .get(`https://haztartas-backend-production.up.railway.app/api/tasks/get/${user.id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          const fetchedTasks = response.data;
-          setTasks(fetchedTasks);
+    // Check if `user` or `token` are not available
+    if (!user || !token) return;
 
-          // Initialize completedDays with the task days' completion status
-          const initialCompletedDays = {};
-          fetchedTasks.forEach((task) => {
-            initialCompletedDays[task.id] = task.days.reduce((acc, day) => {
-              acc[day] = false; // Default to false if no progress data is available
-              return acc;
-            }, {});
-          });
+    // Prevent multiple fetches if tasks are already loaded
+    if (tasks.length > 0) return;
 
-          setCompletedDays(initialCompletedDays);
-        })
-        .catch((error) => {
-          console.error("Error fetching tasks:", error);
+    axios
+      .get(`https://haztartas-backend-production.up.railway.app/api/tasks/get/${user.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        const fetchedTasks = response.data;
+        setTasks(fetchedTasks);
+
+        // Initialize completedDays with the task days' completion status
+        const initialCompletedDays = {};
+        fetchedTasks.forEach((task) => {
+          initialCompletedDays[task.id] = task.days.reduce((acc, day) => {
+            acc[day] = false; // Default to false if no progress data is available
+            return acc;
+          }, {});
         });
-    }
-  }, [user, token]);  // Removed completedDays from the dependencies
+
+        setCompletedDays(initialCompletedDays);
+      })
+      .catch((error) => {
+        console.error("Error fetching tasks:", error);
+      });
+  }, [user, token, tasks.length]); // Include `tasks.length` in the dependency to prevent re-fetching once tasks are loaded
 
   const handleDayCompletion = (taskId, day) => {
     setCompletedDays((prevState) => {
