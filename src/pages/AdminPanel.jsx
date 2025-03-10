@@ -10,7 +10,7 @@ const AdminPanel = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selectedDays, setSelectedDays] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [usersProgress, setUsersProgress] = useState([])
+  const [usersProgress, setUsersProgress] = useState([]);
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -22,17 +22,21 @@ const AdminPanel = () => {
       navigate("/login", { replace: true });
       return;
     }
-    const fetchUserProgress = async () => {
-      try{
-        const result = await axios.get("https://haztartas-backend-production.up.railway.app/api/tasks/progress/all-users", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        setUsersProgress(result.data)
-      }
-      catch(err){
 
+    const fetchUserProgress = async () => {
+      try {
+        const result = await axios.get(
+          "https://haztartas-backend-production.up.railway.app/api/tasks/progress/all-users",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setUsersProgress(result.data);
+      } catch (err) {
+        console.error("Error fetching user progress:", err);
       }
-    }
+    };
+
     const fetchData = async () => {
       try {
         const [taskRes, userRes] = await Promise.all([
@@ -141,35 +145,41 @@ const AdminPanel = () => {
         {loading ? (
           <p>Adatok betöltése...</p>
         ) : (
-          usersProgress.map((user) => (
-            <div key={user.id} className="user-task-table">
-              <h3>{user.username} - Feladatok</h3>
-              <div className="task-table-container">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>Feladat</th>
-                      {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
-                        <th key={day}>{day}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {(usersProgress.tasks)
-                      .filter((task) => task.days.includes(today))
-                      .map((task) => (
+          usersProgress?.tasks &&
+          Array.isArray(usersProgress.tasks) &&
+          usersProgress.tasks
+            .filter((task) => task.days.includes(today))
+            .map((task) => (
+              <div key={task.id} className="user-task-table">
+                <h3>{task.username} - Feladatok</h3>
+                <div className="task-table-container">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>Feladat</th>
+                        {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                          <th key={day}>{day}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {task?.days?.includes(today) && (
                         <tr key={task.id}>
                           <td>{task.name}</td>
-                          {Array(7).fill(null).map((_, idx) => (
-                            <td key={idx}><input type="checkbox" disabled /></td>
-                          ))}
+                          {Array(7)
+                            .fill(null)
+                            .map((_, idx) => (
+                              <td key={idx}>
+                                <input type="checkbox" disabled />
+                              </td>
+                            ))}
                         </tr>
-                      ))}
-                  </tbody>
-                </table>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
-          ))
+            ))
         )}
       </div>
     </div>
