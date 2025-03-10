@@ -275,9 +275,9 @@ const AdminPanel = () => {
                     checked={selectedUsers.includes(user.username)}
                     onChange={() =>
                       setSelectedUsers((prev) =>
-                        prev.includes(user.username)
-                          ? prev.filter((name) => name !== user.username)
-                          : [...prev, user.username]
+                        prev.includes(user.id)
+                          ? prev.filter((id) => id !== user.id)
+                          : [...prev, user.id]
                       )
                     }
                   />
