@@ -1,15 +1,16 @@
 .admin-panel-container {
     display: flex;
     height: 100vh;
-    padding: 10px;
     width: 100%;
     gap: 20px;
     background-color: #222222;
+    padding: 0; /* Removed padding here to make sure panels take full width */
+    box-sizing: border-box;
 }
 
 /* Bal panel - Task management */
 .left-panel {
-    width: 50%; /* Set the left panel width to 50% */
+    flex: 1; /* Allow the left panel to take equal space */
     padding: 20px;
     background-color: #222222;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
@@ -21,7 +22,7 @@
 
 /* Jobb panel - User task tables */
 .right-panel {
-    width: 50%; /* Set the right panel width to 50% */
+    flex: 1; /* Allow the right panel to take equal space */
     padding: 20px;
     overflow-y: auto;
     background-color: #222222;
