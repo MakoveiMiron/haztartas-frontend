@@ -9,49 +9,47 @@ const AdminPanel = () => {
   const [newTask, setNewTask] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selectedDays, setSelectedDays] = useState([]);
-  const [editingTask, setEditingTask] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const currentHour = new Date().getHours();
-  const today = new Date().toLocaleString("hu-HU", { weekday: "long" }); // Aktuális nap magyarul
-
-  if (!token) {
-    navigate("/login", { replace: true });
-  }
+  const today = new Date().toLocaleString("hu-HU", { weekday: "long" });
 
   useEffect(() => {
-    fetchTasks();
-    fetchUsers();
-  }, []);
+    if (!token) {
+      navigate("/login", { replace: true });
+      return;
+    }
 
-  const fetchTasks = () => {
-    axios
-      .get("https://haztartas-backend-production.up.railway.app/api/tasks", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => setTasks(response.data))
-      .catch((error) => console.error("Error fetching tasks:", error));
-  };
+    const fetchData = async () => {
+      try {
+        const [taskRes, userRes] = await Promise.all([
+          axios.get("https://haztartas-backend-production.up.railway.app/api/tasks", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get("https://haztartas-backend-production.up.railway.app/api/tasks/fetch/users", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
 
-  const fetchUsers = () => {
-    axios
-      .get(
-        "https://haztartas-backend-production.up.railway.app/api/tasks/fetch/users",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((response) => setUsers(response.data))
-      .catch((error) => console.error("Error fetching users:", error));
-  };
+        setTasks(taskRes.data);
+        setUsers(userRes.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleBackToDashboard = () => {
-    navigate("/dashboard", { replace: true });
-  };
+    fetchData();
+  }, [navigate, token]);
+
+  const handleBackToDashboard = () => navigate("/dashboard", { replace: true });
 
   return (
     <div className="admin-panel-container">
-      {/* Bal panel - Feladatok kezelése */}
+      {/* Left Panel - Task Management */}
       <div className="left-panel">
         <button onClick={handleBackToDashboard} className="back-button">
           Vissza a Dashboardra
@@ -67,7 +65,7 @@ const AdminPanel = () => {
             className="input-field"
           />
 
-          {/* Felhasználók kiválasztása */}
+          {/* User Selection */}
           <div className="user-selection">
             <label className="label">Felhasználók</label>
             {users.map((user) => (
@@ -78,9 +76,7 @@ const AdminPanel = () => {
                   checked={selectedUsers.includes(user.id)}
                   onChange={() =>
                     setSelectedUsers((prev) =>
-                      prev.includes(user.id)
-                        ? prev.filter((id) => id !== user.id)
-                        : [...prev, user.id]
+                      prev.includes(user.id) ? prev.filter((id) => id !== user.id) : [...prev, user.id]
                     )
                   }
                 />
@@ -89,7 +85,7 @@ const AdminPanel = () => {
             ))}
           </div>
 
-          {/* Napok kiválasztása */}
+          {/* Day Selection */}
           <div className="days-selection">
             <label className="label">Napok</label>
             {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
@@ -100,9 +96,7 @@ const AdminPanel = () => {
                   checked={selectedDays.includes(day)}
                   onChange={() =>
                     setSelectedDays((prev) =>
-                      prev.includes(day)
-                        ? prev.filter((item) => item !== day)
-                        : [...prev, day]
+                      prev.includes(day) ? prev.filter((item) => item !== day) : [...prev, day]
                     )
                   }
                 />
@@ -111,15 +105,15 @@ const AdminPanel = () => {
             ))}
           </div>
 
-          <button className="btn create-btn">Feladat létrehozása</button>
+          <button className="create-btn">Feladat létrehozása</button>
         </div>
 
-        {/* Csak 20 óra után jelenítse meg az el nem készült feladatokat */}
+        {/* Show uncompleted tasks only after 8 PM */}
         {currentHour >= 20 && (
           <div className="task-list">
             <h2>El nem készült feladatok</h2>
             {tasks
-              .filter((task) => task.days.includes(today)) // Csak a mai napra szólókat szűrjük
+              .filter((task) => task.days.includes(today))
               .map((task) => (
                 <div key={task.id} className="task-item">
                   <span>{task.name}</span>
@@ -129,48 +123,42 @@ const AdminPanel = () => {
         )}
       </div>
 
-      {/* Jobb panel - Felhasználók feladatai */}
+      {/* Right Panel - User Tasks */}
       <div className="right-panel">
         <h2 className="header">Felhasználói feladatok</h2>
-        {users.map((user) => (
-          <div key={user.id} className="user-task-table">
-            <h3>{user.username} - Feladatok</h3>
-            <div className="task-table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Feladat</th>
-                    <th>Hétfő</th>
-                    <th>Kedd</th>
-                    <th>Szerda</th>
-                    <th>Csütörtök</th>
-                    <th>Péntek</th>
-                    <th>Szombat</th>
-                    <th>Vasárnap</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {tasks
-                    .filter(
-                      (task) =>
-                        task.assignedUsers.includes(user.id) &&
-                        task.days.includes(today) // Csak az adott user mai napi feladatai
-                    )
-                    .map((task) => (
-                      <tr key={task.id}>
-                        <td>{task.name}</td>
-                        {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
-                          <td key={day}>
-                            {task.days.includes(day) && <input type="checkbox" disabled />}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
+        {loading ? (
+          <p>Adatok betöltése...</p>
+        ) : (
+          users.map((user) => (
+            <div key={user.id} className="user-task-table">
+              <h3>{user.username} - Feladatok</h3>
+              <div className="task-table-container">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Feladat</th>
+                      {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                        <th key={day}>{day}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tasks
+                      .filter((task) => task.assignedUsers.includes(user.id) && task.days.includes(today))
+                      .map((task) => (
+                        <tr key={task.id}>
+                          <td>{task.name}</td>
+                          {Array(7).fill(null).map((_, idx) => (
+                            <td key={idx}><input type="checkbox" disabled /></td>
+                          ))}
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
