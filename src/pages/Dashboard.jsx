@@ -42,7 +42,7 @@ const Dashboard = () => {
           console.error("Error fetching tasks:", error);
         });
     }
-  }, [user, token, completedDays]); // Empty array ensures this runs only once
+  }, [user, token]); // Removed completedDays from the dependency array
 
   const handleDayCompletion = (taskId, day) => {
     setCompletedDays((prevState) => {
