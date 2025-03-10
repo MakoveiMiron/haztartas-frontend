@@ -19,7 +19,6 @@ const Dashboard = () => {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // This effect runs only when `user` or `token` changes, and will prevent infinite re-fetches
   useEffect(() => {
     // Check if `user` or `token` are not available
     if (!user || !token) return;
@@ -39,7 +38,7 @@ const Dashboard = () => {
         const initialCompletedDays = {};
         fetchedTasks.forEach((task) => {
           initialCompletedDays[task.id] = task.days.reduce((acc, day) => {
-            acc[day] = false; // Default to false if no progress data is available
+            acc[day] = task.progress && task.progress[day] ? true : false; // Set based on the fetched progress
             return acc;
           }, {});
         });
@@ -49,7 +48,7 @@ const Dashboard = () => {
       .catch((error) => {
         console.error("Error fetching tasks:", error);
       });
-  }, [user, token, tasks.length]); // Include `tasks.length` in the dependency to prevent re-fetching once tasks are loaded
+  }, [user, token, tasks.length]); // Prevent re-fetching once tasks are loaded
 
   const handleDayCompletion = (taskId, day) => {
     setCompletedDays((prevState) => {
@@ -135,7 +134,7 @@ const Dashboard = () => {
                     {task.days?.includes(day) ? (
                       <input
                         type="checkbox"
-                        checked={completedDays[task.id]?.[day] || false} // Ensure checkbox reflects task completion
+                        checked={completedDays[task.id]?.[day] || false} // Reflect task completion status
                         onChange={() => handleDayCompletion(task.id, day)} // Toggle completion on checkbox change
                         className="task-checkbox"
                       />
