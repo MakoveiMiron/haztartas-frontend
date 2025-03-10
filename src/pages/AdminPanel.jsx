@@ -205,7 +205,7 @@ const AdminPanel = () => {
               </table>
             </div>
           ) : (
-            <p>Ez a felhasználó nincs hozzárendelve feladatokhoz.</p>
+            <p>Ez a felhasználó nincs hozzárendelve feladatokhoz. </p>
           )}
         </div>
       ))
