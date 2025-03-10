@@ -94,6 +94,7 @@ const AdminPanel = () => {
     setEditTaskData(task);
     setNewTask(task.name);
     setSelectedDays(task.days);
+    setSelectedUsers(task.assignedUsers || []);
     setShowEditModal(true);
   };
 
@@ -104,6 +105,7 @@ const AdminPanel = () => {
           `https://haztartas-backend-production.up.railway.app/api/tasks/${editTaskData.id}`,
           {
             name: newTask,
+            assignedUsers: selectedUsers,
             days: selectedDays,
           },
           {
@@ -257,6 +259,27 @@ const AdminPanel = () => {
               onChange={(e) => setNewTask(e.target.value)}
               placeholder="Feladat neve"
             />
+
+            <div className="user-selection">
+              <label className="label">Felhasználók</label>
+              {users.map((user) => (
+                <div key={user.id} className="checkbox">
+                  <input
+                    type="checkbox"
+                    value={user.id}
+                    checked={selectedUsers.includes(user.id)}
+                    onChange={() =>
+                      setSelectedUsers((prev) =>
+                        prev.includes(user.id)
+                          ? prev.filter((id) => id !== user.id)
+                          : [...prev, user.id]
+                      )
+                    }
+                  />
+                  <label>{user.username}</label>
+                </div>
+              ))}
+            </div>
 
             <div className="days-selection">
               <label className="label">Napok</label>
