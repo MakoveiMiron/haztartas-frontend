@@ -7,7 +7,8 @@ const AdminPanel = () => {
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
   const [newTask, setNewTask] = useState("");
-  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]); // for task creation
+  const [editTaskSelectedUsers, setEditTaskSelectedUsers] = useState([]); // for task edit
   const [selectedDays, setSelectedDays] = useState([]);
   const [loading, setLoading] = useState(true);
   const [usersProgress, setUsersProgress] = useState([]);
@@ -95,19 +96,19 @@ const AdminPanel = () => {
   const handleEditTask = (task) => {
     setEditTaskData(task); // Fill the form with current task details
     setNewTask(task.name); // Set task name in input
-    setSelectedUsers(task.assignedUsers); // Set assigned users
+    setEditTaskSelectedUsers(task.assignedUsers); // Set assigned users in edit modal
     setSelectedDays(task.days); // Set selected days
     setShowEditModal(true); // Show the edit modal
   };
 
   const handleSaveEdit = async () => {
-    if (editTaskData && newTask && selectedUsers.length > 0 && selectedDays.length > 0) {
+    if (editTaskData && newTask && editTaskSelectedUsers.length > 0 && selectedDays.length > 0) {
       try {
         await axios.put(
           `https://haztartas-backend-production.up.railway.app/api/tasks/${editTaskData.id}`,
           {
             name: newTask,
-            assignedUsers: selectedUsers,
+            assignedUsers: editTaskSelectedUsers,
             days: selectedDays,
           },
           {
@@ -145,7 +146,7 @@ const AdminPanel = () => {
             className="input-field"
           />
 
-          {/* User Selection */}
+          {/* User Selection for Task Creation */}
           <div className="user-selection">
             <label className="label">Felhasználók</label>
             {users.map((user) => (
@@ -217,7 +218,7 @@ const AdminPanel = () => {
         placeholder="Feladat neve"
       />
       
-      {/* Ensure users are loaded before displaying */}
+      {/* User Selection for Task Edit */}
       {users && users.length > 0 ? (
         <div className="user-selection">
           <label className="label">Felhasználók</label>
@@ -226,9 +227,9 @@ const AdminPanel = () => {
               <input
                 type="checkbox"
                 value={user.id}
-                checked={selectedUsers.includes(user.id)}
+                checked={editTaskSelectedUsers.includes(user.id)}
                 onChange={() =>
-                  setSelectedUsers((prev) =>
+                  setEditTaskSelectedUsers((prev) =>
                     prev.includes(user.id)
                       ? prev.filter((id) => id !== user.id)
                       : [...prev, user.id]
@@ -272,7 +273,6 @@ const AdminPanel = () => {
   </div>
 )}
 
-
       {/* Right Panel - User Tasks */}
       <div className="right-panel">
         <h2 className="header">Felhasználói feladatok</h2>
@@ -308,7 +308,7 @@ const AdminPanel = () => {
                   </table>
                 </div>
               ) : (
-                <p>Ez a felhasználó nincs hozzárendelve feladatokhoz. </p>
+                <p>Ez a felhasználó nem rendelkezik napi feladatokkal.</p>
               )}
             </div>
           ))
