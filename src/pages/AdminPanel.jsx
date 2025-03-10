@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./AdminPanel.css";
@@ -11,6 +11,8 @@ const AdminPanel = () => {
   const [selectedDays, setSelectedDays] = useState([]);
   const [loading, setLoading] = useState(true);
   const [usersProgress, setUsersProgress] = useState([]);
+  const [editTaskData, setEditTaskData] = useState(null); // for edit modal
+  const [showEditModal, setShowEditModal] = useState(false); // to toggle the modal
   
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -89,6 +91,39 @@ const AdminPanel = () => {
     }
   };
 
+  // Handle editing task
+  const handleEditTask = (task) => {
+    setEditTaskData(task); // Fill the form with current task details
+    setShowEditModal(true); // Show the edit modal
+  };
+
+  const handleSaveEdit = async () => {
+    if (editTaskData && newTask && selectedUsers.length > 0 && selectedDays.length > 0) {
+      try {
+        await axios.put(
+          `https://haztartas-backend-production.up.railway.app/api/tasks/${editTaskData.id}`,
+          {
+            name: newTask,
+            assignedUsers: selectedUsers,
+            days: selectedDays,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        alert("Feladat sikeresen frissítve");
+        setShowEditModal(false);
+        // Refresh task list
+        fetchData();
+      } catch (error) {
+        alert("Hiba történt a feladat frissítésekor");
+        console.error(error);
+      }
+    } else {
+      alert("Kérlek, töltsd ki az összes mezőt.");
+    }
+  };
+
   return (
     <div className="admin-panel-container">
       {/* Left Panel - Task Management */}
@@ -157,15 +192,77 @@ const AdminPanel = () => {
         {/* Show all tasks regardless of time */}
         <div className="task-list">
           <h2>Feladatok</h2>
-          {tasks
-            .map((task) => (
-              <div key={task.id} className="task-item">
-                <span>{task.name}</span>
-              </div>
-            ))}
+          {tasks.map((task) => (
+            <div key={task.id} className="task-item">
+              <span>{task.name}</span>
+              <button onClick={() => handleEditTask(task)}>Szerkesztés</button>
+              <button>Törlés</button>
+            </div>
+          ))}
         </div>
       </div>
 
+      {/* Edit Task Modal */}
+      {showEditModal && (
+        <div className="edit-modal">
+          <div className="modal-content">
+            <h2>Feladat szerkesztése</h2>
+            <input
+              type="text"
+              value={newTask}
+              onChange={(e) => setNewTask(e.target.value)}
+              placeholder="Feladat neve"
+            />
+            <div className="user-selection">
+              <label className="label">Felhasználók</label>
+              {users.map((user) => (
+                <div key={user.id} className="checkbox">
+                  <input
+                    type="checkbox"
+                    value={user.id}
+                    checked={selectedUsers.includes(user.id)}
+                    onChange={() =>
+                      setSelectedUsers((prev) =>
+                        prev.includes(user.id)
+                          ? prev.filter((id) => id !== user.id)
+                          : [...prev, user.id]
+                      )
+                    }
+                  />
+                  <label>{user.username}</label>
+                </div>
+              ))}
+            </div>
+
+            <div className="days-selection">
+              <label className="label">Napok</label>
+              {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                <div key={day} className="checkbox">
+                  <input
+                    type="checkbox"
+                    value={day}
+                    checked={selectedDays.includes(day)}
+                    onChange={() =>
+                      setSelectedDays((prev) =>
+                        prev.includes(day) ? prev.filter((item) => item !== day) : [...prev, day]
+                      )
+                    }
+                  />
+                  <label>{day}</label>
+                </div>
+              ))}
+            </div>
+
+            <button className="create-btn" onClick={handleSaveEdit}>
+              Mentés
+            </button>
+            <button onClick={() => setShowEditModal(false)} className="cancel-btn">
+              Mégse
+            </button>
+          </div>
+        </div>
+      )}
+      
       {/* Right Panel - User Tasks */}
       <div className="right-panel">
         <h2 className="header">Felhasználói feladatok</h2>
