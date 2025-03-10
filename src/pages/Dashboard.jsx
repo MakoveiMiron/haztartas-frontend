@@ -17,7 +17,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (user) {
       axios
-        .get(`https://haztartas-backend-production.up.railway.app/api/tasks/${user.id}`, {
+        .get(`https://haztartas-backend-production.up.railway.app/api/tasks/get/${user.id}`, {
             headers: {
               Authorization: `Bearer ${token}`, // Itt küldöd a tokent
           },
