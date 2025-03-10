@@ -67,6 +67,7 @@ const AdminPanel = () => {
   };
 
   const handleDeleteTask = (taskId) => {
+    console.log("taskId", taskId)
     axios.delete(`https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
