@@ -158,7 +158,6 @@ const AdminPanel = () => {
         <div className="task-list">
           <h2>Feladatok</h2>
           {tasks
-            .filter((task) => task.days.includes(today))  // Filter tasks for today
             .map((task) => (
               <div key={task.id} className="task-item">
                 <span>{task.name}</span>
