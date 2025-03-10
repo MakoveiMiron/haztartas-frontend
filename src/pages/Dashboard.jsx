@@ -46,24 +46,30 @@ const Dashboard = () => {
     setCompletedDays((prevState) => {
       const updatedDays = { ...prevState };
       updatedDays[taskId][day] = !updatedDays[taskId][day];
-
+  
       // Send the updated progress to the backend
       axios
         .put(
           `https://haztartas-backend-production.up.railway.app/api/tasks/progress/${taskId}`,
-          { headers: { Authorization: `Bearer ${token}` } },
-          { days: updatedDays[taskId], is_completed: Object.values(updatedDays[taskId]).every(Boolean) }
+          {
+            day: day,  // The day being updated
+            is_completed: updatedDays[taskId][day], // Completion status of the specific day
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         )
         .then(() => {
-          console.log(`Progress for task ${taskId} updated!`);
+          console.log(`Progress for task ${taskId} on ${day} updated!`);
         })
         .catch((error) => {
           console.error("Error updating task progress:", error);
         });
-
+  
       return updatedDays;
     });
   };
+  
 
   const handleCompleteTask = (taskId) => {
     const allDaysCompleted = Object.values(completedDays[taskId]).every(Boolean);
