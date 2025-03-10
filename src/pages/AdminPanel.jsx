@@ -13,6 +13,7 @@ const AdminPanel = () => {
   const [usersProgress, setUsersProgress] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editTaskData, setEditTaskData] = useState(null);
+  const [editedUsers, setEditedUsers] = useState([])
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -115,16 +116,13 @@ const AdminPanel = () => {
   }
 
   const handleSaveEdit = async () => {
-    console.log("editTaskData", editTaskData)
-    console.log("newTask",newTask)
-    console.log("selectedDays", selectedUsers)
     if (editTaskData && newTask && selectedDays.length > 0) {
       try {
         await axios.put(
           `https://haztartas-backend-production.up.railway.app/api/tasks/update/${editTaskData.id}`,
           {
             name: newTask,
-            assignedUsers: selectedUsers,
+            assignedUsers: editedUsers,
             days: selectedDays,
           },
           {
@@ -134,6 +132,8 @@ const AdminPanel = () => {
         alert("Feladat sikeresen frissítve");
         setShowEditModal(false);
         setSelectedDays([])
+        setEditedUsers([])
+        location.reload()
       } catch (error) {
         alert("Hiba történt a feladat frissítésekor");
         console.error(error);
@@ -172,12 +172,12 @@ const AdminPanel = () => {
                   <input
                     type="checkbox"
                     value={user.id}
-                    checked={selectedUsers.includes(user.id)}
+                    checked={selectedUsers.includes(user.username)}
                     onChange={() =>
                       setSelectedUsers((prev) =>
-                        prev.includes(user.id)
-                          ? prev.filter((id) => id !== user.id)
-                          : [...prev, user.id]
+                        prev.includes(user.username)
+                          ? prev.filter((name) => name !== user.username)
+                          : [...prev, user.username]
                       )
                     }
                   />
@@ -292,10 +292,12 @@ const AdminPanel = () => {
                     value={user.id}
                     checked={selectedUsers.includes(user.username)}
                     onChange={() =>
-                      setSelectedUsers((prev) =>
-                        prev.includes(user.id)
-                          ? prev.filter((id) => id !== user.id)
-                          : [...prev, user.id]
+                      setSelectedUsers((prev) =>{
+                        prev.includes(user.username)
+                          ? prev.filter((name) => name !== user.username)
+                          : [...prev, user.username];
+                          setEditedUsers([...prev, user.id])
+                      }
                       )
                     }
                   />
