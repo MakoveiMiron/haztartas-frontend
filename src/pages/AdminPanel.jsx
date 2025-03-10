@@ -263,6 +263,7 @@ const AdminPanel = () => {
             <div className="user-selection">
               <label className="label">Felhasználók</label>
               {users.map((user) => (
+                
                 <div key={user.id} className="checkbox">
                   <input
                     type="checkbox"
@@ -270,6 +271,7 @@ const AdminPanel = () => {
                     checked={selectedUsers.includes(user.id)}
                     onChange={() =>
                       setSelectedUsers((prev) =>
+                        console.log(selectedUsers,user),
                         prev.includes(user.id)
                           ? prev.filter((id) => id !== user.id)
                           : [...prev, user.id]
