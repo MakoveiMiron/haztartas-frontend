@@ -247,7 +247,11 @@ const AdminPanel = () => {
                             <td>{task.name}</td>
                             {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
                               <td key={day}>
-                                <input type="checkbox" checked={task.progress[day] || false} disabled />
+                                <input
+                                  type="checkbox"
+                                  checked={task.progress[day] || false}
+                                  disabled
+                                />
                               </td>
                             ))}
                           </tr>
