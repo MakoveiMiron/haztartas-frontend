@@ -170,6 +170,37 @@ const AdminPanel = () => {
 
           <button onClick={handleCreateTask} className="btn create-btn">Feladat létrehozása</button>
         </div>
+
+        {editingTask && (
+          <div className="task-editing">
+            <h2>Szerkesztés: {editingTask.name}</h2>
+            <input
+              type="text"
+              value={editingTask.name}
+              onChange={(e) => setEditingTask({ ...editingTask, name: e.target.value })}
+            />
+            {/* Allow user editing for days */}
+            <div className="days-selection">
+              {['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'].map(day => (
+                <div key={day} className="checkbox">
+                  <input 
+                    type="checkbox" 
+                    checked={editingTask.days.includes(day)}
+                    onChange={() => {
+                      const updatedDays = editingTask.days.includes(day)
+                        ? editingTask.days.filter(d => d !== day)
+                        : [...editingTask.days, day];
+                      setEditingTask({ ...editingTask, days: updatedDays });
+                    }}
+                  />
+                  <label>{day}</label>
+                </div>
+              ))}
+            </div>
+
+            <button onClick={handleUpdateTask} className="btn update-btn">Frissítés</button>
+          </div>
+        )}
       </div>
 
       <div className="right-panel">
