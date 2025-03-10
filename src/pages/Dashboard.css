@@ -48,17 +48,14 @@
     padding: 12px;
     text-align: center;
     min-width: 120px;
+    background-color: #363636; /* Sötétebb háttér szín */
+    color: white;
   }
   
   .task-table td:first-child {
     text-align: left;
     font-weight: bold;
     width: 250px;
-  }
-  
-  .task-table th {
-    background-color: #363636; /* Sötétebb háttér szín */
-    color: white;
   }
   
   /* Checkbox stílus */
