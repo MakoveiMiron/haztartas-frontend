@@ -13,7 +13,7 @@ const AdminPanel = () => {
   const [usersProgress, setUsersProgress] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editTaskData, setEditTaskData] = useState(null);
-  const [editedUsers, setEditedUsers] = useState([])
+  const [editedUsers, setEditedUsers] = useState([]);
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -82,7 +82,7 @@ const AdminPanel = () => {
         setNewTask('');
         setSelectedUsers([]);
         setSelectedDays([]);
-        location.reload()
+        location.reload();
       } catch (error) {
         alert("Hiba történt a feladat létrehozásakor");
         console.error(error);
@@ -101,22 +101,21 @@ const AdminPanel = () => {
   };
 
   const handleDelete = async (taskId) => {
-    try{
+    try {
       await axios.delete(
         `https://haztartas-backend-production.up.railway.app/api/tasks/delete/${taskId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      location.reload()
+      location.reload();
+    } catch (err) {
+      console.log(err);
     }
-    catch(err){
-      console.log(err)
-    }
-  }
+  };
 
   const handleSaveEdit = async () => {
-    console.log("editedUsers", editedUsers)
+    console.log("editedUsers", editedUsers);
     if (editTaskData && newTask && selectedDays.length > 0) {
       try {
         await axios.put(
@@ -132,9 +131,9 @@ const AdminPanel = () => {
         );
         alert("Feladat sikeresen frissítve");
         setShowEditModal(false);
-        setSelectedDays([])
-        setEditedUsers([])
-        location.reload()
+        setSelectedDays([]);
+        setEditedUsers([]);
+        location.reload();
       } catch (error) {
         alert("Hiba történt a feladat frissítésekor");
         console.error(error);
@@ -143,9 +142,6 @@ const AdminPanel = () => {
       alert("Kérlek, töltsd ki az összes mezőt.");
     }
   };
-  console.log("selectedUsers",selectedUsers)
-  console.log("tasks",tasks)
-  console.log("users",users)
 
   return (
     <div className={`admin-panel-container ${showEditModal ? "modal-active" : ""}`}>
@@ -286,24 +282,23 @@ const AdminPanel = () => {
             <div className="user-selection">
               <label className="label">Felhasználók</label>
               {users.map((user) => (
-                
                 <div key={user.id} className="checkbox">
                   <input
                     type="checkbox"
                     value={user.id}
-                    checked={selectedUsers.includes(user.username)}
-                    onChange={(prev) =>{
-
+                    checked={selectedUsers.includes(user.id)}
+                    onChange={() => {
                       setSelectedUsers((prev) =>
-                        prev.includes(user.username)
-                          ? prev.filter((name) => name !== user.username)
-                          : [...prev, user.username]
+                        prev.includes(user.id)
+                          ? prev.filter((id) => id !== user.id)
+                          : [...prev, user.id]
                       );
-                      setEditedUsers((prev) => prev.includes(user.id)
-                      ? prev.filter((id) => id !== user.id)
-                      : [...prev, user.id])
-                    }
-                    }
+                      setEditedUsers((prev) =>
+                        prev.includes(user.id)
+                          ? prev.filter((id) => id !== user.id)
+                          : [...prev, user.id]
+                      );
+                    }}
                   />
                   <label>{user.username}</label>
                 </div>
@@ -332,7 +327,7 @@ const AdminPanel = () => {
             <button className="create-btn" onClick={handleSaveEdit}>
               Mentés
             </button>
-            <button onClick={() => {setShowEditModal(false); setSelectedDays([])}} className="cancel-btn">
+            <button onClick={() => { setShowEditModal(false); setSelectedDays([]); }} className="cancel-btn">
               Mégse
             </button>
           </div>
