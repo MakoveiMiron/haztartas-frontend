@@ -14,8 +14,8 @@ const AdminPanel = () => {
     // Fetching tasks and users from the API
     const fetchData = async () => {
       try {
-        const tasksResponse = await axios.get('https://example.com/api/tasks');
-        const usersResponse = await axios.get('https://example.com/api/fetch/users');
+        const tasksResponse = await axios.get('https://haztartas-backend-production.up.railway.app/api/tasks');
+        const usersResponse = await axios.get('https://haztartas-backend-production.up.railway.app/api/fetch/users');
         setTasks(tasksResponse.data);
         setUsers(usersResponse.data);
         setLoading(false);
@@ -82,7 +82,7 @@ const AdminPanel = () => {
           onClick={async () => {
             if (newTask && selectedUsers.length > 0 && selectedDays.length > 0) {
               try {
-                await axios.post('https://example.com/api/tasks', {
+                await axios.post('https://haztartas-backend-production.up.railway.app/api/tasks', {
                   name: newTask,
                   assignedUsers: selectedUsers,
                   days: selectedDays
