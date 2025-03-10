@@ -71,7 +71,7 @@ const AdminPanel = () => {
           "https://haztartas-backend-production.up.railway.app/api/tasks",
           {
             name: newTask,
-            assignedUsers: selectedUsers,
+            assignedUsers: selectedUsers, // Use username
             days: selectedDays,
           },
           {
@@ -96,8 +96,8 @@ const AdminPanel = () => {
     setEditTaskData(task);
     setNewTask(task.name);
     setSelectedDays(task.days);
-    setSelectedUsers(task.assignedUsers || []); // Set selected users from task data
-    setEditedUsers(task.assignedUsers || []); // Set edited users for the modal
+    setSelectedUsers(task.assignedUsers || []); // Use assignedUsers (usernames)
+    setEditedUsers(task.assignedUsers || []); // Use assignedUsers (usernames) for modal
     setShowEditModal(true);
   };
 
@@ -122,7 +122,7 @@ const AdminPanel = () => {
           `https://haztartas-backend-production.up.railway.app/api/tasks/update/${editTaskData.id}`,
           {
             name: newTask,
-            assignedUsers: editedUsers,
+            assignedUsers: editedUsers, // Use editedUsers (usernames)
             days: selectedDays,
           },
           {
@@ -168,13 +168,13 @@ const AdminPanel = () => {
                 <div key={user.id} className="checkbox">
                   <input
                     type="checkbox"
-                    value={user.id}
-                    checked={selectedUsers.includes(user.id)}
+                    value={user.username}
+                    checked={selectedUsers.includes(user.username)} // Compare with username
                     onChange={() =>
                       setSelectedUsers((prev) =>
-                        prev.includes(user.id)
-                          ? prev.filter((id) => id !== user.id)
-                          : [...prev, user.id]
+                        prev.includes(user.username)
+                          ? prev.filter((username) => username !== user.username)
+                          : [...prev, user.username]
                       )
                     }
                   />
@@ -289,13 +289,13 @@ const AdminPanel = () => {
                 <div key={user.id} className="checkbox">
                   <input
                     type="checkbox"
-                    value={user.id}
-                    checked={editedUsers.includes(user.id)} // Use editedUsers for modal checkbox selection
+                    value={user.username}
+                    checked={editedUsers.includes(user.username)} // Use editedUsers for modal checkbox selection
                     onChange={() => {
                       setEditedUsers((prev) =>
-                        prev.includes(user.id)
-                          ? prev.filter((id) => id !== user.id)
-                          : [...prev, user.id]
+                        prev.includes(user.username)
+                          ? prev.filter((username) => username !== user.username)
+                          : [...prev, user.username]
                       );
                     }}
                   />
@@ -323,16 +323,13 @@ const AdminPanel = () => {
               ))}
             </div>
 
-            <button className="create-btn" onClick={handleSaveEdit}>
-              Mentés
-            </button>
-            <button onClick={() => { setShowEditModal(false); setSelectedDays([]); }} className="cancel-btn">
+            <button className="save-btn" onClick={handleSaveEdit}>Mentés</button>
+            <button className="close-btn" onClick={() => setShowEditModal(false)}>
               Mégse
             </button>
           </div>
         </div>
       )}
-      
     </div>
   );
 };
