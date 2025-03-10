@@ -44,6 +44,10 @@ const Dashboard = () => {
         });
 
         setCompletedDays(initialCompletedDays);
+
+        // Also set completed tasks from the fetched data
+        const completedTaskIds = new Set(fetchedTasks.filter(task => task.is_completed).map(task => task.id));
+        setCompletedTasks(completedTaskIds);
       })
       .catch((error) => {
         console.error("Error fetching tasks:", error);
@@ -147,15 +151,17 @@ const Dashboard = () => {
                 ))}
 
                 <td>
-                  <button
-                    onClick={() => handleCompleteTask(task.id)}
-                    disabled={completedTasks.has(task.id)} // Disable the button if the task is already completed
-                    className={`complete-btn ${
-                      completedTasks.has(task.id) ? "disabled" : "enabled"
-                    }`}
-                  >
-                    {completedTasks.has(task.id) ? "Feladat kész a hétre" : "Kész"}
-                  </button>
+                  {task.is_completed ? (
+                    <span>Feladat kész a hétre</span> // Show label if completed
+                  ) : (
+                    <button
+                      onClick={() => handleCompleteTask(task.id)}
+                      disabled={completedTasks.has(task.id)} // Disable the button if the task is already completed
+                      className={`complete-btn ${completedTasks.has(task.id) ? "disabled" : "enabled"}`}
+                    >
+                      {completedTasks.has(task.id) ? "Feladat kész a hétre" : "Kész"}
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
