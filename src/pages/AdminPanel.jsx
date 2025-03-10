@@ -11,11 +11,9 @@ const AdminPanel = () => {
   const [selectedDays, setSelectedDays] = useState([]);
   const [loading, setLoading] = useState(true);
   const [usersProgress, setUsersProgress] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null); // Add this to track the admin's user data
   
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const currentHour = new Date().getHours();
   const today = new Date().toLocaleString("hu-HU", { weekday: "long" });
 
   useEffect(() => {
@@ -23,20 +21,6 @@ const AdminPanel = () => {
       navigate("/login", { replace: true });
       return;
     }
-
-    const fetchUserData = async () => {
-      try {
-        const result = await axios.get(
-          "https://haztartas-backend-production.up.railway.app/api/users/me", // Assuming this endpoint returns the current admin's data
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setCurrentUser(result.data); // Store the current admin user
-      } catch (err) {
-        console.error("Error fetching user data:", err);
-      }
-    };
 
     const fetchUserProgress = async () => {
       try {
@@ -74,7 +58,6 @@ const AdminPanel = () => {
 
     fetchData();
     fetchUserProgress();
-    fetchUserData(); // Fetch the admin's user data
   }, [navigate, token]);
 
   const handleBackToDashboard = () => navigate("/dashboard", { replace: true });
@@ -171,19 +154,17 @@ const AdminPanel = () => {
           </button>
         </div>
 
-        {/* Show uncompleted tasks only after 8 PM */}
-        {currentHour >= 20 && (
-          <div className="task-list">
-            <h2>El nem készült feladatok</h2>
-            {tasks
-              .filter((task) => task.days.includes(today))
-              .map((task) => (
-                <div key={task.id} className="task-item">
-                  <span>{task.name}</span>
-                </div>
-              ))}
-          </div>
-        )}
+        {/* Show all tasks regardless of time */}
+        <div className="task-list">
+          <h2>Feladatok</h2>
+          {tasks
+            .filter((task) => task.days.includes(today))  // Filter tasks for today
+            .map((task) => (
+              <div key={task.id} className="task-item">
+                <span>{task.name}</span>
+              </div>
+            ))}
+        </div>
       </div>
 
       {/* Right Panel - User Tasks */}
@@ -212,12 +193,7 @@ const AdminPanel = () => {
                           <td>{task.name}</td>
                           {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
                             <td key={day}>
-                              {/* Disable checkbox if the task is not assigned to the current user */}
-                              <input
-                                type="checkbox"
-                                checked={task.progress[day] || false}
-                                disabled={task.assignedUsers && !task.assignedUsers.includes(currentUser.id)}
-                              />
+                              <input type="checkbox" checked={task.progress[day] || false} disabled />
                             </td>
                           ))}
                         </tr>
