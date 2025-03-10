@@ -10,7 +10,7 @@
     position: absolute;
     top: 20px;
     right: 20px;
-    background-color: #22c55e; /* Zöld háttér */
+    background-color: #363636; /* Zöld háttér */
     color: white;
     padding: 10px 15px;
     border-radius: 5px;
@@ -21,7 +21,7 @@
   }
   
   .admin-button:hover {
-    background-color: #16a34a; /* Sötétebb zöld árnyalat hover állapotban */
+    background-color: #222222; /* Sötétebb zöld árnyalat hover állapotban */
   }
   
   /* Táblázat stílusok */
