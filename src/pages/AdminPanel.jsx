@@ -194,7 +194,7 @@ const AdminPanel = () => {
               <div key={task.id} className="task-item">
                 <span>{task.name}</span>
                 <button onClick={() => handleEditTask(task)}>Szerkesztés</button>
-                <button>Törlés</button>
+                <button onClick={() => handleDelete()}>Törlés</button>
               </div>
             ))}
           </div>
