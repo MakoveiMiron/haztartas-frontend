@@ -65,13 +65,19 @@ const AdminPanel = () => {
   const handleBackToDashboard = () => navigate("/dashboard", { replace: true });
 
   const handleCreateTask = async () => {
+    const usersToSend = []
+    selectedUsers.forEach((name) => users.forEach((user) => {
+      if(user.username === name){
+        usersToSend.push(user.id)
+      }
+    }))
     if (newTask && selectedUsers.length > 0 && selectedDays.length > 0) {
       try {
         await axios.post(
           "https://haztartas-backend-production.up.railway.app/api/tasks",
           {
             name: newTask,
-            assignedUsers: selectedUsers, // Use username
+            assignedUsers: usersToSend, // Use username
             days: selectedDays,
           },
           {
