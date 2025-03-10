@@ -13,10 +13,12 @@ const Dashboard = () => {
 
   if (!token) {
     navigate("/login", { replace: true });
+    return null;  // Stop rendering if the user isn't authenticated
   }
 
   const user = JSON.parse(localStorage.getItem("user"));
 
+  // Fetch tasks when `user` and `token` change
   useEffect(() => {
     if (user) {
       axios
@@ -42,7 +44,7 @@ const Dashboard = () => {
           console.error("Error fetching tasks:", error);
         });
     }
-  }, [user, token]); // Removed completedDays from the dependency array
+  }, [user, token]);  // Removed completedDays from the dependencies
 
   const handleDayCompletion = (taskId, day) => {
     setCompletedDays((prevState) => {
