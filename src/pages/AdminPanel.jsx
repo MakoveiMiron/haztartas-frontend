@@ -98,6 +98,22 @@ const AdminPanel = () => {
     setShowEditModal(true);
   };
 
+  const handleDelete = async (taskId) => {
+    try{
+      await axios.delete(
+        `https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      await fetchData()
+      location.reload()
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
   const handleSaveEdit = async () => {
     console.log("editTaskData", editTaskData)
     console.log("newTask",newTask)
@@ -201,7 +217,7 @@ const AdminPanel = () => {
               <div key={task.id} className="task-item">
                 <span>{task.name}</span>
                 <button onClick={() => handleEditTask(task)}>Szerkesztés</button>
-                <button onClick={() => handleDelete()}>Törlés</button>
+                <button onClick={() => handleDelete(task.id)}>Törlés</button>
               </div>
             ))}
           </div>
