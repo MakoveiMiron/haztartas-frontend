@@ -27,35 +27,34 @@ const Dashboard = () => {
           const fetchedTasks = response.data;
           setTasks(fetchedTasks);
 
+          // Initialize completedDays with the task days' completion status
           const initialCompletedDays = {};
           fetchedTasks.forEach((task) => {
-            // Ensure task.days is an array and set default empty progress if it's missing
-            initialCompletedDays[task.id] = task.days?.reduce((acc, day) => {
+            initialCompletedDays[task.id] = task.days.reduce((acc, day) => {
               acc[day] = false; // Default to false if no progress data is available
               return acc;
-            }, {}) || {}; // Fallback to empty object if no days are provided
+            }, {});
           });
 
           setCompletedDays(initialCompletedDays);
-          console.log("Initial completedDays state:", initialCompletedDays); // Log initial state for debugging
         })
         .catch((error) => {
           console.error("Error fetching tasks:", error);
         });
     }
-  }, [user, token]);
+  }, [user, token]); // Empty array ensures this runs only once
 
   const handleDayCompletion = (taskId, day) => {
     setCompletedDays((prevState) => {
       const updatedDays = { ...prevState };
-      updatedDays[taskId][day] = !updatedDays[taskId][day];
+      updatedDays[taskId][day] = !updatedDays[taskId][day]; // Toggle completion state
 
       // Send the updated progress to the backend
       axios
         .put(
           `https://haztartas-backend-production.up.railway.app/api/tasks/progress/${taskId}`,
           {
-            day: day,  // The day being updated
+            day: day, // The day being updated
             is_completed: updatedDays[taskId][day], // Completion status of the specific day
           },
           {
@@ -69,7 +68,7 @@ const Dashboard = () => {
           console.error("Error updating task progress:", error);
         });
 
-      return updatedDays;
+      return updatedDays; // Return the updated state
     });
   };
 
@@ -129,8 +128,8 @@ const Dashboard = () => {
                     {task.days?.includes(day) ? (
                       <input
                         type="checkbox"
-                        checked={completedDays[task.id]?.[day] || false}  // Ensure the checkbox is checked when appropriate
-                        onChange={() => handleDayCompletion(task.id, day)}  // Handle the checkbox toggle
+                        checked={completedDays[task.id]?.[day] || false} // Ensure checkbox reflects task completion
+                        onChange={() => handleDayCompletion(task.id, day)} // Toggle completion on checkbox change
                         className="task-checkbox"
                       />
                     ) : (
