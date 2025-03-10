@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './AdminPanel.css'; // Importing the CSS file
+import './AdminPanel.css';
 
 const AdminPanel = () => {
   const [tasks, setTasks] = useState([]);
@@ -18,8 +18,15 @@ const AdminPanel = () => {
   }
 
   useEffect(() => {
-    fetchTasks();
-    fetchUsers();
+    const fetchTasksAndUsers = () => {
+      const currentHour = new Date().getHours();
+      if (currentHour >= 20) {
+        fetchTasks();
+        fetchUsers();
+      }
+    };
+
+    fetchTasksAndUsers();
   }, []);
 
   const fetchTasks = () => {
@@ -185,7 +192,7 @@ const AdminPanel = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {tasks.filter(task => task.assignedUsers.includes(user.id)).map(task => (
+                  {tasks.filter(task => task.assignedUsers.includes(user.id) && task.days.includes(new Date().toLocaleString('en-us', { weekday: 'long' }))).map(task => (
                     <tr key={task.id}>
                       <td>{task.name}</td>
                       {['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'].map((day) => (
@@ -193,7 +200,7 @@ const AdminPanel = () => {
                           {task.days.includes(day) && (
                             <input
                               type="checkbox"
-                              disabled={task.assignedUsers[0] !== user.id} // Admin can't check tasks not assigned to them
+                              disabled
                             />
                           )}
                         </td>
