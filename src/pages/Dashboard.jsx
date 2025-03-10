@@ -29,7 +29,8 @@ const Dashboard = () => {
           const initialCompletedDays = {};
           response.data.forEach((task) => {
             initialCompletedDays[task.id] = task.days.reduce((acc, day) => {
-              acc[day] = false;
+              // Assuming `task.progress` contains the completion data for each day
+              acc[day] = task.progress[day] || false; // Mark true/false based on task progress for each day
               return acc;
             }, {});
           });
@@ -40,13 +41,13 @@ const Dashboard = () => {
           console.error("Error fetching tasks:", error);
         });
     }
-  }, []);
+  }, [user, token]);
 
   const handleDayCompletion = (taskId, day) => {
     setCompletedDays((prevState) => {
       const updatedDays = { ...prevState };
       updatedDays[taskId][day] = !updatedDays[taskId][day];
-  
+
       // Send the updated progress to the backend
       axios
         .put(
@@ -65,11 +66,10 @@ const Dashboard = () => {
         .catch((error) => {
           console.error("Error updating task progress:", error);
         });
-  
+
       return updatedDays;
     });
   };
-  
 
   const handleCompleteTask = (taskId) => {
     const allDaysCompleted = Object.values(completedDays[taskId]).every(Boolean);
@@ -127,8 +127,8 @@ const Dashboard = () => {
                     {task.days.includes(day) ? (
                       <input
                         type="checkbox"
-                        checked={completedDays[task.id]?.[day] || false}
-                        onChange={() => handleDayCompletion(task.id, day)}
+                        checked={completedDays[task.id]?.[day] || false}  // If the task for the day is completed, it will be true, otherwise false
+                        onChange={() => handleDayCompletion(task.id, day)}  // Handle the checkbox toggle
                         className="task-checkbox"
                       />
                     ) : (
