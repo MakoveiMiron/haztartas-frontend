@@ -123,6 +123,9 @@ const AdminPanel = () => {
       alert("Kérlek, töltsd ki az összes mezőt.");
     }
   };
+  console.log("selectedUsers",selectedUsers)
+  console.log("tasks",tasks)
+  console.log("users",users)
 
   return (
     <div className={`admin-panel-container ${showEditModal ? "modal-active" : ""}`}>
