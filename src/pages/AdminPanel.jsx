@@ -6,10 +6,9 @@ const AdminPanel = () => {
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
   const [newTask, setNewTask] = useState('');
-  const [selectedUser, setSelectedUser] = useState('');
-  const [selectedDays, setSelectedDays] = useState([]); // State to hold selected days
+  const [selectedUsers, setSelectedUsers] = useState([]); // Több felhasználó kiválasztása
+  const [selectedDays, setSelectedDays] = useState([]); // Több nap kiválasztása
   const [editingTask, setEditingTask] = useState(null);
-  const [redirectToDashboard, setRedirectToDashboard] = useState(false); 
   const navigate = useNavigate();
   const token = localStorage.getItem('token'); 
 
@@ -23,7 +22,7 @@ const AdminPanel = () => {
   }, []);
 
   const fetchTasks = () => {
-    axios.get('https://haztartas-backend-production.up.railway.app/api/tasks',  {
+    axios.get('https://haztartas-backend-production.up.railway.app/api/tasks', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(response => setTasks(response.data))
@@ -31,7 +30,7 @@ const AdminPanel = () => {
   };
 
   const fetchUsers = () => {
-    axios.get('https://haztartas-backend-production.up.railway.app/api/tasks/get/users',  {
+    axios.get('https://haztartas-backend-production.up.railway.app/api/tasks/get/users', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(response => setUsers(response.data))
@@ -39,39 +38,32 @@ const AdminPanel = () => {
   };
 
   const handleCreateTask = () => {
-    if (!newTask || !selectedUser || selectedDays.length === 0) {
-      return alert("Adj meg egy feladatnevet, válassz felhasználót és jelöld ki a napokat!");
+    if (!newTask || selectedUsers.length === 0 || selectedDays.length === 0) {
+      return alert("Adj meg egy feladatnevet, válassz legalább egy felhasználót és egy napot!");
     }
-
-    const token = localStorage.getItem('token'); 
 
     axios.post('https://haztartas-backend-production.up.railway.app/api/tasks', 
       {
         name: newTask,
-        assignedUsers: [selectedUser],
-        days: selectedDays // Send the selected days
+        assignedUsers: selectedUsers, // Több felhasználó ID-je kerül elküldésre
+        days: selectedDays 
       },
       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       }
     )
     .then(() => {
       setNewTask('');
-      setSelectedUser('');
-      setSelectedDays([]); // Reset the selected days
+      setSelectedUsers([]);
+      setSelectedDays([]);
       fetchTasks();
     })
     .catch(error => console.error('Error creating task:', error));
   };
 
   const handleDeleteTask = (taskId) => {
-    console.log("taskId", taskId)
     axios.delete(`https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then(() => fetchTasks())
       .catch(error => console.error('Error deleting task:', error));
@@ -86,9 +78,10 @@ const AdminPanel = () => {
 
     axios.put(`https://haztartas-backend-production.up.railway.app/api/tasks/${editingTask.id}`, {
       name: editingTask.name,
-      assignedUsers: [editingTask.assignedTo],
-      frequency: editingTask.frequency,
+      assignedUsers: editingTask.assignedUsers,
       days: editingTask.days,
+    }, {
+      headers: { Authorization: `Bearer ${token}` },
     })
     .then(() => {
       setEditingTask(null);
@@ -98,7 +91,7 @@ const AdminPanel = () => {
   };
 
   const handleBackToDashboard = () => {
-    navigate("/dashboard",  { replace: true });
+    navigate("/dashboard", { replace: true });
   };
 
   const handleDayChange = (day) => {
@@ -106,6 +99,14 @@ const AdminPanel = () => {
       prevState.includes(day) 
         ? prevState.filter(item => item !== day) 
         : [...prevState, day]
+    );
+  };
+
+  const handleUserChange = (userId) => {
+    setSelectedUsers(prevState => 
+      prevState.includes(userId)
+        ? prevState.filter(id => id !== userId)
+        : [...prevState, userId]
     );
   };
 
@@ -129,18 +130,25 @@ const AdminPanel = () => {
           placeholder="Feladat neve"
           className="border p-2 w-full mt-2"
         />
-        <select 
-          value={selectedUser}
-          onChange={(e) => setSelectedUser(e.target.value)}
-          className="border p-2 w-full mt-2"
-        >
-          <option value="">Válassz felhasználót</option>
+
+        {/* Több felhasználó kiválasztása checkboxokkal */}
+        <div className="mt-2">
+          <label className="font-bold">Felhasználók</label>
           {users.map(user => (
-            <option key={user.id} value={user.id}>{user.username}</option>
+            <div key={user.id} className="flex items-center">
+              <input 
+                type="checkbox" 
+                value={user.id}
+                checked={selectedUsers.includes(user.id)}
+                onChange={() => handleUserChange(user.id)}
+                className="mr-2"
+              />
+              <label>{user.username}</label>
+            </div>
           ))}
-        </select>
+        </div>
         
-        {/* Checkboxes for days */}
+        {/* Napok kiválasztása checkboxokkal */}
         <div className="mt-2">
           <label className="font-bold">Napok</label>
           {['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'].map(day => (
@@ -187,23 +195,6 @@ const AdminPanel = () => {
           </li>
         ))}
       </ul>
-
-      {editingTask && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-4">
-            <h2 className="text-lg font-bold">Feladat szerkesztése</h2>
-            <input 
-              type="text"
-              value={editingTask.name}
-              onChange={(e) => setEditingTask({...editingTask, name: e.target.value})}
-              className="border p-2 w-full mt-2"
-            />
-            <button onClick={handleUpdateTask} className="mt-2 bg-green-500 text-white px-4 py-2 rounded">
-              Mentés
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
