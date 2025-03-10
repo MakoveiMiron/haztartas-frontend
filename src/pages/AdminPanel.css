@@ -1,97 +1,113 @@
-/* Container for admin panel layout */
+/* Admin panel konténer */
 .admin-panel-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 2rem;
-  }
-  
-  /* Left panel (Task creation, editing, and deleting) */
-  .left-panel {
-    width: 30%;
-    background-color: #f9f9f9;
-    padding: 1rem;
-    border-radius: 8px;
-  }
-  
-  .back-button {
-    margin-bottom: 1rem;
-    background-color: #4caf50;
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 5px;
-  }
-  
-  .task-management h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .input-field {
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    border-radius: 5px;
-  }
-  
-  .label {
-    font-weight: bold;
-    margin-top: 1rem;
-  }
-  
-  .checkbox {
-    display: flex;
-    align-items: center;
-  }
-  
-  .checkbox input {
-    margin-right: 0.5rem;
-  }
-  
-  .btn.create-btn {
-    background-color: #007bff;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 1rem;
-  }
-  
-  .btn.create-btn:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Right panel (User task tables) */
-  .right-panel {
-    width: 65%;
-  }
-  
-  .header {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-  }
-  
-  .user-task-table {
-    background-color: #f9f9f9;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  th, td {
-    padding: 10px;
     text-align: center;
-    border: 1px solid #ddd;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    position: relative;
   }
   
-  td input[type="checkbox"] {
+  /* Admin gomb a jobb felső sarokban */
+  .admin-panel-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #22c55e; /* Zöld háttér */
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
     cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+  }
+  
+  .admin-panel-button:hover {
+    background-color: #16a34a; /* Sötétebb zöld árnyalat hover állapotban */
+  }
+  
+  /* Bal oldali vezérlők (task creation/editing/deletion) */
+  .admin-control-panel {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    margin-right: 20px;
+  }
+  
+  .admin-control-panel button {
+    padding: 12px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    background-color: #22c55e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .admin-control-panel button:hover {
+    background-color: #16a34a;
+  }
+  
+  /* Jobb oldali felhasználói táblázatok */
+  .user-task-tables {
+    width: 100%;
+    max-width: 1200px;
+    border-collapse: collapse;
+    font-size: 18px;
+    margin-top: 40px;
+    color: #d6d5d5;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .user-task-tables th,
+  .user-task-tables td {
+    border: 2px solid #d1d0d0;
+    padding: 12px;
+    text-align: center;
+    min-width: 120px;
+  }
+  
+  .user-task-tables td:first-child {
+    text-align: left;
+    font-weight: bold;
+    width: 250px;
+  }
+  
+  .user-task-tables th {
+    background-color: #363636; /* Sötétebb háttér szín */
+    color: white;
+  }
+  
+  /* Reszponzív dizájn */
+  @media (max-width: 768px) {
+    .user-task-tables {
+      font-size: 14px;
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+    }
+  
+    .user-task-tables th,
+    .user-task-tables td {
+      padding: 8px;
+      min-width: 80px;
+    }
+  
+    .admin-panel-button {
+      padding: 10px 15px;
+      font-size: 14px;
+    }
+  
+    .admin-control-panel {
+      width: 100%;
+      margin-right: 0;
+    }
   }
   
