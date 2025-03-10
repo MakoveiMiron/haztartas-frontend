@@ -96,7 +96,8 @@ const AdminPanel = () => {
     setEditTaskData(task);
     setNewTask(task.name);
     setSelectedDays(task.days);
-    setSelectedUsers(task.assignedUsers || []);
+    setSelectedUsers(task.assignedUsers || []); // Set selected users from task data
+    setEditedUsers(task.assignedUsers || []); // Set edited users for the modal
     setShowEditModal(true);
   };
 
@@ -115,7 +116,6 @@ const AdminPanel = () => {
   };
 
   const handleSaveEdit = async () => {
-    console.log("editedUsers", editedUsers);
     if (editTaskData && newTask && selectedDays.length > 0) {
       try {
         await axios.put(
@@ -286,13 +286,8 @@ const AdminPanel = () => {
                   <input
                     type="checkbox"
                     value={user.id}
-                    checked={selectedUsers.includes(user.id)}
+                    checked={editedUsers.includes(user.id)} // Use editedUsers for modal checkbox selection
                     onChange={() => {
-                      setSelectedUsers((prev) =>
-                        prev.includes(user.id)
-                          ? prev.filter((id) => id !== user.id)
-                          : [...prev, user.id]
-                      );
                       setEditedUsers((prev) =>
                         prev.includes(user.id)
                           ? prev.filter((id) => id !== user.id)
