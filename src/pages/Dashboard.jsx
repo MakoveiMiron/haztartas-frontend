@@ -24,15 +24,16 @@ const Dashboard = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
-          setTasks(response.data);
+          const fetchedTasks = response.data;
+          setTasks(fetchedTasks);
 
           const initialCompletedDays = {};
-          response.data.forEach((task) => {
-            initialCompletedDays[task.id] = task.days.reduce((acc, day) => {
-              // Assuming `task.progress` contains the completion data for each day
-              acc[day] = task.progress[day] || false; // Mark true/false based on task progress for each day
+          fetchedTasks.forEach((task) => {
+            // Ensure task.days is an array and set default empty progress if it's missing
+            initialCompletedDays[task.id] = task.days?.reduce((acc, day) => {
+              acc[day] = false; // Default to false if no progress data is available
               return acc;
-            }, {});
+            }, {}) || {}; // Fallback to empty object if no days are provided
           });
 
           setCompletedDays(initialCompletedDays);
@@ -72,7 +73,7 @@ const Dashboard = () => {
   };
 
   const handleCompleteTask = (taskId) => {
-    const allDaysCompleted = Object.values(completedDays[taskId]).every(Boolean);
+    const allDaysCompleted = Object.values(completedDays[taskId] || {}).every(Boolean);
 
     if (allDaysCompleted) {
       axios
@@ -124,10 +125,10 @@ const Dashboard = () => {
 
                 {DAYS_OF_WEEK.map((day) => (
                   <td key={day}>
-                    {task.days.includes(day) ? (
+                    {task.days?.includes(day) ? (
                       <input
                         type="checkbox"
-                        checked={completedDays[task.id]?.[day] || false}  // If the task for the day is completed, it will be true, otherwise false
+                        checked={completedDays[task.id]?.[day] || false}  // If task.id or completedDays is undefined, default to false
                         onChange={() => handleDayCompletion(task.id, day)}  // Handle the checkbox toggle
                         className="task-checkbox"
                       />
@@ -140,9 +141,9 @@ const Dashboard = () => {
                 <td>
                   <button
                     onClick={() => handleCompleteTask(task.id)}
-                    disabled={!Object.values(completedDays[task.id]).every(Boolean)}
+                    disabled={!Object.values(completedDays[task.id] || {}).every(Boolean)}
                     className={`complete-btn ${
-                      Object.values(completedDays[task.id]).every(Boolean) ? "enabled" : "disabled"
+                      Object.values(completedDays[task.id] || {}).every(Boolean) ? "enabled" : "disabled"
                     }`}
                   >
                     Kész
