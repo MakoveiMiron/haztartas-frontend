@@ -2,6 +2,11 @@
 .dashboard-container {
     text-align: center;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
     position: relative;
   }
   
@@ -10,29 +15,31 @@
     position: absolute;
     top: 20px;
     right: 20px;
-    background-color: #363636; /* Zöld háttér */
+    background-color: #22c55e; /* Zöld háttér */
     color: white;
-    padding: 10px 15px;
-    border-radius: 5px;
+    padding: 12px 20px;
+    border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
     border: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
   }
   
   .admin-button:hover {
-    background-color: #222222; /* Sötétebb zöld árnyalat hover állapotban */
+    background-color: #16a34a; /* Sötétebb zöld árnyalat hover állapotban */
   }
   
   /* Táblázat stílusok */
   .task-table {
     width: 100%;
+    max-width: 1200px; /* Maximum szélesség a táblázatnak */
     border-collapse: collapse;
     font-size: 18px;
     margin-top: 40px;
-    margin-left: auto;
-    margin-right: auto;
     color: #d6d5d5;
+    border-radius: 10px; /* Lekerekített sarkok */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
   
   .task-table th,
@@ -47,6 +54,11 @@
     text-align: left;
     font-weight: bold;
     width: 250px;
+  }
+  
+  .task-table th {
+    background-color: #363636; /* Sötétebb háttér szín */
+    color: white;
   }
   
   /* Checkbox stílus */
@@ -79,12 +91,20 @@
   @media (max-width: 768px) {
     .task-table {
       font-size: 14px;
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
     }
   
     .task-table th,
     .task-table td {
       padding: 8px;
-      min-width: 100px;
+      min-width: 80px;
+    }
+  
+    .admin-button {
+      padding: 10px 15px;
+      font-size: 14px;
     }
   }
   

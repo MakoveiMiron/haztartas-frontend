@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./Dashboard.css"; // 📌 Importáljuk az új CSS fájlt
+import "./Dashboard.css"; // 📌 Import CSS for styling
 
 const DAYS_OF_WEEK = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"];
 
@@ -46,6 +46,20 @@ const Dashboard = () => {
     setCompletedDays((prevState) => {
       const updatedDays = { ...prevState };
       updatedDays[taskId][day] = !updatedDays[taskId][day];
+
+      // Send the updated progress to the backend
+      axios
+        .put(
+          `https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`,
+          { days: updatedDays[taskId], is_completed: Object.values(updatedDays[taskId]).every(Boolean) },
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then(() => {
+          console.log(`Progress for task ${taskId} updated!`);
+        })
+        .catch((error) => {
+          console.error("Error updating task progress:", error);
+        });
 
       return updatedDays;
     });
