@@ -84,7 +84,7 @@ const Dashboard = () => {
         </button>
       )}
 
-      <h1 className="header">Mai feladataid</h1>
+      <h1 className="header">Heti feladataid</h1>
 
       <div className="table-container">
         <table className="task-table">

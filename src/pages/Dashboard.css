@@ -7,14 +7,16 @@
     min-height: 100vh;
     padding: 20px;
     position: relative;
+    background-color: #f3f4f6; /* Sötétebb háttér */
   }
   
-  /* Fejléc */
+  /* Fejléc középre igazítva */
   .header {
     text-align: center;
     font-size: 28px;
     font-weight: bold;
     margin-bottom: 20px;
+    color: #111827; /* Sötétebb szín */
   }
   
   /* Admin gomb a jobb felső sarokban */
@@ -36,13 +38,14 @@
   
   /* Táblázat középre igazítása */
   .table-container {
-    width: 90%;
-    max-width: 1000px;
+    width: 100%;
+    max-width: 1200px;
     overflow-x: auto;
     background: white;
-    padding: 15px;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 30px; /* Távolság a fejléc alól */
   }
   
   /* Táblázat */
@@ -50,6 +53,7 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 18px;
+    table-layout: fixed;
   }
   
   /* Fejléc */
@@ -103,6 +107,7 @@
   @media (max-width: 768px) {
     .table-container {
       width: 100%;
+      padding: 15px;
     }
   
     .task-table {
@@ -112,7 +117,7 @@
     .task-table th,
     .task-table td {
       padding: 8px;
-      min-width: 100px;
+      min-width: 80px;
     }
   
     .admin-button {
