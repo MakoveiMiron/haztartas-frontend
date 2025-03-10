@@ -1,78 +1,77 @@
 .admin-panel-container {
     display: flex;
     height: 100vh;
-  }
-  
-  .left-panel {
+}
+
+.left-panel {
     width: 300px;
     padding: 20px;
     background-color: #f4f4f4;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .right-panel {
+}
+
+.right-panel {
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
-  }
-  
-  .task-table-container {
+}
+
+.task-table-container {
     max-height: calc(100vh - 200px);
     overflow-y: auto;
-  }
-  
-  .user-task-table {
+}
+
+.user-task-table {
     margin-bottom: 30px;
-  }
-  
-  .table {
+}
+
+.table {
     width: 100%;
     border-collapse: collapse;
-  }
-  
-  th, td {
+}
+
+th, td {
     padding: 10px;
     text-align: center;
     border: 1px solid #ddd;
-  }
-  
-  th {
+}
+
+th {
     background-color: #f4f4f4;
-  }
-  
-  .checkbox {
+}
+
+.checkbox {
     margin-bottom: 10px;
-  }
-  
-  .checkbox input {
+}
+
+.checkbox input {
     margin-right: 10px;
-  }
-  
-  .create-btn {
+}
+
+.create-btn {
     background-color: #22c55e;
     color: white;
     padding: 10px;
     border: none;
     cursor: pointer;
-  }
-  
-  .create-btn:hover {
+}
+
+.create-btn:hover {
     background-color: #16a34a;
-  }
-  
-  .back-button {
+}
+
+.back-button {
     background-color: #ddd;
     padding: 10px;
     border: none;
     cursor: pointer;
-  }
-  
-  .back-button:hover {
+}
+
+.back-button:hover {
     background-color: #ccc;
-  }
-  
-  .label {
+}
+
+.label {
     font-weight: bold;
     margin-bottom: 5px;
-  }
-  
+}
