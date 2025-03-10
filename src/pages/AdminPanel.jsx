@@ -8,16 +8,14 @@ const AdminPanel = () => {
   const [users, setUsers] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const [editTaskSelectedUsers, setEditTaskSelectedUsers] = useState([]);
   const [selectedDays, setSelectedDays] = useState([]);
   const [loading, setLoading] = useState(true);
   const [usersProgress, setUsersProgress] = useState([]);
-  const [editTaskData, setEditTaskData] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [editTaskData, setEditTaskData] = useState(null);
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const today = new Date().toLocaleString("hu-HU", { weekday: "long" });
 
   useEffect(() => {
     if (!token) {
@@ -79,35 +77,33 @@ const AdminPanel = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        alert('Feladat sikeresen létrehozva');
+        alert("Feladat sikeresen létrehozva");
         setNewTask('');
         setSelectedUsers([]);
         setSelectedDays([]);
       } catch (error) {
-        alert('Hiba történt a feladat létrehozásakor');
+        alert("Hiba történt a feladat létrehozásakor");
         console.error(error);
       }
     } else {
-      alert('Kérlek, töltsd ki az összes mezőt.');
+      alert("Kérlek, töltsd ki az összes mezőt.");
     }
   };
 
   const handleEditTask = (task) => {
     setEditTaskData(task);
     setNewTask(task.name);
-    setEditTaskSelectedUsers(task.assignedUsers);
     setSelectedDays(task.days);
     setShowEditModal(true);
   };
 
   const handleSaveEdit = async () => {
-    if (editTaskData && newTask && editTaskSelectedUsers.length > 0 && selectedDays.length > 0) {
+    if (editTaskData && newTask && selectedDays.length > 0) {
       try {
         await axios.put(
           `https://haztartas-backend-production.up.railway.app/api/tasks/${editTaskData.id}`,
           {
             name: newTask,
-            assignedUsers: editTaskSelectedUsers,
             days: selectedDays,
           },
           {
@@ -203,10 +199,52 @@ const AdminPanel = () => {
         </div>
       )}
 
-      {/* Modal Overlay */}
-      {showEditModal && (
-        <div className="modal-overlay" onClick={() => setShowEditModal(false)}></div>
+      {/* Right Panel - User Tasks */}
+      {!showEditModal && (
+        <div className="right-panel">
+          <h2 className="header">Felhasználói feladatok</h2>
+          {loading ? (
+            <p>Adatok betöltése...</p>
+          ) : (
+            usersProgress?.map((user) => (
+              <div key={user.userId} className="user-task-table">
+                <h3>{user.username} - Feladatok</h3>
+                {user.tasks.length > 0 ? (
+                  <div className="task-table-container">
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th>Feladat</th>
+                          {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                            <th key={day}>{day}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {user.tasks.map((task) => (
+                          <tr key={task.id}>
+                            <td>{task.name}</td>
+                            {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                              <td key={day}>
+                                <input type="checkbox" checked={task.progress[day] || false} disabled />
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <p>Ez a felhasználó nem rendelkezik napi feladatokkal.</p>
+                )}
+              </div>
+            ))
+          )}
+        </div>
       )}
+
+      {/* Modal Overlay */}
+      {showEditModal && <div className="modal-overlay" onClick={() => setShowEditModal(false)}></div>}
 
       {/* Edit Task Modal */}
       {showEditModal && (
@@ -219,27 +257,6 @@ const AdminPanel = () => {
               onChange={(e) => setNewTask(e.target.value)}
               placeholder="Feladat neve"
             />
-
-            <div className="user-selection">
-              <label className="label">Felhasználók</label>
-              {users.map((user) => (
-                <div key={user.id} className="checkbox">
-                  <input
-                    type="checkbox"
-                    value={user.id}
-                    checked={editTaskSelectedUsers.includes(user.id)}
-                    onChange={() =>
-                      setEditTaskSelectedUsers((prev) =>
-                        prev.includes(user.id)
-                          ? prev.filter((id) => id !== user.id)
-                          : [...prev, user.id]
-                      )
-                    }
-                  />
-                  <label>{user.username}</label>
-                </div>
-              ))}
-            </div>
 
             <div className="days-selection">
               <label className="label">Napok</label>
