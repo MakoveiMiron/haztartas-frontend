@@ -94,6 +94,9 @@ const AdminPanel = () => {
   // Handle editing task
   const handleEditTask = (task) => {
     setEditTaskData(task); // Fill the form with current task details
+    setNewTask(task.name); // Set task name in input
+    setSelectedUsers(task.assignedUsers); // Set assigned users
+    setSelectedDays(task.days); // Set selected days
     setShowEditModal(true); // Show the edit modal
   };
 
