@@ -1,9 +1,55 @@
-/* Alapstílusok a táblázathoz */
-.task-table {
+/* Alap elrendezés */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+  }
+  
+  /* Fejléc */
+  .header {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* Admin gomb a jobb felső sarokban */
+  .admin-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #3b82f6;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .admin-button:hover {
+    background-color: #2563eb;
+  }
+  
+  /* Táblázat középre igazítása */
+  .table-container {
+    width: 90%;
+    max-width: 1000px;
+    overflow-x: auto;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Táblázat */
+  .task-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 18px;
-    overflow-x: auto;
   }
   
   /* Fejléc */
@@ -53,15 +99,31 @@
     cursor: not-allowed;
   }
   
-  /* Reszponzivitás */
+  /* Reszponzivitás - Mobil nézet */
   @media (max-width: 768px) {
+    .table-container {
+      width: 100%;
+    }
+  
     .task-table {
       font-size: 14px;
     }
+  
     .task-table th,
     .task-table td {
       padding: 8px;
       min-width: 100px;
+    }
+  
+    .admin-button {
+      position: static;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+  
+    .header {
+      font-size: 24px;
     }
   }
   
