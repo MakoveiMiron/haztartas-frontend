@@ -116,13 +116,19 @@ const AdminPanel = () => {
   };
 
   const handleSaveEdit = async () => {
+    const usersToSend = []
+    editedUsers.forEach((name) => users.forEach((user) => {
+      if(user.username === name){
+        usersToSend.push(user.id)
+      }
+    }))
     if (editTaskData && newTask && selectedDays.length > 0) {
       try {
         await axios.put(
           `https://haztartas-backend-production.up.railway.app/api/tasks/update/${editTaskData.id}`,
           {
             name: newTask,
-            assignedUsers: editedUsers, // Use editedUsers (usernames)
+            assignedUsers: usersToSend, // Use editedUsers (usernames)
             days: selectedDays,
           },
           {
