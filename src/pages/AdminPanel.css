@@ -9,7 +9,7 @@
 
 /* Bal panel */
 .left-panel {
-    width: 20%;
+    width: 40%; /* 40%-ra állítjuk a bal panel szélességét */
     padding: 20px;
     background-color: #222222;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
@@ -17,12 +17,11 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-
 }
 
 /* Jobb panel */
 .right-panel {
-    width: 80%;
+    width: 60%; /* 60%-ra állítjuk a jobb panel szélességét */
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
@@ -31,6 +30,7 @@
     border-radius: 10px;
     margin-right: 0%;
 }
+
 
 /* Feladatok táblázat */
 .user-task-table {
