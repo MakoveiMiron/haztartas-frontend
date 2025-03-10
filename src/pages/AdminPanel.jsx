@@ -11,8 +11,8 @@ const AdminPanel = () => {
   const [selectedDays, setSelectedDays] = useState([]);
   const [loading, setLoading] = useState(true);
   const [usersProgress, setUsersProgress] = useState([]);
-  const [taskBeingEdited, setTaskBeingEdited] = useState(null); // Track task being edited
-
+  const [currentUser, setCurrentUser] = useState(null); // Add this to track the admin's user data
+  
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const currentHour = new Date().getHours();
@@ -23,6 +23,20 @@ const AdminPanel = () => {
       navigate("/login", { replace: true });
       return;
     }
+
+    const fetchUserData = async () => {
+      try {
+        const result = await axios.get(
+          "https://haztartas-backend-production.up.railway.app/api/users/me", // Assuming this endpoint returns the current admin's data
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setCurrentUser(result.data); // Store the current admin user
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+      }
+    };
 
     const fetchUserProgress = async () => {
       try {
@@ -60,47 +74,31 @@ const AdminPanel = () => {
 
     fetchData();
     fetchUserProgress();
+    fetchUserData(); // Fetch the admin's user data
   }, [navigate, token]);
 
   const handleBackToDashboard = () => navigate("/dashboard", { replace: true });
 
-  const handleCreateOrUpdateTask = async () => {
+  const handleCreateTask = async () => {
     if (newTask && selectedUsers.length > 0 && selectedDays.length > 0) {
       try {
-        if (taskBeingEdited) {
-          await axios.put(
-            `https://haztartas-backend-production.up.railway.app/api/tasks/${taskBeingEdited.id}`,
-            {
-              name: newTask,
-              assignedUsers: selectedUsers,
-              days: selectedDays,
-            },
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          alert('Feladat frissítve');
-        } else {
-          await axios.post(
-            "https://haztartas-backend-production.up.railway.app/api/tasks",
-            {
-              name: newTask,
-              assignedUsers: selectedUsers,
-              days: selectedDays,
-            },
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          alert('Feladat sikeresen létrehozva');
-        }
-
+        await axios.post(
+          "https://haztartas-backend-production.up.railway.app/api/tasks",
+          {
+            name: newTask,
+            assignedUsers: selectedUsers,
+            days: selectedDays,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        alert('Feladat sikeresen létrehozva');
         setNewTask('');
         setSelectedUsers([]);
         setSelectedDays([]);
-        setTaskBeingEdited(null);
       } catch (error) {
-        alert('Hiba történt a feladat létrehozásakor vagy frissítésénél');
+        alert('Hiba történt a feladat létrehozásakor');
         console.error(error);
       }
     } else {
@@ -108,37 +106,13 @@ const AdminPanel = () => {
     }
   };
 
-  const handleEditTask = (task) => {
-    setTaskBeingEdited(task);
-    setNewTask(task.name);
-    setSelectedUsers(task.assignedUsers || []);
-    setSelectedDays(task.days || []);
-  };
-
-  const handleDeleteTask = async (taskId) => {
-    const confirmDelete = window.confirm('Biztos, hogy törlöd a feladatot?');
-    if (confirmDelete) {
-      try {
-        await axios.delete(
-          `https://haztartas-backend-production.up.railway.app/api/tasks/${taskId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        alert('Feladat törölve');
-        setTasks(tasks.filter((task) => task.id !== taskId));
-      } catch (error) {
-        alert('Hiba történt a feladat törlésénél');
-        console.error(error);
-      }
-    }
-  };
-
   return (
     <div className="admin-panel-container">
       {/* Left Panel - Task Management */}
       <div className="left-panel">
-        <button onClick={handleBackToDashboard} className="back-button">Vissza a Dashboardra</button>
+        <button onClick={handleBackToDashboard} className="back-button">
+          Vissza a Dashboardra
+        </button>
 
         <div className="task-management">
           <h2>Feladat létrehozása</h2>
@@ -192,8 +166,8 @@ const AdminPanel = () => {
             ))}
           </div>
 
-          <button className="create-btn" onClick={handleCreateOrUpdateTask}>
-            {taskBeingEdited ? 'Feladat frissítése' : 'Feladat létrehozása'}
+          <button className="create-btn" onClick={handleCreateTask}>
+            Feladat létrehozása
           </button>
         </div>
 
@@ -206,11 +180,56 @@ const AdminPanel = () => {
               .map((task) => (
                 <div key={task.id} className="task-item">
                   <span>{task.name}</span>
-                  <button className="edit-btn" onClick={() => handleEditTask(task)}>Szerkesztés</button>
-                  <button className="delete-btn" onClick={() => handleDeleteTask(task.id)}>Törlés</button>
                 </div>
               ))}
           </div>
+        )}
+      </div>
+
+      {/* Right Panel - User Tasks */}
+      <div className="right-panel">
+        <h2 className="header">Felhasználói feladatok</h2>
+        {loading ? (
+          <p>Adatok betöltése...</p>
+        ) : (
+          usersProgress?.map((user) => (
+            <div key={user.userId} className="user-task-table">
+              <h3>{user.username} - Feladatok</h3>
+              {user.tasks.length > 0 ? (
+                <div className="task-table-container">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>Feladat</th>
+                        {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                          <th key={day}>{day}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {user.tasks.map((task) => (
+                        <tr key={task.id}>
+                          <td>{task.name}</td>
+                          {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                            <td key={day}>
+                              {/* Disable checkbox if the task is not assigned to the current user */}
+                              <input
+                                type="checkbox"
+                                checked={task.progress[day] || false}
+                                disabled={task.assignedUsers && !task.assignedUsers.includes(currentUser.id)}
+                              />
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p>Ez a felhasználó nincs hozzárendelve feladatokhoz. </p>
+              )}
+            </div>
+          ))
         )}
       </div>
     </div>
