@@ -28,13 +28,6 @@
     border-radius: 10px;
 }
 
-/* Görgethető táblázatos rész */
-.task-table-container {
-    max-height: calc(100vh - 250px);
-    overflow-y: auto;
-    border-radius: 10px;
-}
-
 /* Feladatok táblázat */
 .user-task-table {
     margin-bottom: 30px;
@@ -53,13 +46,9 @@ th, td {
     border: 1px solid #ddd;
 }
 
-th {
+th, td {
     background-color: #222;
     color: white;
-}
-
-td {
-    background-color: #f9f9f9;
 }
 
 /* Checkbox */
