@@ -8,6 +8,7 @@ const DAYS_OF_WEEK = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "S
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [completedDays, setCompletedDays] = useState({});
+  const [completedTasks, setCompletedTasks] = useState(new Set()); // Track completed tasks
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -94,6 +95,7 @@ const Dashboard = () => {
               task.id === taskId ? { ...task, is_completed: true } : task
             )
           );
+          setCompletedTasks((prevCompletedTasks) => new Set(prevCompletedTasks).add(taskId)); // Mark task as completed
         })
         .catch((error) => console.error("Error updating task:", error));
     }
@@ -135,6 +137,7 @@ const Dashboard = () => {
                         type="checkbox"
                         checked={completedDays[task.id]?.[day] || false} // Ensure checkbox reflects task completion
                         onChange={() => handleDayCompletion(task.id, day)} // Toggle completion on checkbox change
+                        disabled={completedDays[task.id]?.[day] || false} // Disable checkbox if already completed
                         className="task-checkbox"
                       />
                     ) : (
@@ -146,12 +149,12 @@ const Dashboard = () => {
                 <td>
                   <button
                     onClick={() => handleCompleteTask(task.id)}
-                    disabled={!Object.values(completedDays[task.id] || {}).every(Boolean)}
+                    disabled={completedTasks.has(task.id)} // Disable the button if the task is already completed
                     className={`complete-btn ${
-                      Object.values(completedDays[task.id] || {}).every(Boolean) ? "enabled" : "disabled"
+                      completedTasks.has(task.id) ? "disabled" : "enabled"
                     }`}
                   >
-                    Kész
+                    {completedTasks.has(task.id) ? "Feladat kész a hétre" : "Kész"}
                   </button>
                 </td>
               </tr>
