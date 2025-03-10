@@ -1,113 +1,78 @@
-/* Admin panel konténer */
 .admin-panel-container {
-    text-align: center;
+    display: flex;
+    height: 100vh;
+  }
+  
+  .left-panel {
+    width: 300px;
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    position: relative;
+    background-color: #f4f4f4;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   }
   
-  /* Admin gomb a jobb felső sarokban */
-  .admin-panel-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background-color: #22c55e; /* Zöld háttér */
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease;
+  .right-panel {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
   }
   
-  .admin-panel-button:hover {
-    background-color: #16a34a; /* Sötétebb zöld árnyalat hover állapotban */
+  .task-table-container {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
   }
   
-  /* Bal oldali vezérlők (task creation/editing/deletion) */
-  .admin-control-panel {
-    display: flex;
-    flex-direction: column;
-    width: 250px;
-    margin-right: 20px;
+  .user-task-table {
+    margin-bottom: 30px;
   }
   
-  .admin-control-panel button {
-    padding: 12px;
-    font-size: 16px;
-    margin-bottom: 15px;
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+  }
+  
+  .checkbox {
+    margin-bottom: 10px;
+  }
+  
+  .checkbox input {
+    margin-right: 10px;
+  }
+  
+  .create-btn {
     background-color: #22c55e;
     color: white;
+    padding: 10px;
     border: none;
-    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
   }
   
-  .admin-control-panel button:hover {
+  .create-btn:hover {
     background-color: #16a34a;
   }
   
-  /* Jobb oldali felhasználói táblázatok */
-  .user-task-tables {
-    width: 100%;
-    max-width: 1200px;
-    border-collapse: collapse;
-    font-size: 18px;
-    margin-top: 40px;
-    color: #d6d5d5;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  .back-button {
+    background-color: #ddd;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
   }
   
-  .user-task-tables th,
-  .user-task-tables td {
-    border: 2px solid #d1d0d0;
-    padding: 12px;
-    text-align: center;
-    min-width: 120px;
+  .back-button:hover {
+    background-color: #ccc;
   }
   
-  .user-task-tables td:first-child {
-    text-align: left;
+  .label {
     font-weight: bold;
-    width: 250px;
-  }
-  
-  .user-task-tables th {
-    background-color: #363636; /* Sötétebb háttér szín */
-    color: white;
-  }
-  
-  /* Reszponzív dizájn */
-  @media (max-width: 768px) {
-    .user-task-tables {
-      font-size: 14px;
-      width: 100%;
-      margin-left: 0;
-      margin-right: 0;
-    }
-  
-    .user-task-tables th,
-    .user-task-tables td {
-      padding: 8px;
-      min-width: 80px;
-    }
-  
-    .admin-panel-button {
-      padding: 10px 15px;
-      font-size: 14px;
-    }
-  
-    .admin-control-panel {
-      width: 100%;
-      margin-right: 0;
-    }
+    margin-bottom: 5px;
   }
   

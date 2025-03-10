@@ -170,37 +170,39 @@ const AdminPanel = () => {
         {users.map((user) => (
           <div key={user.id} className="user-task-table">
             <h3>{user.username} - Feladatok</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Feladat</th>
-                  <th>Hétfő</th>
-                  <th>Kedd</th>
-                  <th>Szerda</th>
-                  <th>Csütörtök</th>
-                  <th>Péntek</th>
-                  <th>Szombat</th>
-                  <th>Vasárnap</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tasks.filter(task => task.assignedUsers.includes(user.id)).map(task => (
-                  <tr key={task.id}>
-                    <td>{task.name}</td>
-                    {['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'].map((day) => (
-                      <td key={day}>
-                        {task.days.includes(day) && (
-                          <input
-                            type="checkbox"
-                            disabled={task.assignedUsers[0] !== user.id} // Admin can't check tasks not assigned to them
-                          />
-                        )}
-                      </td>
-                    ))}
+            <div className="task-table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Feladat</th>
+                    <th>Hétfő</th>
+                    <th>Kedd</th>
+                    <th>Szerda</th>
+                    <th>Csütörtök</th>
+                    <th>Péntek</th>
+                    <th>Szombat</th>
+                    <th>Vasárnap</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {tasks.filter(task => task.assignedUsers.includes(user.id)).map(task => (
+                    <tr key={task.id}>
+                      <td>{task.name}</td>
+                      {['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'].map((day) => (
+                        <td key={day}>
+                          {task.days.includes(day) && (
+                            <input
+                              type="checkbox"
+                              disabled={task.assignedUsers[0] !== user.id} // Admin can't check tasks not assigned to them
+                            />
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         ))}
       </div>
