@@ -4,13 +4,16 @@ import { useNavigate } from "react-router-dom";
 import "./AdminPanel.css";
 
 const AdminPanel = () => {
-  const [usersWithTasks, setUsersWithTasks] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
+  const [newTask, setNewTask] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectedDays, setSelectedDays] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const currentHour = new Date().getHours();
   const today = new Date().toLocaleString("hu-HU", { weekday: "long" });
 
   useEffect(() => {
@@ -21,27 +24,17 @@ const AdminPanel = () => {
 
     const fetchData = async () => {
       try {
-        const [taskRes, userRes, userTasksRes] = await Promise.all([
+        const [taskRes, userRes] = await Promise.all([
           axios.get("https://haztartas-backend-production.up.railway.app/api/tasks", {
             headers: { Authorization: `Bearer ${token}` },
           }),
           axios.get("https://haztartas-backend-production.up.railway.app/api/tasks/fetch/users", {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get("https://haztartas-backend-production.up.railway.app/api/tasks/all-users", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
         ]);
 
         setTasks(taskRes.data);
         setUsers(userRes.data);
-
-        // Filter users who have uncompleted tasks for today
-        const filteredUsers = userTasksRes.data.filter(user =>
-          user.tasks.some(task => task.progress[today] === false)
-        );
-
-        setUsersWithTasks(filteredUsers);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -62,130 +55,113 @@ const AdminPanel = () => {
           Vissza a Dashboardra
         </button>
 
-        {/* Task Management Section */}
-        <TaskManagement users={users} />
+        <div className="task-management">
+          <h2>Feladat létrehozása</h2>
+          <input
+            type="text"
+            value={newTask}
+            onChange={(e) => setNewTask(e.target.value)}
+            placeholder="Feladat neve"
+            className="input-field"
+          />
+
+          {/* User Selection */}
+          <div className="user-selection">
+            <label className="label">Felhasználók</label>
+            {users.map((user) => (
+              <div key={user.id} className="checkbox">
+                <input
+                  type="checkbox"
+                  value={user.id}
+                  checked={selectedUsers.includes(user.id)}
+                  onChange={() =>
+                    setSelectedUsers((prev) =>
+                      prev.includes(user.id) ? prev.filter((id) => id !== user.id) : [...prev, user.id]
+                    )
+                  }
+                />
+                <label>{user.username}</label>
+              </div>
+            ))}
+          </div>
+
+          {/* Day Selection */}
+          <div className="days-selection">
+            <label className="label">Napok</label>
+            {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+              <div key={day} className="checkbox">
+                <input
+                  type="checkbox"
+                  value={day}
+                  checked={selectedDays.includes(day)}
+                  onChange={() =>
+                    setSelectedDays((prev) =>
+                      prev.includes(day) ? prev.filter((item) => item !== day) : [...prev, day]
+                    )
+                  }
+                />
+                <label>{day}</label>
+              </div>
+            ))}
+          </div>
+
+          <button className="create-btn">Feladat létrehozása</button>
+        </div>
 
         {/* Show uncompleted tasks only after 8 PM */}
-        {new Date().getHours() >= 20 && <UncompletedTasks tasks={tasks} today={today} />}
+        {currentHour >= 20 && (
+          <div className="task-list">
+            <h2>El nem készült feladatok</h2>
+            {tasks
+              .filter((task) => task.days.includes(today))
+              .map((task) => (
+                <div key={task.id} className="task-item">
+                  <span>{task.name}</span>
+                </div>
+              ))}
+          </div>
+        )}
       </div>
 
-      {/* Right Panel - User Task Progress */}
+      {/* Right Panel - User Tasks */}
       <div className="right-panel">
         <h2 className="header">Felhasználói feladatok</h2>
-        {loading ? <p>Adatok betöltése...</p> : <UserTaskProgress usersWithTasks={usersWithTasks} />}
+        {loading ? (
+          <p>Adatok betöltése...</p>
+        ) : (
+          users.map((user) => (
+            <div key={user.id} className="user-task-table">
+              <h3>{user.username} - Feladatok</h3>
+              <div className="task-table-container">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Feladat</th>
+                      {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                        <th key={day}>{day}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tasks
+                      .filter((task) => task.assignedUsers.includes(user.id) && task.days.includes(today))
+                      .map((task) => (
+                        <tr key={task.id}>
+                          <td>{task.name}</td>
+                          {Array(7).fill(null).map((_, idx) => (
+                            <td key={idx}><input type="checkbox" disabled /></td>
+                          ))}
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
 };
-
-const TaskManagement = ({ users }) => {
-  const [newTask, setNewTask] = useState("");
-  const [selectedUsers, setSelectedUsers] = useState([]);
-  const [selectedDays, setSelectedDays] = useState([]);
-
-  return (
-    <div className="task-management">
-      <h2>Feladat létrehozása</h2>
-      <input
-        type="text"
-        value={newTask}
-        onChange={(e) => setNewTask(e.target.value)}
-        placeholder="Feladat neve"
-        className="input-field"
-      />
-
-      {/* User Selection */}
-      <div className="user-selection">
-        <label className="label">Felhasználók</label>
-        {users.map((user) => (
-          <div key={user.id} className="checkbox">
-            <input
-              type="checkbox"
-              value={user.id}
-              checked={selectedUsers.includes(user.id)}
-              onChange={() =>
-                setSelectedUsers((prev) =>
-                  prev.includes(user.id) ? prev.filter((id) => id !== user.id) : [...prev, user.id]
-                )
-              }
-            />
-            <label>{user.username}</label>
-          </div>
-        ))}
-      </div>
-
-      {/* Day Selection */}
-      <div className="days-selection">
-        <label className="label">Napok</label>
-        {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
-          <div key={day} className="checkbox">
-            <input
-              type="checkbox"
-              value={day}
-              checked={selectedDays.includes(day)}
-              onChange={() =>
-                setSelectedDays((prev) =>
-                  prev.includes(day) ? prev.filter((item) => item !== day) : [...prev, day]
-                )
-              }
-            />
-            <label>{day}</label>
-          </div>
-        ))}
-      </div>
-
-      <button className="create-btn">Feladat létrehozása</button>
-    </div>
-  );
-};
-
-const UncompletedTasks = ({ tasks, today }) => (
-  <div className="task-list">
-    <h2>El nem készült feladatok</h2>
-    {tasks
-      .filter((task) => task.days.includes(today))
-      .map((task) => (
-        <div key={task.id} className="task-item">
-          <span>{task.name}</span>
-        </div>
-      ))}
-  </div>
-);
-
-const UserTaskProgress = ({ usersWithTasks }) => (
-  <div className="task-container">
-    {usersWithTasks.length === 0 ? (
-      <p>Nincs el nem végzett feladat ma.</p>
-    ) : (
-      usersWithTasks.map(user => (
-        <div key={user.userId} className="user-task">
-          <h3>{user.username} - Feladatok</h3>
-          <table className="task-table">
-            <thead>
-              <tr>
-                <th>Feladat</th>
-                <th>Nap</th>
-                <th>Kész</th>
-              </tr>
-            </thead>
-            <tbody>
-              {user.tasks.map(task =>
-                Object.entries(task.progress).map(([day, completed]) => (
-                  <tr key={`${task.id}-${day}`}>
-                    <td>{task.name}</td>
-                    <td>{day}</td>
-                    <td>
-                      <input type="checkbox" checked={completed} disabled />
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      ))
-    )}
-  </div>
-);
 
 export default AdminPanel;
