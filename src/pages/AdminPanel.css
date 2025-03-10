@@ -72,7 +72,7 @@ td {
     cursor: pointer;
     border: none;
     transition: background-color 0.3s ease;
-    width: 100px
+    width: 300px
 }
 
 .create-btn:hover,
