@@ -9,11 +9,13 @@
   position: relative;
   text-align: center;
   background-color: #222222; /* Háttér szín */
+  padding: 0 15px; /* Add padding on mobile */
+  box-sizing: border-box; /* Ensures padding does not overflow the content */
 }
 
 /* Cím középre igazítása */
 h1 {
-  font-size: 4rem;
+  font-size: 3rem; /* Adjusted for better mobile fit */
   font-weight: bold;
   margin-top: 0; /* Eltávolítva, hogy a cím a tetejére kerüljön */
   text-align: center;
@@ -29,9 +31,9 @@ h1 {
   left: 20px;
   background-color: #111111;
   color: white;
-  padding: 12px 20px;
+  padding: 10px 15px; /* Reduced padding for mobile */
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 14px; /* Smaller font on mobile */
   cursor: pointer;
   border: none;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -45,9 +47,9 @@ h1 {
 
 /* Táblázat középre helyezése */
 .task-table {
-  width: 90%;
-  max-width: 800px;
-  margin: auto;
+  width: 100%; /* Ensure table is fully responsive */
+  max-width: 100%; /* Limit max width to screen size */
+  margin: 20px auto;
   border-collapse: collapse;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -55,12 +57,12 @@ h1 {
 }
 
 .task-table th, .task-table td {
-  padding: 12px;
+  padding: 8px; /* Adjusted padding for better mobile fit */
   border: 1px solid #444;
   text-align: center;
   background-color: #333;
   color: white;
-  font-size: 16px;
+  font-size: 14px; /* Adjusted font size */
 }
 
 .task-table th {
@@ -70,8 +72,8 @@ h1 {
 
 /* Checkbox méret és megjelenés */
 .task-checkbox {
-  width: 20px;
-  height: 20px;
+  width: 16px; /* Reduced size for mobile */
+  height: 16px;
   cursor: pointer;
 }
 
@@ -83,7 +85,7 @@ h1 {
   cursor: pointer;
   background-color: #1d1d1d;
   color: white;
-  font-size: 16px;
+  font-size: 14px; /* Adjusted font size */
   transition: background-color 0.3s ease;
 }
 
@@ -99,27 +101,33 @@ h1 {
 /* Mobilbarát kialakítás */
 @media (max-width: 768px) {
   h1 {
-    font-size: 2rem; /* Reduce the size of the title */
+    font-size: 2rem; /* Reduce title font size */
     margin-top: 10px;
   }
 
   /* Table adjustments */
   .task-table {
     width: 100%;
-    font-size: 12px; /* Make text smaller for readability */
+    font-size: 12px; /* Smaller text for better readability */
+    margin: 0; /* Remove unnecessary margins */
   }
 
   .task-table th, .task-table td {
     padding: 8px;
-    font-size: 14px;
+    font-size: 12px; /* Adjusted font size for readability */
   }
 
-  /* Reduce padding for smaller buttons */
+  /* Admin button */
   .admin-button {
     font-size: 14px;
     padding: 8px 12px;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 999;
   }
 
+  /* Adjust button sizes */
   .complete-btn {
     font-size: 14px;
     padding: 8px 12px;
@@ -127,12 +135,12 @@ h1 {
 
   /* Make checkboxes smaller */
   .task-checkbox {
-    width: 16px;
-    height: 16px;
+    width: 14px; /* Further reduced size */
+    height: 14px;
   }
 
   /* Reduce margin for better vertical alignment on mobile */
   .dashboard-container {
-    padding: 0 10px; /* Add some padding to the sides */
+    padding: 0 15px; /* Added padding to avoid overflow */
   }
 }
