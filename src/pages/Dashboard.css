@@ -105,34 +105,34 @@ h1 {
 
   /* Table adjustments */
   .task-table {
-    width: 100%;
-    font-size: 12px; /* Make text smaller for readability */
+    max-width: 370px;
+    font-size: 6px; /* Make text smaller for readability */
   }
 
   .task-table th, .task-table td {
-    padding: 8px;
-    font-size: 14px;
+    padding: 3px;
+    font-size: 8px;
   }
 
   /* Reduce padding for smaller buttons */
   .admin-button {
-    font-size: 14px;
-    padding: 8px 12px;
+    font-size: 8px;
+    padding: 3px 5px;
   }
 
   .complete-btn {
-    font-size: 14px;
-    padding: 8px 12px;
+    font-size: 8px;
+    padding: 3px 5px;
   }
 
   /* Make checkboxes smaller */
   .task-checkbox {
-    width: 16px;
-    height: 16px;
+    width: 4px;
+    height: 4px;
   }
 
   /* Reduce margin for better vertical alignment on mobile */
   .dashboard-container {
-    padding: 0 10px; /* Add some padding to the sides */
+    padding: 0 5px; /* Add some padding to the sides */
   }
 }
