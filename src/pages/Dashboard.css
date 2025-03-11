@@ -127,8 +127,8 @@ h1 {
 
   /* Make checkboxes smaller */
   .task-checkbox {
-    width: 4px;
-    height: 4px;
+    width: 7px;
+    height: 7px;
   }
 
   /* Reduce margin for better vertical alignment on mobile */
