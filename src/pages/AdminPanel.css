@@ -66,7 +66,6 @@
     background-color: #2a2a2a;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    height: calc(100vh - 40px); /* Ensure the right panel takes up available height minus padding */
     overflow-y: auto; /* Allow scrolling for the content if needed */
 }
 
