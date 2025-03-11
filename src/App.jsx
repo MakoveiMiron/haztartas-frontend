@@ -7,6 +7,7 @@ import AdminPanel from "./pages/AdminPanel"; // Admin panel importálása
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);  // Új loading állapot hozzáadása
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -29,7 +30,13 @@ const App = () => {
         localStorage.removeItem("user");
       }
     }
+    setLoading(false); // Az aszinkron művelet befejezésével a loading állapotot false-ra állítjuk
   }, []);
+
+  // Ha az adatok még betöltődnek, akkor nem rendereljük a Router-t
+  if (loading) {
+    return <div>Loading...</div>; // Vagy egy töltési animáció
+  }
 
   return (
     <Router>
