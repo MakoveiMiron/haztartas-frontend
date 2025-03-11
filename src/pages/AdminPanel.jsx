@@ -17,13 +17,13 @@ const AdminPanel = () => {
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  if (!token) {
-    navigate("/login");
-    return;
-  }
-
+  
   useEffect(() => {
-
+    
+    if (!token) {
+      navigate("/login");
+      return;
+    }
     const fetchUserProgress = async () => {
       try {
         const result = await axios.get(
