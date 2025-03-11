@@ -18,7 +18,7 @@ const AdminPanel = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   if (!token) {
-    navigate("/login", { replace: true });
+    navigate("/login");
     return;
   }
 
