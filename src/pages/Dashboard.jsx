@@ -1,46 +1,52 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./Dashboard.css"; // 📌 Import CSS for styling
+
+const DAYS_OF_WEEK = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"];
+
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [completedDays, setCompletedDays] = useState({});
   const [completedTasks, setCompletedTasks] = useState(new Set()); // Track completed tasks
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-
-  if (!token) {
-    navigate("/login", { replace: true });
-  }
-
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    if (!user || !token) return;
+    // Redirect if no token is present
+    if (!token) {
+      navigate("/login", { replace: true });
+    }
+    
+    // If there is a user and token, proceed with fetching tasks
+    if (user && token) {
+      axios
+        .get(`https://haztartas-backend-production.up.railway.app/api/tasks/get/${user.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          const fetchedTasks = response.data;
+          setTasks(fetchedTasks);
 
-    if (tasks.length > 0) return;
+          const initialCompletedDays = {};
+          fetchedTasks.forEach((task) => {
+            initialCompletedDays[task.id] = task.days.reduce((acc, day) => {
+              acc[day] = task.progress && task.progress[day] ? task.progress[day] : false;
+              return acc;
+            }, {});
+          });
 
-    axios
-      .get(`https://haztartas-backend-production.up.railway.app/api/tasks/get/${user.id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        const fetchedTasks = response.data;
-        setTasks(fetchedTasks);
+          setCompletedDays(initialCompletedDays);
 
-        const initialCompletedDays = {};
-        fetchedTasks.forEach((task) => {
-          initialCompletedDays[task.id] = task.days.reduce((acc, day) => {
-            acc[day] = task.progress && task.progress[day] ? task.progress[day] : false;
-            return acc;
-          }, {});
+          const completedTaskIds = new Set(fetchedTasks.filter(task => task.is_completed).map(task => task.id));
+          setCompletedTasks(completedTaskIds);
+        })
+        .catch((error) => {
+          console.error("Error fetching tasks:", error);
         });
-
-        setCompletedDays(initialCompletedDays);
-
-        const completedTaskIds = new Set(fetchedTasks.filter(task => task.is_completed).map(task => task.id));
-        setCompletedTasks(completedTaskIds);
-      })
-      .catch((error) => {
-        console.error("Error fetching tasks:", error);
-      });
-  }, [user, token, tasks.length]);
+    }
+  }, [token, user, navigate]);
 
   const handleAdminPanelClick = () => {
     navigate("/admin", { replace: true });
