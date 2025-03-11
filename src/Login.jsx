@@ -1,21 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './login.css'; // Import the CSS file
 
-const Login = () => {
+const Login = ({ setIsAuthenticated }) => {  // Accept the callback from App.jsx
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-
-  // Check if the user is already logged in, navigate them to the dashboard
-  useEffect(() => {
-    if (token) {
-      navigate('/dashboard');
-    }
-  }, [token, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -24,8 +16,10 @@ const Login = () => {
       console.log("resp", response);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-      // After successfully logging in, navigate to the dashboard
-      navigate('/dashboard');
+      
+      // Set isAuthenticated to true after successful login
+      setIsAuthenticated(true);  // Update state in App.jsx
+      navigate('/dashboard');  // Navigate to dashboard
     } catch (error) {
       setError('Hibás felhasználónév vagy jelszó!');
     }
