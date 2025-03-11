@@ -17,10 +17,10 @@ const Dashboard = () => {
     // Redirect if no token is present
     if (!token) {
       navigate("/login", { replace: true });
-      return; // Exit early if no token
+      return;
     }
 
-    // If there is a user and token, proceed with fetching tasks
+    // If token exists, fetch tasks and user data
     if (user && token) {
       axios
         .get(`https://haztartas-backend-production.up.railway.app/api/tasks/get/${user.id}`, {
