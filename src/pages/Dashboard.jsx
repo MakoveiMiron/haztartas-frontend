@@ -62,7 +62,7 @@ const Dashboard = () => {
       // Send the updated progress to the backend
       axios
         .put(
-          `https://haztartas-backend-production.up.railway.app/api/tasks/progress/${taskId}`,
+          `https://haztartas-backend-production.up.railway.app/api/tasks/day-progress/${taskId}/${day}`,
           {
             day: day, // The day being updated
             is_completed: updatedDays[taskId][day], // Completion status of the specific day
