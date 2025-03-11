@@ -17,12 +17,12 @@ const AdminPanel = () => {
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  if (!token) {
+    navigate("/login", { replace: true });
+    return;
+  }
 
   useEffect(() => {
-    if (!token) {
-      navigate("/login", { replace: true });
-      return;
-    }
 
     const fetchUserProgress = async () => {
       try {
