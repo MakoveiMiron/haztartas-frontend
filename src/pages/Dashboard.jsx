@@ -1,10 +1,3 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import "./Dashboard.css"; // 📌 Import CSS for styling
-
-const DAYS_OF_WEEK = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"];
-
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [completedDays, setCompletedDays] = useState({});
@@ -19,10 +12,8 @@ const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    // Check if `user` or `token` are not available
     if (!user || !token) return;
 
-    // Prevent multiple fetches if tasks are already loaded
     if (tasks.length > 0) return;
 
     axios
@@ -33,11 +24,9 @@ const Dashboard = () => {
         const fetchedTasks = response.data;
         setTasks(fetchedTasks);
 
-        // Initialize completedDays with the task days' completion status
         const initialCompletedDays = {};
         fetchedTasks.forEach((task) => {
           initialCompletedDays[task.id] = task.days.reduce((acc, day) => {
-            // Set the initial completion status based on the `progress` field
             acc[day] = task.progress && task.progress[day] ? task.progress[day] : false;
             return acc;
           }, {});
@@ -45,31 +34,31 @@ const Dashboard = () => {
 
         setCompletedDays(initialCompletedDays);
 
-        // Also set completed tasks from the fetched data
         const completedTaskIds = new Set(fetchedTasks.filter(task => task.is_completed).map(task => task.id));
         setCompletedTasks(completedTaskIds);
       })
       .catch((error) => {
         console.error("Error fetching tasks:", error);
       });
-  }, [user, token, tasks.length]); // Prevent re-fetching once tasks are loaded
+  }, [user, token, tasks.length]);
+
+  const handleAdminPanelClick = () => {
+    navigate("/admin", { replace: true });
+  };
 
   const handleDayCompletion = (taskId, day) => {
     setCompletedDays((prevState) => {
       const updatedDays = { ...prevState };
-      updatedDays[taskId][day] = !updatedDays[taskId][day]; // Toggle completion state
+      updatedDays[taskId][day] = !updatedDays[taskId][day];
 
-      // Send the updated progress to the backend
       axios
         .put(
           `https://haztartas-backend-production.up.railway.app/api/tasks/day-progress/${taskId}/${day}`,
           {
-            day: day, // The day being updated
-            is_completed: updatedDays[taskId][day], // Completion status of the specific day
+            day: day,
+            is_completed: updatedDays[taskId][day],
           },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         )
         .then(() => {
           console.log(`Progress for task ${taskId} on ${day} updated!`);
@@ -78,7 +67,7 @@ const Dashboard = () => {
           console.error("Error updating task progress:", error);
         });
 
-      return updatedDays; // Return the updated state
+      return updatedDays;
     });
   };
 
@@ -99,7 +88,7 @@ const Dashboard = () => {
               task.id === taskId ? { ...task, is_completed: true } : task
             )
           );
-          setCompletedTasks((prevCompletedTasks) => new Set(prevCompletedTasks).add(taskId)); // Mark task as completed
+          setCompletedTasks((prevCompletedTasks) => new Set(prevCompletedTasks).add(taskId));
         })
         .catch((error) => console.error("Error updating task:", error));
     }
@@ -110,10 +99,7 @@ const Dashboard = () => {
       <h1 className="text-3xl font-bold mb-4">Heti feladataid</h1>
 
       {user?.isAdmin && (
-        <button
-          onClick={() => navigate("/admin", { replace: true })}
-          className="admin-button"
-        >
+        <button onClick={handleAdminPanelClick} className="admin-button">
           Admin Panel
         </button>
       )}
@@ -139,9 +125,9 @@ const Dashboard = () => {
                     {task.days?.includes(day) ? (
                       <input
                         type="checkbox"
-                        checked={completedDays[task.id]?.[day] || false} // Ensure checkbox reflects task completion
-                        onChange={() => handleDayCompletion(task.id, day)} // Toggle completion on checkbox change
-                        disabled={completedDays[task.id]?.[day] || false} // Disable checkbox if already completed
+                        checked={completedDays[task.id]?.[day] || false}
+                        onChange={() => handleDayCompletion(task.id, day)}
+                        disabled={completedDays[task.id]?.[day] || false}
                         className="task-checkbox"
                       />
                     ) : (
@@ -152,11 +138,11 @@ const Dashboard = () => {
 
                 <td>
                   {task.is_completed ? (
-                    <span>Feladat kész a hétre</span> // Show label if completed
+                    <span>Feladat kész a hétre</span>
                   ) : (
                     <button
                       onClick={() => handleCompleteTask(task.id)}
-                      disabled={completedTasks.has(task.id)} // Disable the button if the task is already completed
+                      disabled={completedTasks.has(task.id)}
                       className={`complete-btn ${completedTasks.has(task.id) ? "disabled" : "enabled"}`}
                     >
                       {completedTasks.has(task.id) ? "Feladat kész a hétre" : "Kész"}
