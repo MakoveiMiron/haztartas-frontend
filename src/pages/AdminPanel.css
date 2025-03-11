@@ -7,6 +7,7 @@
     background-color: #222222;
     padding: 20px;
     box-sizing: border-box;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 /* Left Panel - Task Management */
@@ -26,7 +27,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width:40%;
+    width: 100%; /* Use full width */
 }
 
 .task-item {
@@ -62,10 +63,11 @@
 .right-panel {
     flex: 1;
     padding: 20px;
-    overflow-y: auto;
     background-color: #2a2a2a;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+    height: calc(100vh - 40px); /* Ensure the right panel takes up available height minus padding */
+    overflow-y: auto; /* Allow scrolling for the content if needed */
 }
 
 /* User Task Tables */
@@ -74,10 +76,11 @@
 }
 
 .table {
-    width: 100%;
+    width: 100%; /* Ensure the table takes full width */
     border-collapse: collapse;
     border-radius: 10px;
     overflow: hidden;
+    max-width: 100%; /* Prevent the table from overflowing */
 }
 
 th, td {
@@ -113,11 +116,12 @@ th, td {
         flex-direction: column;
         height: auto;
         gap: 10px;
+        padding: 10px;
     }
 
     .left-panel, .right-panel {
         width: 100%;
-        padding: 15px;
+        padding: 10px;
     }
 
     th, td {
@@ -129,5 +133,9 @@ th, td {
         padding: 10px;
         font-size: 14px;
         width: 100%;
+    }
+
+    .task-list {
+        width: 100%; /* Ensure the left panel takes full width */
     }
 }
