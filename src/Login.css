@@ -40,6 +40,7 @@
     font-size: 16px;
     background-color: #444444; /* Darker background for inputs */
     color: white; /* White text inside the input */
+    box-sizing: border-box; /* Prevents overflow from padding */
 }
 
 /* Focused input fields styles */
@@ -51,19 +52,20 @@
 
 /* Submit button styles */
 .login-form button {
-    width: 100%;
+    width: 60%;
     padding: 12px;
-    background-color: #3b82f6;
+    background-color: #111111;
     color: white;
     border: none;
     border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    box-sizing: border-box; /* Ensures padding is included in the total width */
 }
 
 .login-form button:hover {
-    background-color: #2563eb;
+    background-color: #222222;
 }
 
 /* Error message styling */
