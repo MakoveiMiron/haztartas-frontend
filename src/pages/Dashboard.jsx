@@ -13,6 +13,7 @@ const Dashboard = () => {
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
 
+  location.reload()
   useEffect(() => {
     // Redirect if no token is present
     if (!token) {
