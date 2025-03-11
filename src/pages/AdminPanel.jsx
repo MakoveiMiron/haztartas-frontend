@@ -5,6 +5,7 @@ import "./AdminPanel.css";
 
 const AdminPanel = () => {
   const [tasks, setTasks] = useState([]);
+  const [users, setUsers] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selectedDays, setSelectedDays] = useState([]);
@@ -16,15 +17,13 @@ const AdminPanel = () => {
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-
-  const hardcodedUsers = ["Bob", "Rien", "Mendel", "Miron"];
-
+  
   useEffect(() => {
+    
     if (!token) {
       navigate("/login");
       return;
     }
-
     const fetchUserProgress = async () => {
       try {
         const result = await axios.get(
@@ -41,16 +40,19 @@ const AdminPanel = () => {
 
     const fetchData = async () => {
       try {
-        const taskRes = await axios.get(
-          "https://haztartas-backend-production.up.railway.app/api/tasks",
-          {
+        const [taskRes, userRes] = await Promise.all([
+          axios.get("https://haztartas-backend-production.up.railway.app/api/tasks", {
             headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+          }),
+          axios.get("https://haztartas-backend-production.up.railway.app/api/tasks/fetch/users", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
 
         setTasks(taskRes.data);
+        setUsers(userRes.data);
       } catch (error) {
-        console.error("Error fetching tasks:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
@@ -63,13 +65,19 @@ const AdminPanel = () => {
   const handleBackToDashboard = () => navigate("/dashboard", { replace: true });
 
   const handleCreateTask = async () => {
+    const usersToSend = []
+    selectedUsers.forEach((name) => users.forEach((user) => {
+      if(user.username === name){
+        usersToSend.push(user.id)
+      }
+    }))
     if (newTask && selectedUsers.length > 0 && selectedDays.length > 0) {
       try {
         await axios.post(
           "https://haztartas-backend-production.up.railway.app/api/tasks",
           {
             name: newTask,
-            assignedUsers: selectedUsers,
+            assignedUsers: usersToSend, // Use username
             days: selectedDays,
           },
           {
@@ -77,10 +85,10 @@ const AdminPanel = () => {
           }
         );
         alert("Feladat sikeresen létrehozva");
-        setNewTask("");
+        setNewTask('');
         setSelectedUsers([]);
         setSelectedDays([]);
-        setEditedUsers([]);
+        setEditedUsers([])
         location.reload();
       } catch (error) {
         alert("Hiba történt a feladat létrehozásakor");
@@ -95,8 +103,8 @@ const AdminPanel = () => {
     setEditTaskData(task);
     setNewTask(task.name);
     setSelectedDays(task.days);
-    setSelectedUsers(task.assignedUsers || []);
-    setEditedUsers(task.assignedUsers || []);
+    setSelectedUsers(task.assignedUsers || []); // Use assignedUsers (usernames)
+    setEditedUsers(task.assignedUsers || []); // Use assignedUsers (usernames) for modal
     setShowEditModal(true);
   };
 
@@ -108,7 +116,7 @@ const AdminPanel = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setEditedUsers([]);
+      setEditedUsers([])
       location.reload();
     } catch (err) {
       console.log(err);
@@ -116,13 +124,19 @@ const AdminPanel = () => {
   };
 
   const handleSaveEdit = async () => {
+    const usersToSend = []
+    editedUsers.forEach((name) => users.forEach((user) => {
+      if(user.username === name){
+        usersToSend.push(user.id)
+      }
+    }))
     if (editTaskData && newTask && selectedDays.length > 0) {
       try {
         await axios.put(
           `https://haztartas-backend-production.up.railway.app/api/tasks/update/${editTaskData.id}`,
           {
             name: newTask,
-            assignedUsers: editedUsers,
+            assignedUsers: usersToSend, // Use editedUsers (usernames)
             days: selectedDays,
           },
           {
@@ -145,78 +159,138 @@ const AdminPanel = () => {
 
   return (
     <div className={`admin-panel-container ${showEditModal ? "modal-active" : ""}`}>
-      <div className="left-panel">
-        <button onClick={handleBackToDashboard} className="back-button">
-          Vissza a Dashboardra
-        </button>
-
-        <div className="task-management">
-          <h2>Feladat létrehozása</h2>
-          <input
-            type="text"
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            placeholder="Feladat neve"
-            className="input-field"
-          />
-
-          <div className="user-selection">
-            <label className="label">Felhasználók</label>
-            {hardcodedUsers.map((user) => (
-              <div key={user} className="checkbox">
-                <input
-                  type="checkbox"
-                  value={user}
-                  checked={selectedUsers.includes(user)}
-                  onChange={() =>
-                    setSelectedUsers((prev) =>
-                      prev.includes(user) ? prev.filter((u) => u !== user) : [...prev, user]
-                    )
-                  }
-                />
-                <label>{user}</label>
-              </div>
-            ))}
-          </div>
-
-          <div className="days-selection">
-            <label className="label">Napok</label>
-            {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
-              <div key={day} className="checkbox">
-                <input
-                  type="checkbox"
-                  value={day}
-                  checked={selectedDays.includes(day)}
-                  onChange={() =>
-                    setSelectedDays((prev) =>
-                      prev.includes(day) ? prev.filter((item) => item !== day) : [...prev, day]
-                    )
-                  }
-                />
-                <label>{day}</label>
-              </div>
-            ))}
-          </div>
-
-          <button className="create-btn" onClick={handleCreateTask}>
-            Feladat létrehozása
+      {/* Left Panel - Task Management */}
+      {!showEditModal && (
+        <div className="left-panel">
+          <button onClick={handleBackToDashboard} className="back-button">
+            Vissza a Dashboardra
           </button>
-        </div>
 
-        <div className="task-list">
-          <h2>Feladatok</h2>
-          {tasks.map((task) => (
-            <div key={task.id} className="task-item">
-              <span>{task.name}</span>
-              <button onClick={() => handleEditTask(task)}>Szerkesztés</button>
-              <button onClick={() => handleDelete(task.id)}>Törlés</button>
+          <div className="task-management">
+            <h2>Feladat létrehozása</h2>
+            <input
+              type="text"
+              value={newTask}
+              onChange={(e) => setNewTask(e.target.value)}
+              placeholder="Feladat neve"
+              className="input-field"
+            />
+
+            <div className="user-selection">
+              <label className="label">Felhasználók</label>
+              {users.map((user) => (
+                <div key={user.id} className="checkbox">
+                  <input
+                    type="checkbox"
+                    value={user.username}
+                    checked={selectedUsers.includes(user.username)} // Compare with username
+                    onChange={() =>
+                      setSelectedUsers((prev) =>
+                        prev.includes(user.username)
+                          ? prev.filter((username) => username !== user.username)
+                          : [...prev, user.username]
+                      )
+                    }
+                  />
+                  <label>{user.username}</label>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
 
+            <div className="days-selection">
+              <label className="label">Napok</label>
+              {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                <div key={day} className="checkbox">
+                  <input
+                    type="checkbox"
+                    value={day}
+                    checked={selectedDays.includes(day)}
+                    onChange={() =>
+                      setSelectedDays((prev) =>
+                        prev.includes(day) ? prev.filter((item) => item !== day) : [...prev, day]
+                      )
+                    }
+                  />
+                  <label>{day}</label>
+                </div>
+              ))}
+            </div>
+
+            <button className="create-btn" onClick={handleCreateTask}>
+              Feladat létrehozása
+            </button>
+          </div>
+
+          <div className="task-list">
+            <h2>Feladatok</h2>
+            {tasks.map((task) => (
+              <div key={task.id} className="task-item">
+                <span>{task.name}</span>
+                <button onClick={() => handleEditTask(task)}>Szerkesztés</button>
+                <button onClick={() => handleDelete(task.id)}>Törlés</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Right Panel - User Tasks */}
+      {!showEditModal && (
+        <div className="right-panel">
+          <h2 className="header">Felhasználói feladatok</h2>
+          {loading ? (
+            <p>Adatok betöltése...</p>
+          ) : (
+            usersProgress?.map((user) => (
+              <div key={user.userId} className="user-task-table">
+                <h3>{user.username} - Feladatok</h3>
+                {user.tasks.length > 0 ? (
+                  <div className="task-table-container">
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th>Feladat</th>
+                          {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                            <th key={day}>{day}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {user.tasks.map((task) => (
+                            <tr key={task.id}>
+                              <td>{task.name}</td>
+                              {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                                <td key={day}>
+                                  {task.days.includes(day) ? (
+                                    <input
+                                      type="checkbox"
+                                      checked={task.progress[day] || false}
+                                      disabled
+                                    />
+                                  ) : (
+                                    <span>-</span> // If the task isn't assigned to this day, display a dash
+                                  )}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                      </tbody>
+
+                    </table>
+                  </div>
+                ) : (
+                  <p>Ez a felhasználó nem rendelkezik napi feladatokkal.</p>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {/* Modal Overlay */}
       {showEditModal && <div className="modal-overlay" onClick={() => setShowEditModal(false)}></div>}
 
+      {/* Edit Task Modal */}
       {showEditModal && (
         <div className="edit-modal">
           <div className="modal-content">
@@ -230,25 +304,48 @@ const AdminPanel = () => {
 
             <div className="user-selection">
               <label className="label">Felhasználók</label>
-              {hardcodedUsers.map((user) => (
-                <div key={user} className="checkbox">
+              {users.map((user) => (
+                <div key={user.id} className="checkbox">
                   <input
                     type="checkbox"
-                    value={user}
-                    checked={editedUsers.includes(user)}
-                    onChange={() =>
+                    value={user.username}
+                    checked={editedUsers.includes(user.username)} // Use editedUsers for modal checkbox selection
+                    onChange={() => {
                       setEditedUsers((prev) =>
-                        prev.includes(user) ? prev.filter((u) => u !== user) : [...prev, user]
+                        prev.includes(user.username)
+                          ? prev.filter((username) => username !== user.username)
+                          : [...prev, user.username]
+                      );
+                    }}
+                  />
+                  <label>{user.username}</label>
+                </div>
+              ))}
+            </div>
+
+            <div className="days-selection">
+              <label className="label">Napok</label>
+              {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
+                <div key={day} className="checkbox">
+                  <input
+                    type="checkbox"
+                    value={day}
+                    checked={selectedDays.includes(day)}
+                    onChange={() =>
+                      setSelectedDays((prev) =>
+                        prev.includes(day) ? prev.filter((item) => item !== day) : [...prev, day]
                       )
                     }
                   />
-                  <label>{user}</label>
+                  <label>{day}</label>
                 </div>
               ))}
             </div>
 
             <button className="save-btn" onClick={handleSaveEdit}>Mentés</button>
-            <button className="close-btn" onClick={() => setShowEditModal(false)}>Mégse</button>
+            <button className="close-btn" onClick={() => setShowEditModal(false)}>
+              Mégse
+            </button>
           </div>
         </div>
       )}
