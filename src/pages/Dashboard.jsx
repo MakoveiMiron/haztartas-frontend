@@ -119,7 +119,6 @@ const Dashboard = () => {
               {DAYS_OF_WEEK.map((day) => (
                 <th key={day}>{day}</th>
               ))}
-              <th>Kész</th>
             </tr>
           </thead>
           <tbody>
@@ -142,20 +141,6 @@ const Dashboard = () => {
                     )}
                   </td>
                 ))}
-
-                <td>
-                  {task.is_completed ? (
-                    <span>Feladat kész a hétre</span>
-                  ) : (
-                    <button
-                      onClick={() => handleCompleteTask(task.id)}
-                      disabled={completedTasks.has(task.id)}
-                      className={`complete-btn ${completedTasks.has(task.id) ? "disabled" : "enabled"}`}
-                    >
-                      {completedTasks.has(task.id) ? "Feladat kész a hétre" : "Kész"}
-                    </button>
-                  )}
-                </td>
               </tr>
             ))}
           </tbody>
