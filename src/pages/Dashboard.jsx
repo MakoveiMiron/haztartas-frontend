@@ -13,13 +13,13 @@ const Dashboard = () => {
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
 
-  location.reload()
   useEffect(() => {
     // Redirect if no token is present
     if (!token) {
       navigate("/login", { replace: true });
+      return; // Exit early if no token
     }
-    
+
     // If there is a user and token, proceed with fetching tasks
     if (user && token) {
       axios
