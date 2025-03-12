@@ -221,8 +221,8 @@ const AdminPanel = () => {
             </button>
           </div>
 
+          <h2>Feladatok</h2>
           <div className="task-list">
-            <h2>Feladatok</h2>
             {tasks.map((task) => (
               <div key={task.id} className="task-item">
                 <span>{task.name}</span>
