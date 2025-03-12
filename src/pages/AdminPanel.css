@@ -32,7 +32,7 @@
 }
 
 .task-item {
-    width: 100%; /* Full width within the grid column */
+    width: 80%; /* Full width within the grid column */
     display: flex;
     justify-content: space-between;
     align-items: center;

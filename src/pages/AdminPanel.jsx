@@ -68,7 +68,7 @@ const AdminPanel = () => {
 
     fetchData();
     fetchUserProgress();
-  }, [navigate, token, selectedUsers]);
+  }, [navigate, token, selectedUsers, editedUsers]);
 
   const handleBackToDashboard = () => navigate("/dashboard", { replace: true });
 
@@ -97,7 +97,6 @@ const AdminPanel = () => {
         setSelectedUsers([]);
         setSelectedDays([]);
         setEditedUsers([])
-        location.reload();
       } catch (error) {
         toast.error("Hiba a feladat létrehozásánál!", { position: "top-right" })
         console.error(error);
@@ -125,7 +124,6 @@ const AdminPanel = () => {
         }
       );
       setEditedUsers([])
-      location.reload();
     } catch (err) {
       console.log(err);
     }
@@ -155,7 +153,6 @@ const AdminPanel = () => {
         setShowEditModal(false);
         setSelectedDays([]);
         setEditedUsers([]);
-        location.reload();
       } catch (error) {
         toast.error("Hiba történt a feladat frissítésekor", { position: "top-right" })
         console.error(error);
