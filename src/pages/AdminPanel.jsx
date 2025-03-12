@@ -16,11 +16,7 @@ const AdminPanel = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editTaskData, setEditTaskData] = useState(null);
   const [editedUsers, setEditedUsers] = useState([]);
-  const taskCreated = () => toast.success("Feladat létrehozva!")
-  const errorCreatingTask = () => toast.error("Hiba a feladat létrehozásánál!", { position: "top-right" })
-  const taskUpdated = () => toast.success("Feladat sikeresen módosítva!", { position: "top-right" })
-  const fillAll = () => toast.success("Kérlek, töltsd ki az összes mezőt.", { position: "top-right" })
-  const errorUpdatingTask = () => toast.error("Hiba történt a feladat frissítésekor", { position: "top-right" })
+  
 
 
   const navigate = useNavigate();
@@ -98,7 +94,7 @@ const AdminPanel = () => {
         setSelectedDays([]);
         setEditedUsers([])
       } catch (error) {
-        toast.error("Hiba a feladat létrehozásánál!", { position: "top-right" })
+        toast.error("Error a feladat létrehozásánál!", { position: "top-right" })
         console.error(error);
       }
     } else {
@@ -156,7 +152,7 @@ const AdminPanel = () => {
         setSelectedDays([]);
         setEditedUsers([]);
       } catch (error) {
-        toast.error("Hiba történt a feladat frissítésekor", { position: "top-right" })
+        toast.error("Error a feladat frissítésekor", { position: "top-right" })
         console.error(error);
       }
     } else {
