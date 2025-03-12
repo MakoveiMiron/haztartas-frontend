@@ -120,7 +120,7 @@ const AdminPanel = () => {
         }
       );
       setEditedUsers([])
-      toast.succes("Feladat sikeresen törölve!", { position: "top-right" })
+      toast.success("Feladat sikeresen törölve!", { position: "top-right" })
     } catch (err) {
       toast.error("Error a feladat törlése közben!", { position: "top-right" })
       console.log(err);
