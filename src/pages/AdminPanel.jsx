@@ -103,6 +103,8 @@ const AdminPanel = () => {
   };
 
   const handleEditTask = (task) => {
+    console.log("Editing Task:", task); // Debugging
+    console.log("Assigned Users Before Setting:", task.assignedUsers); // Debugging
     setEditTaskData(task);
     setNewTask(task.name);
     setSelectedDays(task.days);
