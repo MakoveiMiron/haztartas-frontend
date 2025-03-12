@@ -21,7 +21,6 @@
     flex-direction: column;
     gap: 15px;
     color: white;
-    overflow-y: auto;
 }
 
 .task-list {
@@ -29,9 +28,12 @@
     flex-direction: column;
     gap: 10px;
     width: 100%; /* Use full width */
+    overflow-y: auto;
+    columns: 2;
 }
 
 .task-item {
+    width: 40%;
     display: flex;
     justify-content: space-between;
     align-items: center;
