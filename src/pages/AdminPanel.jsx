@@ -152,6 +152,7 @@ const AdminPanel = () => {
         setSelectedDays([]);
         setSelectedUsers([])
         setEditedUsers([]);
+        setNewTask("")
       } catch (error) {
         toast.error("Error a feladat frissítésekor", { position: "top-right" })
         console.error(error);
