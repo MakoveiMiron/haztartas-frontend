@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 import "./AdminPanel.css";
 
 const AdminPanel = () => {
@@ -14,6 +15,12 @@ const AdminPanel = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editTaskData, setEditTaskData] = useState(null);
   const [editedUsers, setEditedUsers] = useState([]);
+  const taskCreated = () => toast.success("Feladat létrehozva!")
+  const errorCreatingTask = () => toast.success("Hiba a feladat létrehozásánál!")
+  const taskUpdated = () => toast.success("Feladat sikeresen módosítva!")
+  const fillAll = () => toast.success("Kérlek, töltsd ki az összes mezőt.")
+  const errorUpdatingTask = () => toast.success("Hiba történt a feladat frissítésekor")
+
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -84,18 +91,18 @@ const AdminPanel = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        alert("Feladat sikeresen létrehozva");
+        taskCreated()
         setNewTask('');
         setSelectedUsers([]);
         setSelectedDays([]);
         setEditedUsers([])
         location.reload();
       } catch (error) {
-        alert("Hiba történt a feladat létrehozásakor");
+        errorCreatingTask()
         console.error(error);
       }
     } else {
-      alert("Kérlek, töltsd ki az összes mezőt.");
+      fillAll();
     }
   };
 
@@ -143,17 +150,17 @@ const AdminPanel = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        alert("Feladat sikeresen frissítve");
+        taskUpdated()
         setShowEditModal(false);
         setSelectedDays([]);
         setEditedUsers([]);
         location.reload();
       } catch (error) {
-        alert("Hiba történt a feladat frissítésekor");
+        errorUpdatingTask()
         console.error(error);
       }
     } else {
-      alert("Kérlek, töltsd ki az összes mezőt.");
+      fillAll()
     }
   };
 
@@ -349,6 +356,7 @@ const AdminPanel = () => {
           </div>
         </div>
       )}
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };
