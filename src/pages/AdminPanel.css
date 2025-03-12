@@ -111,6 +111,11 @@ th, td {
     background-color: #111;
 }
 
+.Toastify__toast-container {
+    z-index: 9999 !important;  /* Ensure the toast is above other elements */
+  }
+  
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .admin-panel-container {
