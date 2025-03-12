@@ -64,7 +64,7 @@ const AdminPanel = () => {
 
     fetchData();
     fetchUserProgress();
-  }, [navigate, token, selectedUsers, editedUsers]);
+  }, [navigate, token, selectedUsers, editedUsers, selectedDays]);
 
   const handleBackToDashboard = () => navigate("/dashboard", { replace: true });
 
@@ -355,7 +355,7 @@ const AdminPanel = () => {
               ))}
             </div>
 
-            <button className="save-btn" onClick={handleSaveEdit}>Mentés</button>
+            <button className="save-btn" onClick={() => handleSaveEdit()}>Mentés</button>
             <button className="close-btn" onClick={() => handleCancel()}>
               Mégse
             </button>
