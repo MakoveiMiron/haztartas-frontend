@@ -124,6 +124,7 @@ const AdminPanel = () => {
         }
       );
       setEditedUsers([])
+      toast.succes("Feladat sikeresen törölve!")
     } catch (err) {
       console.log(err);
     }
