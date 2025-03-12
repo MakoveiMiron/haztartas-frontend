@@ -161,6 +161,7 @@ const AdminPanel = () => {
         setSelectedUsers([])
         setEditedUsers([]);
         setNewTask("")
+        location.reload()
       } catch (error) {
         toast.error("Error a feladat frissítésekor", { position: "top-right" })
         console.error(error);
