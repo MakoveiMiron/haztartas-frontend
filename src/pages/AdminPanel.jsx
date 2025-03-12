@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./AdminPanel.css";
 
 const AdminPanel = () => {
@@ -16,10 +17,10 @@ const AdminPanel = () => {
   const [editTaskData, setEditTaskData] = useState(null);
   const [editedUsers, setEditedUsers] = useState([]);
   const taskCreated = () => toast.success("Feladat létrehozva!")
-  const errorCreatingTask = () => toast.success("Hiba a feladat létrehozásánál!")
-  const taskUpdated = () => toast.success("Feladat sikeresen módosítva!")
-  const fillAll = () => toast.success("Kérlek, töltsd ki az összes mezőt.")
-  const errorUpdatingTask = () => toast.success("Hiba történt a feladat frissítésekor")
+  const errorCreatingTask = () => toast.error("Hiba a feladat létrehozásánál!", { position: "top-right" })
+  const taskUpdated = () => toast.success("Feladat sikeresen módosítva!", { position: "top-right" })
+  const fillAll = () => toast.success("Kérlek, töltsd ki az összes mezőt.", { position: "top-right" })
+  const errorUpdatingTask = () => toast.error("Hiba történt a feladat frissítésekor", { position: "top-right" })
 
 
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ const AdminPanel = () => {
 
     fetchData();
     fetchUserProgress();
-  }, [navigate, token]);
+  }, [navigate, token, selectedUsers]);
 
   const handleBackToDashboard = () => navigate("/dashboard", { replace: true });
 
@@ -91,18 +92,18 @@ const AdminPanel = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        taskCreated()
+        toast.success("Feladat létrehozva!", { position: "top-right" });
         setNewTask('');
         setSelectedUsers([]);
         setSelectedDays([]);
         setEditedUsers([])
         location.reload();
       } catch (error) {
-        errorCreatingTask()
+        toast.error("Hiba a feladat létrehozásánál!", { position: "top-right" })
         console.error(error);
       }
     } else {
-      fillAll();
+      toast.success("Kérlek, töltsd ki az összes mezőt.", { position: "top-right" })
     }
   };
 
@@ -150,17 +151,17 @@ const AdminPanel = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        taskUpdated()
+        toast.success("Feladat sikeresen módosítva!", { position: "top-right" })
         setShowEditModal(false);
         setSelectedDays([]);
         setEditedUsers([]);
         location.reload();
       } catch (error) {
-        errorUpdatingTask()
+        toast.error("Hiba történt a feladat frissítésekor", { position: "top-right" })
         console.error(error);
       }
     } else {
-      fillAll()
+      toast.success("Kérlek, töltsd ki az összes mezőt.", { position: "top-right" })
     }
   };
 

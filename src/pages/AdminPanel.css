@@ -24,17 +24,15 @@
 }
 
 .task-list {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two equal columns */
     gap: 10px;
-    width: 100%; /* Use full width */
+    width: 100%;
     overflow-y: auto;
-    flex-wrap: wrap;
-    columns: 2;
 }
 
 .task-item {
-    width: 40%;
+    width: 100%; /* Full width within the grid column */
     display: flex;
     justify-content: space-between;
     align-items: center;
