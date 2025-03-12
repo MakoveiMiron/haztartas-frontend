@@ -24,13 +24,13 @@
 }
 
 .task-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Két egyenlő szélességű oszlop */
+    display: flex;
+    flex-direction: column;
     gap: 10px;
-    width: 100%;
-    overflow-y: auto; /* Görgetés, ha túl sok az elem */
+    width: 100%; /* Use full width */
+    overflow-y: auto;
+    flex-wrap: wrap;
 }
-
 
 .task-item {
     width: 40%;
