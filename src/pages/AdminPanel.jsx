@@ -107,6 +107,7 @@ const AdminPanel = () => {
     setSelectedDays([]);
     setSelectedUsers([]);
     setEditedUsers([]);
+    setShowEditModal(false);
   };
 
   const handleEditTask = (task) => {
