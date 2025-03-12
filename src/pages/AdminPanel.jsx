@@ -102,6 +102,13 @@ const AdminPanel = () => {
     }
   };
 
+  const handleCancel = () => {
+    setNewTask("");
+    setSelectedDays([]);
+    setSelectedUsers([]);
+    setEditedUsers([]);
+  };
+
   const handleEditTask = (task) => {
     setEditTaskData(task);
     setNewTask(task.name);
@@ -348,7 +355,7 @@ const AdminPanel = () => {
             </div>
 
             <button className="save-btn" onClick={handleSaveEdit}>Mentés</button>
-            <button className="close-btn" onClick={() => setShowEditModal(false)}>
+            <button className="close-btn" onClick={() => handleCancel()}>
               Mégse
             </button>
           </div>
