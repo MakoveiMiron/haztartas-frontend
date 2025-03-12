@@ -30,6 +30,7 @@
     width: 100%; /* Use full width */
     overflow-y: auto;
     flex-wrap: wrap;
+    columns: 2;
 }
 
 .task-item {
