@@ -87,7 +87,7 @@
 .table input[type="checkbox"]:checked:disabled {
     background-color: #4CAF50 !important; /* Green background */
     border-color: #4CAF50 !important; /* Green border */
-    color: white !important; /* White checkmark */
+    accent-color: white !important; /* White checkmark */
 }
 
 /* Right Panel - User Task Tables */
