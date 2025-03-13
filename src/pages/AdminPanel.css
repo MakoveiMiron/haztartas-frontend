@@ -73,6 +73,17 @@
     position: relative;
 }
 
+.table input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+}
+
 /* Disabled and checked checkboxes */
 .table input[type="checkbox"]:checked:disabled {
     background-color: #4CAF50 !important; /* Green background */
