@@ -88,6 +88,7 @@
     background-color: #4CAF50 !important; /* Green background */
     border-color: #4CAF50 !important; /* Green border */
     accent-color: white !important; /* White checkmark */
+    content: "X";
     box-shadow: inset 0 0 0 2px #4CAF50 !important;
 }
 
