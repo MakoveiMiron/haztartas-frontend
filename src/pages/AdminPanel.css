@@ -73,7 +73,7 @@
     position: relative;
 }
 
-.user-task-table input[type="checkbox"]:checked:disabled {
+.table input[type="checkbox"]:checked:disabled {
     background-color: #4CAF50; /* Green background */
     border-color: #4CAF50; /* Green border */
     accent-color: white; /* White checkmark */
