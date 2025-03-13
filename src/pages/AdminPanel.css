@@ -73,10 +73,10 @@
     position: relative;
 }
 
-.user-task-table input[type="checkbox"]:checked {
-    background-color: #4CAF50; /* Zöld háttér */
-    border-color: #4CAF50; /* Zöld szegély */
-    accent-color: white; /* A pipa színe fehér */
+.user-task-table input[type="checkbox"]:checked:disabled {
+    background-color: #4CAF50; /* Green background */
+    border-color: #4CAF50; /* Green border */
+    accent-color: white; /* White checkmark */
 }
 
 /* Right Panel - User Task Tables */
