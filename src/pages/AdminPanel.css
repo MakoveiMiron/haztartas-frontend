@@ -73,10 +73,11 @@
     position: relative;
 }
 
+/* Disabled and checked checkboxes */
 .table input[type="checkbox"]:checked:disabled {
-    background-color: #4CAF50; /* Green background */
-    border-color: #4CAF50; /* Green border */
-    accent-color: white; /* White checkmark */
+    background-color: #4CAF50 !important; /* Green background */
+    border-color: #4CAF50 !important; /* Green border */
+    accent-color: white !important; /* White checkmark */
 }
 
 /* Right Panel - User Task Tables */
