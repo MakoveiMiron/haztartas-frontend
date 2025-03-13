@@ -98,7 +98,7 @@ const AdminPanel = () => {
         console.error(error);
       }
     } else {
-      toast.success("Kérlek, töltsd ki az összes mezőt.", { position: "top-right" })
+      toast.error("Kérlek, töltsd ki az összes mezőt.", { position: "top-right" })
     }
   };
 
@@ -169,7 +169,7 @@ const AdminPanel = () => {
         console.error(error);
       }
     } else {
-      toast.success("Kérlek, töltsd ki az összes mezőt.", { position: "top-right" })
+      toast.error("Kérlek, töltsd ki az összes mezőt.", { position: "top-right" })
     }
   };
 

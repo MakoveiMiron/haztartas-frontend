@@ -73,7 +73,7 @@
     position: relative;
 }
 
-td input[type="checkbox"]:checked {
+td, input[type="checkbox"]:checked {
     background-color: #4CAF50; /* Zöld háttér */
     border-color: #4CAF50;
 }
