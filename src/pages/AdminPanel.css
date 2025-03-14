@@ -76,9 +76,10 @@
 .table input[type="checkbox"] {
     width: 18px;
     height: 18px;
-    border: 2px solid #ccc;
+    border: 2px solid #4CAF50;
     border-radius: 4px;
-    background-color: transparent;
+    background-color: #4CAF50 !important;
+    color: white !important; 
     position: relative;
 }
 
