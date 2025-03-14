@@ -23,7 +23,7 @@ const AdminPanel = () => {
   const token = localStorage.getItem("token");
   
 
-  if(localStorage.getItem("toast")){
+  if(localStorage.getItem("toast") === "toast"){
       localStorage.removeItem("toast")
       toast.success("Feladat sikeresen módosítva!", { position: "top-right" })   
   }
