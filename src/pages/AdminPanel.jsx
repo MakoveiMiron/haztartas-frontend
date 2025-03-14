@@ -22,6 +22,13 @@ const AdminPanel = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   
+
+  if(localStorage.getItem("toast")){
+      localStorage.removeItem("toast")
+      toast.success("Feladat sikeresen módosítva!", { position: "top-right" })   
+  }
+
+
   useEffect(() => {
     
     if (!token) {
@@ -155,15 +162,13 @@ const AdminPanel = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        toast.success("Feladat sikeresen módosítva!", { position: "top-right" })
         setShowEditModal(false);
         setSelectedDays([]);
         setSelectedUsers([])
         setEditedUsers([]);
         setNewTask("")
-        setTimeout(() => {
-          location.reload()
-        }, '1000');
+        localStorage.setItem("toast", "toast")
+        location.reload()
       } catch (error) {
         toast.error("Error a feladat frissítésekor", { position: "top-right" })
         console.error(error);
