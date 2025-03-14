@@ -74,7 +74,6 @@
 } */
 
 .table input[type="checkbox"] {
-    appearance: none;
     width: 18px;
     height: 18px;
     border: 2px solid #ccc;
