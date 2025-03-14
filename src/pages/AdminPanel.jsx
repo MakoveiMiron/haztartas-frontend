@@ -69,8 +69,10 @@ const AdminPanel = () => {
   }, [navigate, token, selectedUsers, editedUsers, selectedDays]);
 
   if(toastNeeded === "toast"){
-    toast.success("Feladat sikeresen módosítva!", { position: "top-right" })   
-    localStorage.removeItem("toast")
+    toast.success("Feladat sikeresen módosítva!", { position: "top-right" })
+    setTimeout(() => {
+      localStorage.removeItem("toast")
+    },'3500')   
   }
 
   const handleBackToDashboard = () => navigate("/dashboard", { replace: true });
