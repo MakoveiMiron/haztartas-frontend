@@ -83,7 +83,7 @@
 }
 
 /* Disabled and checked checkboxes */
-.table input[type="checkbox"]:checked:disabled {
+.table input[type="checkbox"]:disabled:checked {
     background-color: #4CAF50 !important; 
     border-color: #4CAF50 !important; 
     color: white !important; 
