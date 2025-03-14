@@ -84,12 +84,12 @@
 }
 
 /* Disabled and checked checkboxes */
-/* .table input[type="checkbox"]:checked:disabled {
+.table input[type="checkbox"]:checked:disabled {
     background-color: #4CAF50 !important; 
     border-color: #4CAF50 !important; 
     color: white !important; 
     box-shadow: inset 0 0 0 2px #4CAF50 !important;
-}  */
+} 
 
 /* Right Panel - User Task Tables */
 .right-panel {
