@@ -21,16 +21,15 @@ const AdminPanel = () => {
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  
-
-  if(localStorage.getItem("toast") === "toast"){
-    toast.success("Feladat sikeresen módosítva!", { position: "top-right" })   
-    localStorage.removeItem("toast")
-  }
 
 
   useEffect(() => {
     
+    if(localStorage.getItem("toast") === "toast"){
+      toast.success("Feladat sikeresen módosítva!", { position: "top-right" })   
+      localStorage.removeItem("toast")
+    }
+
     if (!token) {
       navigate("/login");
       return;
