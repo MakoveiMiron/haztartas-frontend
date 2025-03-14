@@ -16,7 +16,7 @@ const AdminPanel = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editTaskData, setEditTaskData] = useState(null);
   const [editedUsers, setEditedUsers] = useState([]);
-  
+  const toastNeeded = localStorage.getItem("toast")
 
 
   const navigate = useNavigate();
@@ -24,11 +24,6 @@ const AdminPanel = () => {
 
 
   useEffect(() => {
-    
-    if(localStorage.getItem("toast") === "toast"){
-      toast.success("Feladat sikeresen módosítva!", { position: "top-right" })   
-      localStorage.removeItem("toast")
-    }
 
     if (!token) {
       navigate("/login");
@@ -47,6 +42,7 @@ const AdminPanel = () => {
         console.error("Error fetching user progress:", err);
       }
     };
+
 
     const fetchData = async () => {
       try {
@@ -71,6 +67,11 @@ const AdminPanel = () => {
     fetchData();
     fetchUserProgress();
   }, [navigate, token, selectedUsers, editedUsers, selectedDays]);
+
+  if(toastNeeded === "toast"){
+    toast.success("Feladat sikeresen módosítva!", { position: "top-right" })   
+    localStorage.removeItem("toast")
+  }
 
   const handleBackToDashboard = () => navigate("/dashboard", { replace: true });
 
