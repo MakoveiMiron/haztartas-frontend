@@ -79,6 +79,7 @@
     border: 2px solid #4CAF50;
     border-radius: 4px;
     position: relative;
+    color: "white";
 }
 
 /* Disabled and checked checkboxes */
