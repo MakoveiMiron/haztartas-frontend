@@ -278,11 +278,7 @@ const AdminPanel = () => {
                               {["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"].map((day) => (
                                 <td key={day}>
                                   {task.days.includes(day) ? (
-                                    <input
-                                      type="checkbox"
-                                      checked={task.progress[day] || false}
-                                      disabled
-                                    />
+                                    <span>✓</span>
                                   ) : (
                                     <span>-</span> // If the task isn't assigned to this day, display a dash
                                   )}
