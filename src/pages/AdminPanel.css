@@ -92,6 +92,7 @@
 
 /* Right Panel - User Task Tables */
 .right-panel {
+    color: white;
     flex: 1;
     padding: 20px;
     background-color: #2a2a2a;
