@@ -149,6 +149,15 @@ th, td {
     color:white;
 }
 
+.save-btn, .close-btn{
+    background-color: #1d1d1d;
+    color: white;
+}
+
+.save-btn:hover, .close-btn:hover{
+    background-color: #111;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .admin-panel-container {
