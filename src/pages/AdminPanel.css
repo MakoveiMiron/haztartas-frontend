@@ -145,7 +145,7 @@ th, td {
     z-index: 9999 !important;  /* Ensure the toast is above other elements */
 }
 
-.modal-overlay{
+.edit-modal{
     color:white;
 }
 
