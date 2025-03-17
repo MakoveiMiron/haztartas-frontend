@@ -146,7 +146,43 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
+          {tasks.map((task) => (
+              <tr key={task.id}>
+                <td>{task.name}</td>
+
+                {DAYS_OF_WEEK.map((day) => (
+                  <td key={day}>
+                    {task.days?.includes(day) ? (
+                      <input
+                        type="checkbox"
+                        checked={completedDays[task.id]?.[day] || false}
+                        onChange={() => handleDayCompletion(task.id, day)}
+                        disabled={completedDays[task.id]?.[day] || false}
+                        className="task-checkbox"
+                      />
+                    ) : (
+                      "-"
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="task-table">
+          <thead>
+            <tr>
+              <th>Feladat</th>
+              {DAYS_OF_WEEK.map((day) => (
+                <th key={day}>{day}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
             {sortedUsersProgress.map((userProgress) => (
+              userProgress.userId !== user.id ?
               <div key={userProgress.userId} className="user-task-table">
                 <h3>{userProgress.username} - Feladatok</h3>
                 {userProgress.tasks.length > 0 ? (
@@ -193,7 +229,7 @@ const Dashboard = () => {
                 ) : (
                   <p>Ez a felhasználó nem rendelkezik napi feladatokkal.</p>
                 )}
-              </div>
+              </div> : null
             ))}
           </tbody>
         </table>
