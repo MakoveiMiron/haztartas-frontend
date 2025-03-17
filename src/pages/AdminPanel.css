@@ -152,6 +152,7 @@ th, td {
 .save-btn, .close-btn{
     background-color: #1d1d1d;
     color: white;
+    margin-top: 20px;
 }
 
 .save-btn:hover, .close-btn:hover{
