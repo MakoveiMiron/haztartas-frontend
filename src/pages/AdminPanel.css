@@ -153,6 +153,8 @@ th, td {
     background-color: #1d1d1d;
     color: white;
     margin-top: 20px;
+    margin-right: 10px;
+    border: 2px solid white;
 }
 
 .save-btn:hover, .close-btn:hover{
