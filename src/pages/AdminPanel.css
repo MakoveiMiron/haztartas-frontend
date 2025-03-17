@@ -159,6 +159,7 @@ th, td {
 
 .save-btn:hover, .close-btn:hover{
     background-color: #111;
+    border: 2px solid white;
 }
 
 /* Responsive Design */
