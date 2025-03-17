@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./Dashboard.css"; // 📌 Import CSS for styling
+import "./Dashboard.css";
 
 const DAYS_OF_WEEK = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"];
 
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [completedDays, setCompletedDays] = useState({});
-  const [completedTasks, setCompletedTasks] = useState(new Set()); // Track completed tasks
+  const [completedTasks, setCompletedTasks] = useState(new Set());
+  const [usersProgress, setUsersProgress] = useState([]);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
@@ -20,32 +21,42 @@ const Dashboard = () => {
       return;
     }
 
+    const fetchUserProgress = async () => {
+      try {
+        const result = await axios.get(
+          "https://haztartas-backend-production.up.railway.app/api/tasks/progress/all-users",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setUsersProgress(result.data);
+      } catch (err) {
+        console.error("Error fetching user progress:", err);
+      }
+    };
+
+    const fetchData = async () => {
+      try {
+        const [taskRes, userRes] = await Promise.all([
+          axios.get("https://haztartas-backend-production.up.railway.app/api/tasks", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get("https://haztartas-backend-production.up.railway.app/api/tasks/fetch/users", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+
+        setTasks(taskRes.data);
+        setUsers(userRes.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
     // If token exists, fetch tasks and user data
     if (user && token) {
-      axios
-        .get(`https://haztartas-backend-production.up.railway.app/api/tasks/get/${user.id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          const fetchedTasks = response.data;
-          setTasks(fetchedTasks);
-
-          const initialCompletedDays = {};
-          fetchedTasks.forEach((task) => {
-            initialCompletedDays[task.id] = task.days.reduce((acc, day) => {
-              acc[day] = task.progress && task.progress[day] ? task.progress[day] : false;
-              return acc;
-            }, {});
-          });
-
-          setCompletedDays(initialCompletedDays);
-
-          const completedTaskIds = new Set(fetchedTasks.filter(task => task.is_completed).map(task => task.id));
-          setCompletedTasks(completedTaskIds);
-        })
-        .catch((error) => {
-          console.error("Error fetching tasks:", error);
-        });
+      fetchData();
+      fetchUserProgress();
     }
   }, [token, user, navigate]);
 
@@ -56,7 +67,10 @@ const Dashboard = () => {
   const handleDayCompletion = (taskId, day) => {
     setCompletedDays((prevState) => {
       const updatedDays = { ...prevState };
-      updatedDays[taskId][day] = !updatedDays[taskId][day];
+      updatedDays[taskId] = {
+        ...updatedDays[taskId],
+        [day]: !updatedDays[taskId]?.[day], // Toggle the completion
+      };
 
       axios
         .put(
@@ -122,26 +136,54 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task) => (
-              <tr key={task.id}>
-                <td>{task.name}</td>
-
-                {DAYS_OF_WEEK.map((day) => (
-                  <td key={day}>
-                    {task.days?.includes(day) ? (
-                      <input
-                        type="checkbox"
-                        checked={completedDays[task.id]?.[day] || false}
-                        onChange={() => handleDayCompletion(task.id, day)}
-                        disabled={completedDays[task.id]?.[day] || false}
-                        className="task-checkbox"
-                      />
-                    ) : (
-                      "-"
-                    )}
-                  </td>
-                ))}
-              </tr>
+            {usersProgress.map((userProgress) => (
+              <div key={userProgress.userId} className="user-task-table">
+                <h3>{userProgress.username} - Feladatok</h3>
+                {userProgress.tasks.length > 0 ? (
+                  <div className="task-table-container">
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th>Feladat</th>
+                          {DAYS_OF_WEEK.map((day) => (
+                            <th key={day}>{day}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {userProgress.tasks.map((task) => (
+                          <tr key={task.id}>
+                            <td>{task.name}</td>
+                            {DAYS_OF_WEEK.map((day) => (
+                              <td key={day}>
+                                {task.days.includes(day) ? (
+                                  user.userId === userProgress.userId ? (
+                                    <input
+                                      type="checkbox"
+                                      checked={task.progress[day] || false}
+                                      onChange={() => handleDayCompletion(task.id, day)}
+                                    />
+                                  ) : (
+                                    <input
+                                      type="checkbox"
+                                      checked={task.progress[day] || false}
+                                      disabled
+                                    />
+                                  )
+                                ) : (
+                                  <span>-</span> // Dash if the task isn't assigned to this day
+                                )}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <p>Ez a felhasználó nem rendelkezik napi feladatokkal.</p>
+                )}
+              </div>
             ))}
           </tbody>
         </table>
