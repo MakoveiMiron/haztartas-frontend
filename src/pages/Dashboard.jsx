@@ -8,7 +8,6 @@ const DAYS_OF_WEEK = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "S
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [completedDays, setCompletedDays] = useState({});
-  const [completedTasks, setCompletedTasks] = useState(new Set());
   const [usersProgress, setUsersProgress] = useState([]);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -109,11 +108,22 @@ const Dashboard = () => {
               task.id === taskId ? { ...task, is_completed: true } : task
             )
           );
-          setCompletedTasks((prevCompletedTasks) => new Set(prevCompletedTasks).add(taskId));
         })
         .catch((error) => console.error("Error updating task:", error));
     }
   };
+
+  // Feladatok rendezése úgy, hogy a saját feladatok legyenek legfelül
+  const sortedUsersProgress = usersProgress.map((userProgress) => {
+    return {
+      ...userProgress,
+      tasks: userProgress.tasks.sort((a, b) => {
+        if (a.userId === user.userId && b.userId !== user.userId) return -1;
+        if (b.userId === user.userId && a.userId !== user.userId) return 1;
+        return 0;
+      }),
+    };
+  });
 
   return (
     <div className="dashboard-container">
@@ -136,7 +146,7 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {usersProgress.map((userProgress) => (
+            {sortedUsersProgress.map((userProgress) => (
               <div key={userProgress.userId} className="user-task-table">
                 <h3>{userProgress.username} - Feladatok</h3>
                 {userProgress.tasks.length > 0 ? (
