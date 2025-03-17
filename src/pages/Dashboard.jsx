@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./Dashboard.css";
+import "./Dashboard.css"; // 📌 Import CSS for styling
 
 const DAYS_OF_WEEK = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"];
 
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
-  const [users, setUsers] = useState([]);
   const [completedDays, setCompletedDays] = useState({});
-  const [usersProgress, setUsersProgress] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState(new Set()); // Track completed tasks
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
@@ -21,42 +20,32 @@ const Dashboard = () => {
       return;
     }
 
-    const fetchUserProgress = async () => {
-      try {
-        const result = await axios.get(
-          "https://haztartas-backend-production.up.railway.app/api/tasks/progress/all-users",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setUsersProgress(result.data);
-      } catch (err) {
-        console.error("Error fetching user progress:", err);
-      }
-    };
-
-    const fetchData = async () => {
-      try {
-        const [taskRes, userRes] = await Promise.all([
-          axios.get("https://haztartas-backend-production.up.railway.app/api/tasks", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get("https://haztartas-backend-production.up.railway.app/api/tasks/fetch/users", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
-
-        setTasks(taskRes.data);
-        setUsers(userRes.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     // If token exists, fetch tasks and user data
     if (user && token) {
-      fetchData();
-      fetchUserProgress();
+      axios
+        .get(`https://haztartas-backend-production.up.railway.app/api/tasks/get/${user.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          const fetchedTasks = response.data;
+          setTasks(fetchedTasks);
+
+          const initialCompletedDays = {};
+          fetchedTasks.forEach((task) => {
+            initialCompletedDays[task.id] = task.days.reduce((acc, day) => {
+              acc[day] = task.progress && task.progress[day] ? task.progress[day] : false;
+              return acc;
+            }, {});
+          });
+
+          setCompletedDays(initialCompletedDays);
+
+          const completedTaskIds = new Set(fetchedTasks.filter(task => task.is_completed).map(task => task.id));
+          setCompletedTasks(completedTaskIds);
+        })
+        .catch((error) => {
+          console.error("Error fetching tasks:", error);
+        });
     }
   }, [token, user, navigate]);
 
@@ -67,10 +56,7 @@ const Dashboard = () => {
   const handleDayCompletion = (taskId, day) => {
     setCompletedDays((prevState) => {
       const updatedDays = { ...prevState };
-      updatedDays[taskId] = {
-        ...updatedDays[taskId],
-        [day]: !updatedDays[taskId]?.[day], // Toggle the completion
-      };
+      updatedDays[taskId][day] = !updatedDays[taskId][day];
 
       axios
         .put(
@@ -109,22 +95,11 @@ const Dashboard = () => {
               task.id === taskId ? { ...task, is_completed: true } : task
             )
           );
+          setCompletedTasks((prevCompletedTasks) => new Set(prevCompletedTasks).add(taskId));
         })
         .catch((error) => console.error("Error updating task:", error));
     }
   };
-
-  // Feladatok rendezése úgy, hogy a saját feladatok legyenek legfelül
-  const sortedUsersProgress = usersProgress.map((userProgress) => {
-    return {
-      ...userProgress,
-      tasks: userProgress.tasks.sort((a, b) => {
-        if (a.userId === user.userId && b.userId !== user.userId) return -1;
-        if (b.userId === user.userId && a.userId !== user.userId) return 1;
-        return 0;
-      }),
-    };
-  });
 
   return (
     <div className="dashboard-container">
@@ -147,7 +122,7 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-          {tasks.map((task) => (
+            {tasks.map((task) => (
               <tr key={task.id}>
                 <td>{task.name}</td>
 
@@ -167,70 +142,6 @@ const Dashboard = () => {
                   </td>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="overflow-x-auto">
-        <table className="task-table">
-          <thead>
-            <tr>
-              <th>Feladat</th>
-              {DAYS_OF_WEEK.map((day) => (
-                <th key={day}>{day}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {sortedUsersProgress.map((userProgress) => (
-              userProgress.userId !== user.id ?
-              <div key={userProgress.userId} className="user-task-table">
-                <h3>{userProgress.username} - Feladatok</h3>
-                {userProgress.tasks.length > 0 ? (
-                  <div className="task-table-container">
-                    <table className="table">
-                      <thead>
-                        <tr>
-                          <th>Feladat</th>
-                          {DAYS_OF_WEEK.map((day) => (
-                            <th key={day}>{day}</th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {userProgress.tasks.map((task) => (
-                          <tr key={task.id}>
-                            <td>{task.name}</td>
-                            {DAYS_OF_WEEK.map((day) => (
-                              <td key={day}>
-                                {task.days.includes(day) ? (
-                                  user.userId === userProgress.userId ? (
-                                    <input
-                                      type="checkbox"
-                                      checked={task.progress[day] || false}
-                                      onChange={() => handleDayCompletion(task.id, day)}
-                                    />
-                                  ) : (
-                                    <input
-                                      type="checkbox"
-                                      checked={task.progress[day] || false}
-                                      disabled
-                                    />
-                                  )
-                                ) : (
-                                  <span>-</span> // Dash if the task isn't assigned to this day
-                                )}
-                              </td>
-                            ))}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  <p>Ez a felhasználó nem rendelkezik napi feladatokkal.</p>
-                )}
-              </div> : null
             ))}
           </tbody>
         </table>
