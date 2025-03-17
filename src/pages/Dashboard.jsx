@@ -47,7 +47,7 @@ const Dashboard = () => {
           console.error("Error fetching tasks:", error);
         });
     }
-  }, [token, user, navigate]);
+  }, [token, user?.id, navigate]);
 
   const handleAdminPanelClick = () => {
     navigate("/admin", { replace: true });
