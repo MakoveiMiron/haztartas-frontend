@@ -7,6 +7,7 @@ const DAYS_OF_WEEK = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "S
 
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
+  const [users, setUsers] = useState([]);
   const [completedDays, setCompletedDays] = useState({});
   const [usersProgress, setUsersProgress] = useState([]);
   const navigate = useNavigate();
