@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './login.css'; // Import the CSS file
+import './Login.css'; // Import the CSS file
 
 const Login = ({ setIsAuthenticated }) => {  // Accept the callback from App.jsx
   const [username, setUsername] = useState('');

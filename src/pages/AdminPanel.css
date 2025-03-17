@@ -92,6 +92,7 @@
 
 /* Right Panel - User Task Tables */
 .right-panel {
+    color: white;
     flex: 1;
     padding: 20px;
     background-color: #2a2a2a;
@@ -142,6 +143,23 @@ th, td {
 
 .Toastify__toast-container {
     z-index: 9999 !important;  /* Ensure the toast is above other elements */
+}
+
+.edit-modal{
+    color:white;
+}
+
+.save-btn, .close-btn{
+    background-color: #1d1d1d;
+    color: white;
+    margin-top: 20px;
+    margin-right: 10px;
+    border: 2px solid white;
+}
+
+.save-btn:hover, .close-btn:hover{
+    background-color: #111;
+    border: 2px solid white;
 }
 
 /* Responsive Design */

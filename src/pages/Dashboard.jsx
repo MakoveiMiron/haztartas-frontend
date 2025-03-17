@@ -42,12 +42,20 @@ const Dashboard = () => {
           }, {});
         });
 
-        setCompletedDays(initialCompletedDays);
-      })
-      .catch((error) => {
-        console.error("Error fetching tasks:", error);
-      });
-  }, [token, navigate, user.id]);
+          setCompletedDays(initialCompletedDays);
+
+          const completedTaskIds = new Set(fetchedTasks.filter(task => task.is_completed).map(task => task.id));
+          setCompletedTasks(completedTaskIds);
+        })
+        .catch((error) => {
+          console.error("Error fetching tasks:", error);
+        });
+    }
+  }, [token, user?.id, navigate]);
+
+  const handleAdminPanelClick = () => {
+    navigate("/admin", { replace: true });
+  };
 
   const handleDayCompletion = (taskId, day) => {
     if (!tasks.find(task => task.id === taskId)?.userId === user.id) {
