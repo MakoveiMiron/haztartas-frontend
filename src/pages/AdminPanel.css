@@ -61,35 +61,6 @@
     background-color: #111;
 }
 
-/* Custom Checkbox */
-/* .task-item input[type="checkbox"] {
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    background-color: transparent;
-    cursor: pointer;
-    position: relative;
-} */
-
-/* .table input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    border: 2px solid #4CAF50;
-    border-radius: 4px;
-    position: relative;
-    color: "white";
-} */
-
-/* Disabled and checked checkboxes */
-/* .table input[type="checkbox"]:disabled:checked {
-    background-color: #4CAF50 !important; 
-    border-color: #4CAF50 !important; 
-    color: white !important; 
-    box-shadow: inset 0 0 0 2px #4CAF50 !important;
-}  */
-
 /* Right Panel - User Task Tables */
 .right-panel {
     color: white;
@@ -107,11 +78,13 @@
 }
 
 .table {
-    width: 100%; /* Ensure the table takes full width */
+    width: 100%;
     border-collapse: collapse;
     border-radius: 10px;
     overflow: hidden;
-    max-width: 100%; /* Prevent the table from overflowing */
+    max-width: 100%;
+    table-layout: fixed; /* Force the table layout to fit */
+    word-wrap: break-word; /* Make sure content wraps */
 }
 
 th, td {
@@ -121,6 +94,8 @@ th, td {
     background-color: #3a3a3a;
     color: white;
     font-size: 16px;
+    overflow-wrap: break-word; /* Ensure words break properly */
+    word-break: break-word;
 }
 
 /* Buttons */
@@ -145,11 +120,11 @@ th, td {
     z-index: 9999 !important;  /* Ensure the toast is above other elements */
 }
 
-.edit-modal{
-    color:white;
+.edit-modal {
+    color: white;
 }
 
-.save-btn, .close-btn{
+.save-btn, .close-btn {
     background-color: #1d1d1d;
     color: white;
     margin-top: 20px;
@@ -157,7 +132,7 @@ th, td {
     border: 2px solid white;
 }
 
-.save-btn:hover, .close-btn:hover{
+.save-btn:hover, .close-btn:hover {
     background-color: #111;
     border: 2px solid white;
 }
@@ -182,5 +157,3 @@ th, td {
         height: auto; /* Left panel can be normal height */
     }
 }
-
-
