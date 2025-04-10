@@ -168,16 +168,15 @@ th, td {
         flex-direction: column;
     }
 
-    /* Reorder panels on mobile */
-    .right-panel {
-        order: -1;
+    .left-panel {
+        display: none; /* Rejti a bal panelt mobilon */
     }
 
-    .left-panel {
+    .right-panel {
+        width: 100%;
         order: 0;
     }
 
-    /* Táblázat stílus kicsinyítve mobilra */
     .table {
         font-size: 12px;
     }
@@ -187,14 +186,12 @@ th, td {
         font-size: 12px;
     }
 
-    /* Gombok kisebbek legyenek mobilon */
     .create-btn, .back-button {
         width: 100%;
         font-size: 14px;
         padding: 10px;
     }
 
-    /* Task-item kicsinyítése */
     .task-item {
         flex-direction: column;
         align-items: flex-start;
@@ -205,4 +202,5 @@ th, td {
         width: 100%;
     }
 }
+
 
