@@ -71,11 +71,15 @@
     border-radius: 10px;
     overflow-y: auto; /* Allow scrolling for the content if needed */
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Allow the panel to expand to fill the space */
 }
 
 /* User Task Tables */
 .user-task-table {
     margin-bottom: 30px;
+    overflow-x: auto; /* Allow horizontal scroll only when needed */
 }
 
 .table {
@@ -83,9 +87,7 @@
     border-collapse: collapse;
     border-radius: 10px;
     max-width: 100%; /* Prevent the table from overflowing */
-    overflow: hidden;
     box-sizing: border-box;
-    transform-origin: top left; /* Ensure the scale transformation happens from the top left */
 }
 
 /* Table styling */
@@ -96,6 +98,7 @@ th, td {
     background-color: #3a3a3a;
     color: white;
     font-size: 16px;
+    word-wrap: break-word; /* Ensure long words break into the next line */
 }
 
 /* Buttons */
@@ -141,6 +144,7 @@ th, td {
 @media (max-width: 768px) {
     .admin-panel-container {
         flex-direction: column;
+        height: auto; /* Allow the height to adjust based on content */
     }
 
     .left-panel {
