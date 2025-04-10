@@ -51,8 +51,8 @@
     border-radius: 10px;
     box-sizing: border-box;
     table-layout: fixed; /* Ensure columns are of equal width */
-    max-width: 100%; /* Prevent the table from overflowing horizontally */
-    overflow-x: auto; /* Horizontal scroll for tables that exceed the width */
+    max-width: 90%; /* Adjust max width to 90% of container width */
+    margin: 0 auto; /* Center align the table */
 }
 
 /* Table cell styling */
@@ -62,7 +62,7 @@ th, td {
     border: 1px solid #444;
     background-color: #3a3a3a;
     color: white;
-    font-size: 16px;
+    font-size: 14px; /* Reduce font size to make the table more compact */
     word-wrap: break-word; /* Ensure long words break into the next line */
 }
 
@@ -109,8 +109,8 @@ th, td {
     .table {
         font-size: 12px;
         table-layout: auto; /* Adjust column widths automatically */
-        max-height: 100vh; /* Allow the table to take full height */
-        overflow-y: auto; /* Make the table scrollable vertically */
+        max-width: 100%; /* Ensure it fits within the available space */
+        margin: 0 auto; /* Center the table */
     }
 
     th, td {
