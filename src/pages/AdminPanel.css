@@ -166,28 +166,21 @@ th, td {
 @media (max-width: 768px) {
     .admin-panel-container {
         flex-direction: column;
-        height: auto;
-        gap: 10px;
-        padding: 10px;
+        height: 100vh; /* Full height of screen */
     }
 
-    .left-panel, .right-panel {
-        width: 100%;
-        padding: 10px;
+    .right-panel {
+        order: -1;
+        flex: none;
+        height: 100vh; /* Make right panel full screen height */
+        overflow-y: auto; /* Allow scrolling inside if content overflows */
     }
 
-    th, td {
-        padding: 8px;
-        font-size: 14px;
-    }
-
-    .create-btn, .back-button {
-        padding: 10px;
-        font-size: 14px;
-        width: 100%;
-    }
-
-    .task-list {
-        width: 100%; /* Ensure the left panel takes full width */
+    .left-panel {
+        order: 0;
+        flex: none;
+        height: auto; /* Left panel can be normal height */
     }
 }
+
+
