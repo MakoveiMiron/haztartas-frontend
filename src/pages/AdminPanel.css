@@ -58,12 +58,12 @@
 
 /* Table cell styling */
 th, td {
-    padding: 6px; /* Reduced padding for a smaller table */
+    padding: 4px; /* Reduced padding for a smaller table */
     text-align: center;
     border: 1px solid #444;
     background-color: #3a3a3a;
     color: white;
-    font-size: 10px; /* Even smaller font size */
+    font-size: 6px; /* Smaller font size */
     word-wrap: break-word; /* Ensure long words break into the next line */
 }
 
@@ -71,7 +71,7 @@ th, td {
 .create-btn, .back-button {
     background-color: #1d1d1d;
     color: white;
-    padding: 12px;
+    padding: 10px;
     border-radius: 8px;
     cursor: pointer;
     border: none;
@@ -108,21 +108,21 @@ th, td {
     }
 
     .table {
-        font-size: 8px; /* Further reduced font size */
+        font-size: 4px; /* Even smaller font size */
         table-layout: auto; /* Adjust column widths automatically */
         max-width: 100%; /* Ensure it fits within the available space */
         margin: 0 auto; /* Center the table */
     }
 
     th, td {
-        padding: 4px; /* Further reduced padding */
-        font-size: 8px; /* Even smaller font size */
+        padding: 2px; /* Even smaller padding */
+        font-size: 4px; /* Even smaller font size */
     }
 
     .create-btn, .back-button {
         width: 100%;
-        font-size: 14px;
-        padding: 10px;
+        font-size: 12px;
+        padding: 8px;
     }
 
     .task-item {
