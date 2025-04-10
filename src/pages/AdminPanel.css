@@ -12,7 +12,7 @@
 
 /* Left Panel - Task Management */
 .left-panel {
-    flex: 1;
+    flex: 0 0 300px; /* Fixed width for left panel */
     padding: 20px;
     background-color: #2a2a2a;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
@@ -21,44 +21,6 @@
     flex-direction: column;
     gap: 15px;
     color: white;
-}
-
-.task-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two equal columns */
-    gap: 10px;
-    width: 100%;
-    overflow-y: auto;
-}
-
-.task-item {
-    width: 95%; /* Full width within the grid column */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
-}
-
-.task-item span {
-    flex: 1;
-}
-
-.task-item button {
-    background-color: #1d1d1d;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-left: 10px;
-}
-
-.task-item button:hover {
-    background-color: #111;
 }
 
 /* Right Panel - User Task Tables */
@@ -78,6 +40,7 @@
 /* User Task Tables */
 .user-task-table {
     margin-bottom: 30px;
+    flex-grow: 1; /* Ensure table takes up available space */
 }
 
 /* Table styling */
@@ -122,28 +85,11 @@ th, td {
     z-index: 9999 !important;  /* Ensure the toast is above other elements */
 }
 
-.edit-modal{
-    color:white;
-}
-
-.save-btn, .close-btn{
-    background-color: #1d1d1d;
-    color: white;
-    margin-top: 20px;
-    margin-right: 10px;
-    border: 2px solid white;
-}
-
-.save-btn:hover, .close-btn:hover{
-    background-color: #111;
-    border: 2px solid white;
-}
-
-/* Responsive Design */
+/* Responsive Design for Mobile Only */
 @media (max-width: 768px) {
     .admin-panel-container {
         flex-direction: column;
-        height: auto; /* Allow the height to adjust based on content */
+        height: 100vh; /* Allow the height to adjust based on content */
     }
 
     .left-panel {
@@ -153,13 +99,14 @@ th, td {
     .right-panel {
         width: 100%;
         order: 0;
-        transform: scale(0.9); /* Scale down the content to fit the screen */
-        transform-origin: top left; /* Ensure the table shrinks proportionally */
+        transform: scale(1); /* Ensure no scaling on mobile */
     }
 
     .table {
         font-size: 12px;
         table-layout: auto; /* Adjust column widths automatically */
+        max-height: 100vh; /* Allow the table to take full height */
+        overflow-y: auto; /* Make the table scrollable vertically */
     }
 
     th, td {
