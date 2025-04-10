@@ -7,7 +7,7 @@
     background-color: #222222;
     padding: 20px;
     box-sizing: border-box;
-    overflow-x: hidden; /* Prevent horizontal scrolling */
+    overflow: hidden; /* Prevent both horizontal and vertical scrolling */
 }
 
 /* Left Panel - Task Management */
@@ -69,28 +69,27 @@
     background-color: #2a2a2a;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    overflow-y: auto; /* Allow scrolling for the content if needed */
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Allow the panel to expand to fill the space */
+    justify-content: flex-start; /* Ensure it starts at the top */
 }
 
 /* User Task Tables */
 .user-task-table {
     margin-bottom: 30px;
-    overflow-x: auto; /* Allow horizontal scroll only when needed */
 }
 
+/* Table styling */
 .table {
     width: 100%; /* Ensure the table takes full width */
     border-collapse: collapse;
     border-radius: 10px;
-    max-width: 100%; /* Prevent the table from overflowing */
     box-sizing: border-box;
+    table-layout: fixed; /* Ensure columns are of equal width */
 }
 
-/* Table styling */
+/* Table cell styling */
 th, td {
     padding: 12px;
     text-align: center;
@@ -160,6 +159,7 @@ th, td {
 
     .table {
         font-size: 12px;
+        table-layout: auto; /* Adjust column widths automatically */
     }
 
     th, td {
