@@ -32,7 +32,7 @@
 }
 
 .task-item {
-    width: 95%; /* Full width within the grid column */
+    width: 95%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -69,7 +69,13 @@
     background-color: #2a2a2a;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    overflow-y: auto; /* Allow scrolling for the content if needed */
+    overflow-y: auto;
+}
+
+/* Wrapper to allow horizontal scrolling on small screens */
+.task-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
 }
 
 /* User Task Tables */
@@ -77,29 +83,32 @@
     margin-bottom: 30px;
 }
 
-.table {
+.table,
+.task-table {
     width: 100%;
     border-collapse: collapse;
     border-radius: 10px;
     overflow: hidden;
     max-width: 100%;
-    table-layout: fixed; /* Force the table layout to fit */
-    word-wrap: break-word; /* Make sure content wraps */
+    table-layout: fixed;
+    word-wrap: break-word;
 }
 
-th, td {
+th,
+td {
     padding: 12px;
     text-align: center;
     border: 1px solid #444;
     background-color: #3a3a3a;
     color: white;
     font-size: 16px;
-    overflow-wrap: break-word; /* Ensure words break properly */
+    overflow-wrap: break-word;
     word-break: break-word;
 }
 
 /* Buttons */
-.create-btn, .back-button {
+.create-btn,
+.back-button {
     background-color: #1d1d1d;
     color: white;
     padding: 12px;
@@ -112,19 +121,21 @@ th, td {
     align-self: center;
 }
 
-.create-btn:hover, .back-button:hover {
+.create-btn:hover,
+.back-button:hover {
     background-color: #111;
 }
 
 .Toastify__toast-container {
-    z-index: 9999 !important;  /* Ensure the toast is above other elements */
+    z-index: 9999 !important;
 }
 
 .edit-modal {
     color: white;
 }
 
-.save-btn, .close-btn {
+.save-btn,
+.close-btn {
     background-color: #1d1d1d;
     color: white;
     margin-top: 20px;
@@ -132,7 +143,8 @@ th, td {
     border: 2px solid white;
 }
 
-.save-btn:hover, .close-btn:hover {
+.save-btn:hover,
+.close-btn:hover {
     background-color: #111;
     border: 2px solid white;
 }
@@ -141,19 +153,37 @@ th, td {
 @media (max-width: 768px) {
     .admin-panel-container {
         flex-direction: column;
-        height: 100vh; /* Full height of screen */
+        height: 100vh;
     }
 
     .right-panel {
         order: -1;
         flex: none;
-        height: 100vh; /* Make right panel full screen height */
-        overflow-y: auto; /* Allow scrolling inside if content overflows */
+        height: 100vh;
+        overflow-y: auto;
     }
 
     .left-panel {
         order: 0;
         flex: none;
-        height: auto; /* Left panel can be normal height */
+        height: auto;
+    }
+
+    .task-table {
+        font-size: 12px;
+        table-layout: fixed;
+        word-break: break-word;
+    }
+
+    .task-table th,
+    .task-table td {
+        padding: 6px;
+        min-width: 60px;
+    }
+
+    .task-table th {
+        writing-mode: horizontal-tb;
+        transform: rotate(0deg);
+        white-space: normal;
     }
 }
