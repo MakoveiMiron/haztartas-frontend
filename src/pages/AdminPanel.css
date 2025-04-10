@@ -58,12 +58,12 @@
 
 /* Table cell styling */
 th, td {
-    padding: 8px; /* Reduced padding */
+    padding: 6px; /* Reduced padding for a smaller table */
     text-align: center;
     border: 1px solid #444;
     background-color: #3a3a3a;
     color: white;
-    font-size: 12px; /* Further reduced font size */
+    font-size: 10px; /* Even smaller font size */
     word-wrap: break-word; /* Ensure long words break into the next line */
 }
 
@@ -108,15 +108,15 @@ th, td {
     }
 
     .table {
-        font-size: 10px; /* Significantly reduced font size */
+        font-size: 8px; /* Further reduced font size */
         table-layout: auto; /* Adjust column widths automatically */
         max-width: 100%; /* Ensure it fits within the available space */
         margin: 0 auto; /* Center the table */
     }
 
     th, td {
-        padding: 5px; /* Further reduced padding */
-        font-size: 10px; /* Further reduced font size */
+        padding: 4px; /* Further reduced padding */
+        font-size: 8px; /* Even smaller font size */
     }
 
     .create-btn, .back-button {
