@@ -5,12 +5,13 @@
     padding: 20px;
     gap: 20px;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
     background-color: #f9fafb;
     min-height: 100vh;
     font-family: Arial, sans-serif;
   }
   
+  /* Bal és jobb panel */
   .left-panel,
   .right-panel {
     flex: 1;
@@ -20,6 +21,7 @@
     padding: 20px;
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
   }
   
   /* Vissza gomb */
@@ -32,7 +34,10 @@
     font-size: 16px;
     cursor: pointer;
     margin-bottom: 20px;
-    float: right;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
   }
   
   .back-button:hover {
@@ -47,6 +52,7 @@
     border-radius: 8px;
     margin-bottom: 16px;
     font-size: 16px;
+    box-sizing: border-box;
   }
   
   /* Címkék és checkboxok */
@@ -66,6 +72,7 @@
   .checkbox input[type="checkbox"] {
     margin-right: 8px;
     transform: scale(1.2);
+    cursor: pointer;
   }
   
   /* Létrehozás gomb */
@@ -79,6 +86,7 @@
     cursor: pointer;
     margin-top: 12px;
     width: 100%;
+    transition: background-color 0.3s ease;
   }
   
   .create-btn:hover {
@@ -96,6 +104,7 @@
     align-items: center;
     border-bottom: 1px solid #e5e7eb;
     padding: 10px 0;
+    flex-wrap: wrap;
   }
   
   .task-item button {
@@ -107,6 +116,7 @@
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
+    transition: background-color 0.3s ease;
   }
   
   .task-item button:last-child {
@@ -120,6 +130,8 @@
   /* Jobb panel táblázat */
   .header {
     margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
   }
   
   .user-task-table {
@@ -152,7 +164,7 @@
     background-color: #f3f4f6;
   }
   
-  /* Responsive nézet */
+  /* Reszponzív nézet */
   @media (max-width: 768px) {
     .admin-panel-container {
       flex-direction: column;
@@ -160,13 +172,32 @@
     }
   
     .back-button {
-      width: 100%;
+      width: auto;
       margin-bottom: 10px;
-      float: none;
+      position: static;
+      align-self: flex-end;
+    }
+  
+    .left-panel,
+    .right-panel {
+      max-width: 100%;
     }
   
     .create-btn {
       width: 100%;
+    }
+  
+    .table {
+      font-size: 13px;
+    }
+  
+    .task-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .task-item button {
+      margin: 5px 0 0 0;
     }
   }
   
