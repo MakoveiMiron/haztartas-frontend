@@ -85,20 +85,6 @@ th, td {
     background-color: #111;
 }
 
-/* Mobilnézetben a vissza gomb a bal felső sarokban */
-@media (max-width: 768px) {
-    .back-button {
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        width: auto;
-        font-size: 12px;
-        padding: 6px 12px;
-        z-index: 1000;
-        align-self: flex-start;
-    }
-}
-
 .Toastify__toast-container {
     z-index: 9999 !important;
 }
@@ -155,6 +141,17 @@ th, td {
     .admin-panel-container {
         flex-direction: column;
         height: 100vh;
+    }
+
+    .back-button {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        width: auto;
+        font-size: 12px;
+        padding: 6px 12px;
+        z-index: 1000;
+        align-self: flex-start;
     }
 
     .left-panel {
