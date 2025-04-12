@@ -58,12 +58,12 @@
 
 /* Table cell styling */
 th, td {
-    padding: 4px;
+    padding: 8px;
     text-align: center;
     border: 1px solid #444;
     background-color: #3a3a3a;
     color: white;
-    font-size: 10px;
+    font-size: 14px;
     word-wrap: break-word;
 }
 
@@ -154,15 +154,15 @@ th, td {
     }
 
     .table {
-        font-size: 4px;
+        font-size: 12px;
         table-layout: auto;
         max-width: 100%;
         margin: 0 auto;
     }
 
     th, td {
-        padding: 2px;
-        font-size: 4px;
+        padding: 4px;
+        font-size: 12px;
     }
 
     .create-btn {
@@ -180,6 +180,7 @@ th, td {
         font-size: 12px;
         padding: 6px 12px;
         z-index: 1000;
+        align-self: flex-start;
     }
 
     .task-list {
