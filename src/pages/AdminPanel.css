@@ -172,6 +172,7 @@ th, td {
     }
 
     .back-button {
+        display: block;
         position: fixed;
         top: 10px;
         left: 10px;
