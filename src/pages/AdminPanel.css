@@ -154,7 +154,7 @@ th, td {
     }
 
     .table {
-        font-size: 12px;
+        font-size: 9px;
         table-layout: auto;
         max-width: 100%;
         margin: 0 auto;
@@ -162,7 +162,7 @@ th, td {
 
     th, td {
         padding: 4px;
-        font-size: 12px;
+        font-size: 9px;
     }
 
     .create-btn {
