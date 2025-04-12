@@ -118,6 +118,9 @@ th, td {
     margin-bottom: 8px;
     word-wrap: break-word;
 }
+.back-button-mobile {
+    display:none;
+}
 
 /* Gombok a task elemeken belül */
 .task-item button {
@@ -143,7 +146,7 @@ th, td {
         height: 100vh;
     }
 
-    .back-button {
+    .back-button-mobile {
         position: fixed;
         top: 10px;
         left: 10px;

@@ -183,6 +183,9 @@ const AdminPanel = () => {
   return (
     <div className={`admin-panel-container ${showEditModal ? "modal-active" : ""}`}>
       {/* Left Panel - Task Management */}
+      <button onClick={handleBackToDashboard} className="back-button-mobile">
+            Vissza a Dashboardra
+          </button>
       {!showEditModal && (
         <div className="left-panel">
           <button onClick={handleBackToDashboard} className="back-button">
