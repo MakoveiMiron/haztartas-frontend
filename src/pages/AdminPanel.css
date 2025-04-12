@@ -118,10 +118,20 @@ th, td {
         font-size: 4px;
     }
 
-    .create-btn, .back-button {
+    .create-btn {
         width: 100%;
         font-size: 12px;
         padding: 8px;
+    }
+
+    .back-button {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        width: auto;
+        font-size: 12px;
+        padding: 6px 12px;
+        z-index: 1000;
     }
 
     .task-item {
@@ -134,3 +144,4 @@ th, td {
         width: 100%;
     }
 }
+
