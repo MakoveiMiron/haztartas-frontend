@@ -85,6 +85,20 @@ th, td {
     background-color: #111;
 }
 
+/* Mobilnézetben a vissza gomb a bal felső sarokban */
+@media (max-width: 768px) {
+    .back-button {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        width: auto;
+        font-size: 12px;
+        padding: 6px 12px;
+        z-index: 1000;
+        align-self: flex-start;
+    }
+}
+
 .Toastify__toast-container {
     z-index: 9999 !important;
 }
@@ -169,18 +183,6 @@ th, td {
         width: 100%;
         font-size: 12px;
         padding: 8px;
-    }
-
-    .back-button {
-        display: block;
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        width: auto;
-        font-size: 12px;
-        padding: 6px 12px;
-        z-index: 1000;
-        align-self: flex-start;
     }
 
     .task-list {
