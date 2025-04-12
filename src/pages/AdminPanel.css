@@ -80,12 +80,6 @@ th, td {
     margin-top: 10px;
     align-self: center;
 }
-.back-button{
-    position: fixed;
-    top: 10px;
-    left:50%;
-    right:50%;
-}
 
 .create-btn:hover, .back-button:hover {
     background-color: #111;
